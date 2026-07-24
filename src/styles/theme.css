@@ -1,0 +1,925 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Typography Variables */
+  --text-2xs: 11px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 30px;
+  --text-3xl: 48px;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Font Family */
+  --font-family-inter: 'Inter', sans-serif;
+
+  /* Base Colors */
+  --white: rgba(255, 255, 255, 1);
+  --black: rgba(0, 0, 0, 1);
+
+  /* =============================================
+     DARK MODE (DEFAULT) — Ant Design Color System
+     ============================================= */
+
+  /* Gray Scale — Ant Design Dark */
+  --gray-25: rgba(250, 250, 250, 1);
+  --gray-50: rgba(245, 245, 245, 1);
+  --gray-100: rgba(240, 240, 240, 1);
+  --gray-200: rgba(217, 217, 217, 1);
+  --gray-300: rgba(191, 191, 191, 1);
+  --gray-400: rgba(166, 166, 166, 1);
+  --gray-500: rgba(140, 140, 140, 1);
+  --gray-600: rgba(115, 115, 115, 1);
+  --gray-700: rgba(89, 89, 89, 1);
+  --gray-800: rgba(64, 64, 64, 1);
+  --gray-900: rgba(38, 38, 38, 1);
+  --gray-950: rgba(20, 20, 20, 1);
+
+  /* Primary Scale — Ant Design Blue */
+  --primary-25: rgba(240, 249, 255, 1);
+  --primary-50: rgba(230, 244, 255, 1);
+  --primary-100: rgba(186, 230, 255, 1);
+  --primary-200: rgba(145, 213, 255, 1);
+  --primary-300: rgba(105, 192, 255, 1);
+  --primary-400: rgba(64, 169, 255, 1);
+  --primary-500: rgba(28, 140, 209, 1); /* Dark Mode Primary #1C8CD1 */
+  --primary-600: rgba(28, 140, 209, 1);
+  --primary-700: rgba(22, 112, 167, 1);
+  --primary-800: rgba(17, 84, 125, 1);
+  --primary-900: rgba(11, 56, 84, 1);
+  --primary-950: rgba(6, 28, 42, 1);
+
+  /* Semantic Colors — Dark Mode Default */
+  --background: rgba(0, 0, 0, 1); /* Pure black for dark mode */
+  --foreground: rgba(255, 255, 255, 0.85);
+  --card: rgba(20, 20, 20, 1); /* #141414 */
+  --card-bg: rgba(20, 20, 20, 1);
+  --card-bg-secondary: rgba(31, 31, 31, 1); /* #1f1f1f */
+  --card-dark: rgba(31, 31, 31, 1);
+  --surface-1: var(--card);
+  --surface-2: var(--secondary);
+  --card-foreground: rgba(255, 255, 255, 0.65);
+  --popover: rgba(31, 31, 31, 1);
+  --popover-foreground: rgba(255, 255, 255, 0.85);
+  --primary: rgba(28, 140, 209, 1); /* Dark Mode Primary #1C8CD1 */
+  --primary-foreground: rgba(255, 255, 255, 1);
+  --secondary: rgba(31, 31, 31, 1);
+  --secondary-foreground: rgba(255, 255, 255, 0.65);
+  --muted: rgba(31, 31, 31, 1);
+  --muted-foreground: rgba(255, 255, 255, 0.45);
+  --accent: rgba(28, 140, 209, 1);
+  --accent-foreground: rgba(255, 255, 255, 1);
+  --destructive: rgba(255, 77, 79, 1); /* Ant Design Red #ff4d4f */
+  --destructive-foreground: rgba(255, 255, 255, 1);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-secondary: rgba(255, 255, 255, 0.08);
+  --input: rgba(20, 20, 20, 1);
+  --input-background: rgba(20, 20, 20, 1);
+  --ring: rgba(28, 140, 209, 1);
+
+  /* Success — Ant Design Green */
+  --success: rgba(82, 196, 26, 1); /* #52c41a */
+  --success-foreground: rgba(255, 255, 255, 1);
+  --success-50: rgba(246, 255, 237, 1);
+  --success-100: rgba(217, 249, 157, 1);
+  --success-200: rgba(217, 247, 190, 1); /* AntD green-2 */
+  --success-300: rgba(149, 222, 100, 1);
+  --success-400: rgba(115, 209, 61, 1);
+  --success-500: rgba(82, 196, 26, 1);
+  --success-600: rgba(56, 158, 13, 1);
+  --success-700: rgba(35, 120, 3, 1);
+  /* AntD dark-mode green palette (muted, for dark-mode card surfaces) */
+  --success-d2: rgba(29, 55, 18, 1);   /* AntD dark green-2 = dark ref/green/20 #1d3712 */
+  --success-d4: rgba(48, 99, 23, 1);   /* AntD dark green-4 = dark ref/green/40 #306317 */
+
+  /* Warning — Ant Design Gold */
+  --warning: rgba(250, 173, 20, 1); /* #faad14 */
+  --warning-foreground: rgba(255, 255, 255, 1);
+  --warning-50: rgba(255, 251, 230, 1);
+  --warning-100: rgba(255, 241, 178, 1);
+  --warning-500: rgba(250, 173, 20, 1);
+  --warning-600: rgba(250, 140, 22, 1);
+  --warning-700: rgba(217, 119, 6, 1);
+  --warning-800: rgba(179, 97, 0, 1);
+  --warning-950: rgba(102, 55, 0, 1);
+
+  /* Error — Ant Design Red */
+  --error: rgba(255, 77, 79, 1); /* #ff4d4f */
+  --error-foreground: rgba(255, 255, 255, 1);
+  --error-50: rgba(255, 241, 240, 1);
+  --error-100: rgba(255, 204, 199, 1);
+  --error-500: rgba(255, 77, 79, 1);
+  --error-600: rgba(207, 19, 34, 1);
+  --error-700: rgba(168, 7, 26, 1);
+
+  /* AntD dark-mode red palette — matches AntD 5 Tag (error) on dark surfaces */
+  --error-d2: rgba(42, 18, 21, 1);     /* #2a1215 — tag background */
+  --error-d4: rgba(88, 24, 28, 1);     /* #58181c — tag border */
+
+  /* AntD dark-mode gold/amber palette — matches AntD 5 Tag (warning) on dark surfaces */
+  --warning-d2: rgba(43, 29, 17, 1);   /* #2b1d11 — tag background */
+  --warning-d4: rgba(89, 66, 20, 1);   /* #594214 — tag border */
+
+  /* Mock-test NTA action-bar colors — mirror the real NTA portal palette.
+     Mark-review = purple (palette "marked" state + Mark-for-Review CTA).
+     Review-flag = orange (Save & Mark for Review CTA). */
+  --mark-review-300: rgba(146, 84, 222, 1);  /* #9254de — light variant for outline CTAs */
+  --mark-review-500: rgba(114, 46, 209, 1);  /* #722ed1 — palette square fill, MARKED badge */
+  --review-flag-500: rgba(255, 149, 0, 1);   /* #ff9500 — Save & Mark for Review CTA */
+
+  /* Subject Accent Colors — Vibrant & Clear */
+  --physics: rgba(24, 144, 255, 1); /* Ant Design Blue */
+  --physics-foreground: rgba(255, 255, 255, 1);
+  --physics-50: rgba(230, 244, 255, 1);
+  --physics-100: rgba(186, 230, 255, 1);
+  --physics-950: rgba(0, 24, 64, 1);
+
+  --chemistry: rgba(82, 196, 26, 1); /* Ant Design Green */
+  --chemistry-foreground: rgba(255, 255, 255, 1);
+  --chemistry-50: rgba(246, 255, 237, 1);
+  --chemistry-100: rgba(217, 249, 157, 1);
+  --chemistry-950: rgba(18, 61, 0, 1);
+
+  --mathematics: rgba(250, 140, 22, 1); /* Ant Design Orange */
+  --mathematics-foreground: rgba(255, 255, 255, 1);
+  --mathematics-50: rgba(255, 247, 230, 1);
+  --mathematics-100: rgba(255, 229, 179, 1);
+  --mathematics-950: rgba(102, 42, 0, 1);
+
+  --biology: rgba(135, 108, 255, 1); /* Ant Design Purple */
+  --biology-foreground: rgba(255, 255, 255, 1);
+  --biology-50: rgba(243, 240, 255, 1);
+  --biology-100: rgba(222, 214, 255, 1);
+  --biology-950: rgba(30, 16, 89, 1);
+
+  /* Orange (for Rank Predictor / premium accents) */
+  --orange-50: rgba(255, 231, 186, 1);
+  --orange-200: rgba(255, 192, 105, 1);
+  --orange-300: rgba(255, 169, 64, 1);
+  --orange-400: rgba(250, 140, 22, 1);
+  --orange-500: rgba(250, 140, 22, 1);
+  --orange-800: rgba(179, 97, 0, 1);
+  --orange-900: rgba(128, 70, 0, 1);
+  --orange-950: rgba(102, 55, 0, 1);
+  /* AntD dark-mode orange palette (muted, for dark-mode card surfaces) */
+  --orange-d2: rgba(59, 39, 16, 1);    /* AntD dark gold-2 #3b2710 — darker start */
+  --orange-d4: rgba(89, 66, 20, 1);    /* AntD dark gold-4 #594214 — more saturated end */
+
+  /* Blue accents */
+  --blue-400: rgba(64, 169, 255, 1);
+  --blue-900: rgba(13, 24, 40, 1);
+  --blue-950: rgba(0, 24, 64, 1);
+
+  /* Green accents */
+  --green-400: rgba(115, 209, 61, 1);
+  --green-500: rgba(34, 197, 94, 1);
+  --green-950: rgba(18, 61, 0, 1);
+
+  /* Purple scale */
+  --purple-400: rgba(167, 139, 250, 1);
+  --purple-500: rgba(168, 85, 247, 1);
+  --purple-600: rgba(124, 58, 237, 1);
+  --purple-900: rgba(42, 26, 58, 1);
+
+  /* Certificate "paper" palette — FIXED (never theme-flips). Used by the
+     light, print-credible export/share variant of the certificate artifact. */
+  --cert-paper: rgba(251, 250, 245, 1);        /* cream ground */
+  --cert-paper-edge: rgba(242, 239, 228, 1);   /* subtle inner panel */
+  --cert-ink: rgba(26, 35, 50, 1);             /* navy primary text */
+  --cert-ink-muted: rgba(90, 100, 120, 1);     /* navy-grey secondary text */
+  --cert-gold: rgba(184, 134, 11, 1);          /* deep gold — reads on cream */
+  --cert-gold-soft: rgba(212, 136, 6, 1);      /* gold-7, seal gradient end */
+  --purple-950: rgba(26, 13, 46, 1);
+
+  /* Cyan/Sky scale */
+  --cyan-400: rgba(56, 189, 248, 1);
+  --cyan-500: rgba(14, 165, 233, 1);
+  --cyan-600: rgba(2, 132, 199, 1);
+  --cyan-900: rgba(26, 42, 58, 1);
+  --cyan-950: rgba(13, 30, 46, 1);
+
+  /* AntD-standard palette additions used by marketplace promo banners */
+  --magenta-400: rgba(247, 89, 171, 1);  /* AntD magenta-5 #f759ab */
+  --magenta-500: rgba(235, 47, 150, 1);  /* AntD magenta-6 #eb2f96 */
+  --magenta-600: rgba(196, 29, 127, 1);  /* AntD magenta-7 #c41d7f */
+  --magenta-alpha-12: rgba(235, 47, 150, 0.12);
+  --magenta-alpha-25: rgba(235, 47, 150, 0.25);
+
+  --geekblue-400: rgba(89, 126, 247, 1); /* AntD geekblue-5 #597ef7 */
+  --geekblue-500: rgba(47, 84, 235, 1);  /* AntD geekblue-6 #2f54eb */
+  --geekblue-600: rgba(29, 57, 196, 1);  /* AntD geekblue-7 #1d39c4 */
+  --geekblue-alpha-12: rgba(47, 84, 235, 0.12);
+  --geekblue-alpha-25: rgba(47, 84, 235, 0.25);
+
+  --volcano-400: rgba(255, 122, 69, 1);  /* AntD volcano-5 #ff7a45 */
+  --volcano-500: rgba(250, 84, 28, 1);   /* AntD volcano-6 #fa541c */
+  --volcano-600: rgba(212, 56, 13, 1);   /* AntD volcano-7 #d4380d */
+  --volcano-alpha-12: rgba(250, 84, 28, 0.12);
+  --volcano-alpha-25: rgba(250, 84, 28, 0.25);
+
+  --lime-400: rgba(186, 230, 55, 1);     /* AntD lime-5 #bae637 */
+  --lime-500: rgba(160, 217, 17, 1);     /* AntD lime-6 #a0d911 */
+  --lime-600: rgba(124, 179, 5, 1);      /* AntD lime-7 #7cb305 */
+  --lime-alpha-12: rgba(160, 217, 17, 0.12);
+  --lime-alpha-25: rgba(160, 217, 17, 0.25);
+
+  /* AntD-true cyan. Distinct from existing --cyan-500 (#0ea5e9 = Tailwind
+     sky-500, mislabeled as cyan in this project). Use --teal-* when you want
+     AntD's actual cyan family. */
+  --teal-400: rgba(54, 207, 201, 1);     /* AntD cyan-5 #36cfc9 */
+  --teal-500: rgba(19, 194, 194, 1);     /* AntD cyan-6 #13c2c2 */
+  --teal-600: rgba(8, 151, 156, 1);      /* AntD cyan-7 #08979c */
+  --teal-alpha-12: rgba(19, 194, 194, 0.12);
+  --teal-alpha-25: rgba(19, 194, 194, 0.25);
+
+  /* Warning dark bg variants */
+  --warning-900: rgba(42, 26, 13, 1);
+  --warning-bg-950: rgba(30, 13, 0, 1);
+
+  /* Success dark bg variants */
+  --success-dark: rgba(10, 34, 21, 1);
+  --success-dark-2: rgba(20, 51, 35, 1);
+
+  /* Alpha/Opacity Variants — for badge backgrounds, subtle tints, overlays */
+  --primary-alpha-4: rgba(28, 140, 209, 0.04);
+  --primary-alpha-6: rgba(28, 140, 209, 0.06);
+  --primary-alpha-8: rgba(28, 140, 209, 0.08);
+  --primary-alpha-12: rgba(28, 140, 209, 0.12);
+  --primary-alpha-15: rgba(28, 140, 209, 0.15);
+  --primary-alpha-20: rgba(28, 140, 209, 0.20);
+  --primary-alpha-25: rgba(28, 140, 209, 0.25);
+  --primary-alpha-30: rgba(28, 140, 209, 0.30);
+  --primary-alpha-40: rgba(28, 140, 209, 0.40);
+
+  --success-alpha-6: rgba(82, 196, 26, 0.06);
+  --success-alpha-8: rgba(82, 196, 26, 0.08);
+  --success-alpha-12: rgba(82, 196, 26, 0.12);
+  --success-alpha-15: rgba(82, 196, 26, 0.15);
+  --success-alpha-20: rgba(82, 196, 26, 0.20);
+  --success-alpha-25: rgba(82, 196, 26, 0.25);
+  --success-alpha-30: rgba(82, 196, 26, 0.30);
+
+  --warning-alpha-12: rgba(250, 173, 20, 0.12);
+  --warning-alpha-15: rgba(250, 173, 20, 0.15);
+  --warning-alpha-20: rgba(250, 173, 20, 0.20);
+  --warning-alpha-25: rgba(250, 173, 20, 0.25);
+  --warning-alpha-30: rgba(250, 173, 20, 0.30);
+
+  --purple-alpha-4: rgba(168, 85, 247, 0.04);
+  --purple-alpha-6: rgba(168, 85, 247, 0.06);
+  --purple-alpha-12: rgba(168, 85, 247, 0.12);
+  --purple-alpha-15: rgba(168, 85, 247, 0.15);
+  --purple-alpha-25: rgba(168, 85, 247, 0.25);
+  --purple-alpha-30: rgba(168, 85, 247, 0.30);
+
+  --green-alpha-12: rgba(34, 197, 94, 0.12);
+  --green-alpha-30: rgba(34, 197, 94, 0.30);
+
+  --cyan-alpha-30: rgba(14, 165, 233, 0.30);
+  --cyan-alpha-40: rgba(14, 165, 233, 0.40);
+  --cyan-alpha-50: rgba(14, 165, 233, 0.50);
+
+  --black-alpha-2: rgba(0, 0, 0, 0.02);
+
+  --error-alpha-6: rgba(255, 77, 79, 0.06);
+  --error-alpha-8: rgba(255, 77, 79, 0.08);
+  --error-alpha-10: rgba(255, 77, 79, 0.10);
+  --error-alpha-12: rgba(255, 77, 79, 0.12);
+  --error-alpha-15: rgba(255, 77, 79, 0.15);
+  --error-alpha-25: rgba(255, 77, 79, 0.25);
+
+  --muted-alpha-8: rgba(255, 255, 255, 0.08);
+  --muted-alpha-15: rgba(255, 255, 255, 0.15);
+  --muted-alpha-20: rgba(255, 255, 255, 0.20);
+  --muted-alpha-30: rgba(255, 255, 255, 0.30);
+
+  --overlay-bg: rgba(0, 0, 0, 0.60);
+  --overlay-dark: rgba(0, 0, 0, 0.5);
+  --overlay-heavy: rgba(0, 0, 0, 0.6);
+  --white-alpha-4: rgba(255, 255, 255, 0.04);
+  --white-alpha-6: rgba(255, 255, 255, 0.06);
+  --white-alpha-8: rgba(255, 255, 255, 0.08);
+  --white-alpha-10: rgba(255, 255, 255, 0.10);
+  --white-alpha-12: rgba(255, 255, 255, 0.12);
+  --white-alpha-15: rgba(255, 255, 255, 0.15);
+  --white-alpha-20: rgba(255, 255, 255, 0.20);
+  --white-alpha-25: rgba(255, 255, 255, 0.25);
+  --white-alpha-30: rgba(255, 255, 255, 0.30);
+  --white-alpha-35: rgba(255, 255, 255, 0.35);
+  --white-alpha-40: rgba(255, 255, 255, 0.40);
+  --white-alpha-45: rgba(255, 255, 255, 0.45);
+  --white-alpha-50: rgba(255, 255, 255, 0.50);
+  --white-alpha-60: rgba(255, 255, 255, 0.60);
+  --white-alpha-65: rgba(255, 255, 255, 0.65);
+  --white-alpha-70: rgba(255, 255, 255, 0.70);
+  --white-alpha-75: rgba(255, 255, 255, 0.75);
+  --white-alpha-80: rgba(255, 255, 255, 0.80);
+  --white-alpha-85: rgba(255, 255, 255, 0.85);
+  --white-alpha-90: rgba(255, 255, 255, 0.9);
+  --white-alpha-95: rgba(255, 255, 255, 0.95);
+
+  --black-alpha-4: rgba(0, 0, 0, 0.04);
+  --black-alpha-6: rgba(0, 0, 0, 0.06);
+  --black-alpha-8: rgba(0, 0, 0, 0.08);
+  --black-alpha-10: rgba(0, 0, 0, 0.10);
+  --black-alpha-12: rgba(0, 0, 0, 0.12);
+  --black-alpha-15: rgba(0, 0, 0, 0.15);
+  --black-alpha-20: rgba(0, 0, 0, 0.20);
+  --black-alpha-30: rgba(0, 0, 0, 0.30);
+  --black-alpha-40: rgba(0, 0, 0, 0.40);
+  --black-alpha-50: rgba(0, 0, 0, 0.50);
+  --black-alpha-60: rgba(0, 0, 0, 0.60);
+
+  /* Subject alpha variants */
+  --physics-alpha-6: rgba(24, 144, 255, 0.06);
+  --physics-alpha-12: rgba(24, 144, 255, 0.12);
+  --physics-alpha-15: rgba(24, 144, 255, 0.15);
+  --physics-alpha-20: rgba(24, 144, 255, 0.20);
+  --physics-alpha-30: rgba(24, 144, 255, 0.30);
+  
+  --chemistry-alpha-6: rgba(82, 196, 26, 0.06);
+  --chemistry-alpha-15: rgba(82, 196, 26, 0.15);
+  
+  --mathematics-alpha-6: rgba(250, 140, 22, 0.06);
+  --mathematics-alpha-12: rgba(250, 140, 22, 0.12);
+  --mathematics-alpha-15: rgba(250, 140, 22, 0.15);
+  --mathematics-alpha-20: rgba(250, 140, 22, 0.20);
+  
+  --biology-alpha-6: rgba(135, 108, 255, 0.06);
+  --biology-alpha-15: rgba(135, 108, 255, 0.15);
+
+  /* Action Type Colors (for badges on Daily Plan) */
+  --action-learn: rgba(24, 144, 255, 1); /* Blue */
+  --action-revise: rgba(250, 140, 22, 1); /* Orange */
+  --action-practice: rgba(82, 196, 26, 1); /* Green */
+  --action-test: rgba(135, 108, 255, 1); /* Purple */
+
+  /* Subject Colors (quick reference) */
+  --subject-physics: rgba(24, 144, 255, 1);
+  --subject-chemistry: rgba(82, 196, 26, 1);
+  --subject-mathematics: rgba(250, 140, 22, 1);
+  --subject-biology: rgba(135, 108, 255, 1);
+
+  /* PDF / Light Document Surface */
+  --doc-bg: rgba(250, 250, 250, 0.95);
+  --doc-text: var(--gray-900);
+  --doc-text-secondary: var(--gray-700);
+  --doc-surface: var(--gray-100);
+  --doc-border: var(--gray-300);
+  --doc-caption: var(--gray-500);
+
+  /* Border Radius — extended scale */
+  --radius-2: 2px;
+  --radius-xs: 4px;
+  --radius-full: 999px;
+  --radius-circle: 50%;
+
+  /* Elevation / Shadows */
+  --elevation-xs: 0px 1px 2px 0px var(--black-alpha-10);
+  --elevation-sm: 0px 1px 2px 0px var(--black-alpha-12), 0px 1px 3px 0px var(--black-alpha-15);
+  --elevation-md: 0px 2px 4px -2px var(--black-alpha-12), 0px 4px 8px -2px var(--black-alpha-15);
+  --elevation-lg: 0px 4px 6px -2px var(--black-alpha-8), 0px 12px 16px -4px var(--black-alpha-15);
+  --elevation-xl: 0px 8px 8px -4px var(--black-alpha-10), 0px 20px 24px -4px var(--black-alpha-20);
+
+  /* Premium Effects */
+  --glass-bg: rgba(14, 14, 14, 0.97);
+  --glass-blur: blur(16px);
+  --glow-primary: 0 4px 24px var(--primary-alpha-20);
+  --glow-primary-strong: 0 4px 32px var(--primary-alpha-30);
+  --glow-primary-subtle: 0 0 16px var(--primary-alpha-12);
+  --gradient-primary-btn: linear-gradient(180deg, var(--primary-600), var(--primary-700));
+  --gradient-featured: linear-gradient(135deg, var(--primary-950) 0%, var(--primary-900) 100%);
+  --gradient-orange-featured: linear-gradient(135deg, var(--orange-950) 0%, var(--orange-900) 100%);
+  --gradient-purple-dark: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-950) 100%);
+  --gradient-blue-dark: linear-gradient(135deg, var(--blue-900) 0%, var(--cyan-900) 100%);
+  --gradient-warning-dark: linear-gradient(135deg, var(--warning-900) 0%, var(--warning-bg-950) 100%);
+  --gradient-cyan-dark: linear-gradient(135deg, var(--cyan-900) 0%, var(--cyan-950) 100%);
+  --gradient-success-live: linear-gradient(135deg, var(--success-dark) 0%, var(--success-dark-2) 100%);
+  --gradient-purple-light: linear-gradient(135deg, var(--biology-50) 0%, var(--biology-100) 100%);
+  /* Dark mode: deep forest green / dark amber */
+  --card-live-bg: linear-gradient(158deg, var(--success-d2) 0%, var(--success-d4) 100%);
+  --card-upcoming-bg: linear-gradient(158deg, var(--orange-d2) 0%, var(--orange-d4) 100%);
+  --card-live-strip: var(--success-d4);
+  --card-live-badge-bg: var(--success-alpha-15);
+  --card-live-badge-border: var(--success-alpha-30);
+  --card-upcoming-strip: var(--orange-d4);
+  --card-upcoming-badge-bg: var(--white-alpha-8);
+  --card-upcoming-badge-border: var(--warning-alpha-30);
+  /* Dark mode card text — light on dark card */
+  --card-live-title: rgba(255, 255, 255, 0.88);
+  --card-live-secondary: rgba(255, 255, 255, 0.65);
+  --card-live-accent: var(--success-400);
+  --card-upcoming-title: rgba(255, 255, 255, 0.88);
+  --card-upcoming-secondary: rgba(255, 255, 255, 0.65);
+  --card-upcoming-accent: var(--orange-300);
+  --card-live-join-bg: rgba(60, 125, 24, 1);   /* AntD dark green-5 #3c7d18 */
+
+  /* Exam strip backgrounds — PrepClassroomCard left banner */
+  --strip-cat: rgba(92, 49, 0, 1);
+  --strip-jee: rgba(10, 37, 88, 1);
+  --strip-jee-adv: rgba(32, 10, 74, 1);
+  --strip-neet: rgba(10, 61, 46, 1);
+  --strip-upsc: rgba(74, 16, 16, 1);
+  --strip-crash: rgba(5, 46, 28, 1);
+  --header-hero-bg: linear-gradient(180deg, rgba(71, 47, 26, 1) 0%, rgba(133, 98, 58, 1) 100%);
+  --gradient-cyan-light: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  --card-highlight: var(--white-alpha-12);
+  --header-edge: linear-gradient(90deg, transparent 0%, var(--white-alpha-12) 50%, transparent 100%);
+  --bottom-fade: linear-gradient(to top, var(--background) 60%, transparent);
+
+  /* Live Class Specific Variables */
+  --video-background: rgba(0, 0, 0, 1);
+  --foreground-inverse: rgba(255, 255, 255, 1);
+  --overlay: rgba(0, 0, 0, 0.40);
+  --overlay-strong: rgba(0, 0, 0, 0.60);
+  --primary-alpha-50: rgba(28, 140, 209, 0.50);
+
+  /* Button States — Standardized Disabled State */
+  --button-disabled-bg: var(--gray-900);
+  --button-disabled-text: var(--gray-600);
+  --button-disabled-opacity: 1;
+  --disabled-bg: var(--gray-900);
+  --disabled-text: var(--gray-600);
+  
+  /* Secondary Background for Input/Option areas */
+  --secondary-bg: rgba(31, 31, 31, 1);
+  --input-bg: rgba(20, 20, 20, 1);
+
+  /* Chart Colors */
+  --chart-1: rgba(24, 144, 255, 1);
+  --chart-2: rgba(64, 169, 255, 1);
+  --chart-3: rgba(105, 192, 255, 1);
+  --chart-4: rgba(145, 213, 255, 1);
+  --chart-5: rgba(186, 230, 255, 1);
+
+  /* Border Radius */
+  --radius: 8px;
+  --radius-button: 8px;
+  --radius-card: 12px;
+  --radius-small: 6px;
+
+  /* Sidebar (dark default) */
+  --sidebar: rgba(0, 0, 0, 1);
+  --sidebar-foreground: rgba(255, 255, 255, 0.85);
+  --sidebar-primary: rgba(28, 140, 209, 1);
+  --sidebar-primary-foreground: rgba(255, 255, 255, 1);
+  --sidebar-accent: rgba(31, 31, 31, 1);
+  --sidebar-accent-foreground: rgba(255, 255, 255, 0.85);
+  --sidebar-border: var(--white-alpha-12);
+  --sidebar-ring: rgba(28, 140, 209, 1);
+}
+
+/* =============================================
+   LIGHT MODE — Ant Design Color System
+   ============================================= */
+.light {
+  /* Semantic Colors — Light Mode */
+  --background: rgba(255, 255, 255, 1);
+  --foreground: rgba(0, 0, 0, 0.85);
+  --card: rgba(255, 255, 255, 1);
+  --card-bg: rgba(255, 255, 255, 1);
+  --card-bg-secondary: rgba(245, 245, 245, 1);
+  --card-dark: rgba(250, 250, 250, 1);
+  --card-foreground: rgba(0, 0, 0, 0.65);
+  --popover: rgba(255, 255, 255, 1);
+  --popover-foreground: rgba(0, 0, 0, 0.85);
+  --primary: rgba(29, 161, 242, 1); /* Light Mode Primary #1DA1F2 */
+  --primary-foreground: rgba(255, 255, 255, 1);
+  --secondary: rgba(250, 250, 250, 1);
+  --secondary-foreground: rgba(0, 0, 0, 0.65);
+  --muted: rgba(245, 245, 245, 1);
+  --muted-foreground: rgba(0, 0, 0, 0.45);
+  --accent: rgba(29, 161, 242, 1);
+  --accent-foreground: rgba(255, 255, 255, 1);
+  --destructive: rgba(255, 77, 79, 1);
+  --destructive-foreground: rgba(255, 255, 255, 1);
+  --border: rgba(217, 217, 217, 1); /* #d9d9d9 */
+  --input: rgba(255, 255, 255, 1);
+  --input-background: rgba(255, 255, 255, 1);
+  --ring: rgba(29, 161, 242, 1);
+
+  /* Override primary scale for light mode */
+  --primary-500: rgba(29, 161, 242, 1); /* Light Mode Primary #1DA1F2 */
+  --primary-600: rgba(26, 145, 218, 1);
+  --primary-700: rgba(21, 115, 173, 1);
+  --primary-800: rgba(16, 86, 130, 1);
+
+  /* Sidebar light mode */
+  --sidebar: rgba(255, 255, 255, 1);
+  --sidebar-foreground: rgba(0, 0, 0, 0.85);
+  --sidebar-primary: rgba(29, 161, 242, 1);
+  --sidebar-primary-foreground: rgba(255, 255, 255, 1);
+  --sidebar-accent: rgba(240, 249, 255, 1);
+  --sidebar-accent-foreground: rgba(29, 161, 242, 1);
+  --sidebar-border: rgba(217, 217, 217, 1);
+  --sidebar-ring: rgba(29, 161, 242, 1);
+
+  /* Alpha variants for light mode */
+  --primary-alpha-4: rgba(29, 161, 242, 0.04);
+  --primary-alpha-6: rgba(29, 161, 242, 0.06);
+  --primary-alpha-8: rgba(29, 161, 242, 0.08);
+  --primary-alpha-12: rgba(29, 161, 242, 0.12);
+  --primary-alpha-15: rgba(29, 161, 242, 0.15);
+  --primary-alpha-20: rgba(29, 161, 242, 0.20);
+  --primary-alpha-25: rgba(29, 161, 242, 0.25);
+  --primary-alpha-30: rgba(29, 161, 242, 0.30);
+  --primary-alpha-40: rgba(29, 161, 242, 0.40);
+
+  --border-secondary: rgba(240, 240, 240, 1);
+  --muted-alpha-8: rgba(0, 0, 0, 0.02);
+  --muted-alpha-15: rgba(0, 0, 0, 0.04);
+  --muted-alpha-20: rgba(0, 0, 0, 0.06);
+  --muted-alpha-30: rgba(0, 0, 0, 0.10);
+
+  /* Light mode overlay adjustments */
+  --overlay-bg: rgba(255, 255, 255, 0.80);
+  --overlay-dark: rgba(0, 0, 0, 0.3);
+  --overlay-heavy: rgba(0, 0, 0, 0.4);
+
+  /* Light mode glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.90);
+
+  /* Light mode glows */
+  --glow-primary: 0 4px 24px var(--primary-alpha-20);
+  --glow-primary-strong: 0 4px 32px var(--primary-alpha-30);
+  --glow-primary-subtle: 0 0 16px var(--primary-alpha-12);
+
+  /* Light mode gradients */
+  --gradient-primary-btn: linear-gradient(180deg, var(--primary-600), var(--primary-700));
+
+  /* Button States — Light Mode Disabled State */
+  --button-disabled-bg: var(--gray-200);
+  --button-disabled-text: var(--gray-400);
+  --button-disabled-opacity: 1;
+  --disabled-bg: var(--gray-200);
+  --disabled-text: var(--gray-400);
+  
+  /* Secondary Background for Input/Option areas */
+  --secondary-bg: rgba(245, 245, 245, 1);
+  --input-bg: rgba(255, 255, 255, 1);
+
+  /* Light mode shadows */
+  --elevation-xs: 0px 1px 2px 0px var(--black-alpha-10);
+  --elevation-sm: 0px 1px 2px 0px var(--black-alpha-12), 0px 1px 3px 0px var(--black-alpha-15);
+  --elevation-md: 0px 2px 4px -2px var(--black-alpha-12), 0px 4px 8px -2px var(--black-alpha-15);
+  --elevation-lg: 0px 4px 6px -2px var(--black-alpha-8), 0px 12px 16px -4px var(--black-alpha-15);
+  --elevation-xl: 0px 8px 8px -4px var(--black-alpha-10), 0px 20px 24px -4px var(--black-alpha-20);
+
+  /* Light mode card highlight */
+  --card-highlight: rgba(240, 240, 240, 0.60);
+  
+  /* Light mode gradients for featured cards */
+  --gradient-featured: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
+  --gradient-orange-featured: linear-gradient(135deg, var(--mathematics-50) 0%, var(--mathematics-100) 100%);
+  --gradient-warning: linear-gradient(135deg, var(--warning-50) 0%, var(--warning-100) 100%);
+  --gradient-success-light: linear-gradient(135deg, var(--success-50) 0%, var(--success-100) 100%);
+
+  /* Live/Schedule card — light mode overrides */
+  --card-live-bg: linear-gradient(158deg, var(--success-200) 0%, var(--success-300) 100%);
+  --card-upcoming-bg: linear-gradient(158deg, var(--orange-50) 0%, var(--orange-200) 100%);
+  --card-live-strip: var(--success-300);
+  --card-live-badge-bg: var(--success-200);
+  --card-live-badge-border: var(--success-300);
+  --card-upcoming-strip: var(--orange-200);
+  --card-upcoming-badge-bg: var(--orange-50);
+  --card-upcoming-badge-border: var(--orange-200);
+  /* Light mode card text — dark on light card */
+  --card-live-title: rgba(0, 0, 0, 0.85);
+  --card-live-secondary: var(--success-700);
+  --card-live-accent: var(--success-600);
+  --card-upcoming-title: rgba(0, 0, 0, 0.85);
+  --card-upcoming-secondary: var(--orange-800);
+  --card-upcoming-accent: var(--orange-400);
+  --card-live-join-bg: var(--success-400);
+
+  /* Exam strip backgrounds — light mode */
+  --strip-cat: var(--mathematics-100);
+  --strip-jee: var(--primary-200);
+  --strip-jee-adv: var(--biology-100);
+  --strip-neet: var(--chemistry-100);
+  --strip-upsc: var(--error-100);
+  --strip-crash: rgba(185, 232, 214, 1);
+  --header-hero-bg: linear-gradient(180deg, var(--mathematics-50) 0%, var(--mathematics-100) 100%);
+  
+  /* Light mode header edge */
+  --header-edge: linear-gradient(90deg, transparent 0%, rgba(217, 217, 217, 0.60) 50%, transparent 100%);
+  
+  /* Live Class Specific Variables - Light Mode */
+  --video-background: rgba(0, 0, 0, 1); /* Video background stays black in both modes */
+  --foreground-inverse: rgba(0, 0, 0, 1); /* Dark text for inverse */
+  --overlay: rgba(0, 0, 0, 0.40);
+  --overlay-strong: rgba(0, 0, 0, 0.60);
+  --primary-alpha-50: rgba(28, 140, 209, 0.50);
+
+  /* AntD-style Tag light-mode overrides — same semantic colors but mapped to
+     the light-tag palette (50 bg + 200/100 border + 500 text). Used by ScoreTag,
+     IBPS banner, etc. so they read correctly in both themes. */
+  --success-d2: var(--success-50);    /* light green tag bg */
+  --success-d4: var(--success-200);   /* light green tag border */
+  --warning-d2: var(--warning-50);    /* light gold tag bg */
+  --warning-d4: var(--warning-100);   /* light gold tag border */
+  --error-d2:   var(--error-50);      /* light red tag bg */
+  --error-d4:   var(--error-100);     /* light red tag border */
+  --orange-d2:  var(--warning-50);    /* light gold gradient start */
+  --orange-d4:  var(--warning-100);   /* light gold gradient end */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-ring: var(--ring);
+
+  /* Status Colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-50: var(--success-50);
+  --color-success-100: var(--success-100);
+  --color-success-500: var(--success-500);
+  --color-success-600: var(--success-600);
+  --color-success-700: var(--success-700);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-50: var(--warning-50);
+  --color-warning-100: var(--warning-100);
+  --color-warning-500: var(--warning-500);
+  --color-warning-600: var(--warning-600);
+  --color-warning-700: var(--warning-700);
+  --color-warning-800: var(--warning-800);
+  --color-warning-950: var(--warning-950);
+
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-error-50: var(--error-50);
+  --color-error-100: var(--error-100);
+  --color-error-500: var(--error-500);
+  --color-error-600: var(--error-600);
+  --color-error-700: var(--error-700);
+
+  /* Subject Colors */
+  --color-physics: var(--physics);
+  --color-physics-foreground: var(--physics-foreground);
+  --color-physics-50: var(--physics-50);
+  --color-physics-100: var(--physics-100);
+  --color-physics-950: var(--physics-950);
+
+  --color-chemistry: var(--chemistry);
+  --color-chemistry-foreground: var(--chemistry-foreground);
+  --color-chemistry-50: var(--chemistry-50);
+  --color-chemistry-100: var(--chemistry-100);
+  --color-chemistry-950: var(--chemistry-950);
+
+  --color-mathematics: var(--mathematics);
+  --color-mathematics-foreground: var(--mathematics-foreground);
+  --color-mathematics-50: var(--mathematics-50);
+  --color-mathematics-100: var(--mathematics-100);
+  --color-mathematics-950: var(--mathematics-950);
+
+  --color-biology: var(--biology);
+  --color-biology-foreground: var(--biology-foreground);
+  --color-biology-50: var(--biology-50);
+  --color-biology-100: var(--biology-100);
+  --color-biology-950: var(--biology-950);
+
+  /* Gray Scale */
+  --color-gray-25: var(--gray-25);
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+  --color-gray-950: var(--gray-950);
+
+  /* Primary Scale */
+  --color-primary-25: var(--primary-25);
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
+  /* Chart */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius */
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-card);
+  --radius-xl: calc(var(--radius-card) + 4px);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+    outline-offset: 2px;
+  }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-family-inter);
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Shimmer animation for progress bars */
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Pulse animation for in-progress lessons */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+
+  /* Pulse glow animation for in-progress lessons - Duolingo style */
+  @keyframes pulse-glow {
+    0%, 100% {
+      transform: scale(1.05);
+    }
+    50% {
+      transform: scale(1.08);
+    }
+  }
+
+  /* Float animation for entire in-progress lesson section */
+  @keyframes float-lesson {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  /* Play button pulse animation */
+  @keyframes play-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+  }
+
+  /* Hide mobile keyboard on desktop/web viewports (≥1280px) */
+  @media (min-width: 1280px) {
+    .mobile-keyboard-only {
+      display: none !important;
+    }
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"])):not(:has([class^="text-"]))) {
+    h1 {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.3;
+    }
+
+    h4 {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
+    }
+
+    p {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.5;
+    }
+
+    button {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.5;
+    }
+
+    input {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    .caption {
+      font-family: var(--font-family-inter);
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+  }
+}
+.slot-scroll {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
+.slot-scroll::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+.slot-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.slot-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 9999px;
+  min-height: 32px;
+}

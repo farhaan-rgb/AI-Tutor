@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;}
+  #c{display:block;}
+</style>
+</head>
+<body>
+<canvas id="c" width="480" height="480"></canvas>
+<script>
+// ---- Deterministic Arena icon renderer -------------------------------------
+// URL params:  ?t=0..1  (loop phase)   ?bg=transparent|dark|white   ?size=480
+const P = new URLSearchParams(location.search);
+const T  = ((parseFloat(P.get('t')) || 0) % 1 + 1) % 1;   // 0..1 seamless
+const BG = P.get('bg') || 'transparent';
+const SZ = parseInt(P.get('size') || '480', 10);
+
+const cv = document.getElementById('c');
+cv.width = SZ; cv.height = SZ;
+const g = cv.getContext('2d');
+const S = SZ / 480;                    // scale factor (design space = 480)
+const TAU = Math.PI * 2;
+const ease = x => 0.5 - 0.5 * Math.cos(x * Math.PI);      // smooth 0..1..0-ish
+
+// ---- palette ---------------------------------------------------------------
+const BLUE      = '#2b7fff';
+const BLUE_HI   = '#8fc0ff';
+const BLUE_DK   = '#1a5fd0';
+const GOLD      = '#f5a623';
+const GOLD_HI   = '#ffd27a';
+const GOLD_DK   = '#c67f10';
+const NAVY      = '#0d1a3a';
+const NAVY_EDGE = '#0a1430';
+const RED       = '#ff3b30';
+const RED_HI    = '#ffd0cc';
+
+function bg(){
+  if (BG === 'dark')  { g.fillStyle = '#0f1524'; g.fillRect(0,0,SZ,SZ); }
+  else if (BG === 'white') { g.fillStyle = '#ffffff'; g.fillRect(0,0,SZ,SZ); }
+  // transparent: leave clear
+}
+
+// design-space helpers (draw in 480 units, auto-scaled)
+function push(fn){ g.save(); g.scale(S,S); fn(); g.restore(); }
+
+// ---- arena ring + ripples --------------------------------------------------
+const ARENA_CX = 240, ARENA_CY = 322, ARENA_RX = 176, ARENA_RY = 66;
+
+function arena(){
+  push(()=>{
+    // filled navy dish
+    const grd = g.createLinearGradient(0, ARENA_CY-ARENA_RY, 0, ARENA_CY+ARENA_RY);
+    grd.addColorStop(0, NAVY);
+    grd.addColorStop(1, NAVY_EDGE);
+    g.beginPath();
+    g.ellipse(ARENA_CX, ARENA_CY, ARENA_RX, ARENA_RY, 0, 0, TAU);
+    g.fillStyle = grd; g.fill();
+    // solid rim
+    g.lineWidth = 5; g.strokeStyle = BLUE; g.stroke();
+    // inner soft rim
+    g.beginPath();
+    g.ellipse(ARENA_CX, ARENA_CY, ARENA_RX-7, ARENA_RY-7, 0, 0, TAU);
+    g.lineWidth = 2; g.strokeStyle = 'rgba(143,192,255,0.35)'; g.stroke();
+
+    // expanding ripple rings (2 rings, phase-offset), seamless over T
+    for (let k=0;k<2;k++){
+      const ph = (T + k*0.5) % 1;             // 0..1
+      const grow = ph;                        // expands outward
+      const rx = ARENA_RX + 4 + grow*26;
+      const ry = ARENA_RY + 2 + grow*10;
+      const alpha = 0.55 * (1 - ph);          // fade as it grows
+      g.beginPath();
+      g.ellipse(ARENA_CX, ARENA_CY, rx, ry, 0, 0, TAU);
+      g.lineWidth = 2.5;
+      g.strokeStyle = `rgba(43,127,255,${alpha.toFixed(3)})`;
+      g.stroke();
+    }
+  });
+}
+
+// ---- one sword -------------------------------------------------------------
+// drawn along local +y = tip direction; origin at the crossguard.
+function sword(cx, cy, angleDeg, col, colHi, colDk, pommelCol, glintPhase){
+  push(()=>{
+    g.translate(cx, cy);
+    g.rotate(angleDeg * Math.PI/180);
+
+    const bladeLen = 152, bladeW = 23;
+    const gripLen  = 34,  gripW  = 9;
+    const guardW   = 50,  guardH = 12;
+
+    // ---- grip + pommel (below origin, -y) ----
+    g.fillStyle = '#3a4a63';
+    g.beginPath();
+    g.roundRect(-gripW/2, 0, gripW, gripLen, 3);
+    g.fill();
+    // pommel dot
+    g.beginPath();
+    g.arc(0, gripLen+7, 9, 0, TAU);
+    g.fillStyle = pommelCol; g.fill();
+    g.lineWidth = 2; g.strokeStyle = 'rgba(255,255,255,0.5)'; g.stroke();
+
+    // ---- crossguard ----
+    const gg = g.createLinearGradient(-guardW/2,0,guardW/2,0);
+    gg.addColorStop(0, colDk); gg.addColorStop(0.5, colHi); gg.addColorStop(1, colDk);
+    g.fillStyle = gg;
+    g.beginPath();
+    g.roundRect(-guardW/2, -guardH/2, guardW, guardH, 5);
+    g.fill();
+
+    // ---- blade (tapered, points to +y... but we want tip up => use -y) ----
+    // We'll draw blade extending in -y (upward in local space).
+    g.beginPath();
+    g.moveTo(-bladeW/2, -2);
+    g.lineTo( bladeW/2, -2);
+    g.lineTo( bladeW*0.34, -(bladeLen-22));
+    g.lineTo( 0,          -bladeLen);          // point
+    g.lineTo(-bladeW*0.34, -(bladeLen-22));
+    g.closePath();
+    const bg2 = g.createLinearGradient(-bladeW/2,0,bladeW/2,0);
+    bg2.addColorStop(0, colDk);
+    bg2.addColorStop(0.42, col);
+    bg2.addColorStop(0.5, colHi);
+    bg2.addColorStop(0.58, col);
+    bg2.addColorStop(1, colDk);
+    g.fillStyle = bg2; g.fill();
+
+    // central fuller line
+    g.beginPath();
+    g.moveTo(0, -6); g.lineTo(0, -(bladeLen-14));
+    g.lineWidth = 2; g.strokeStyle = 'rgba(255,255,255,0.28)'; g.stroke();
+
+    // ---- travelling glint ----
+    const gp = (glintPhase % 1);
+    const gy = -(6 + gp * (bladeLen-24));
+    g.save();
+    g.beginPath();                             // clip to blade
+    g.moveTo(-bladeW/2, -2);
+    g.lineTo( bladeW/2, -2);
+    g.lineTo( bladeW*0.34, -(bladeLen-22));
+    g.lineTo( 0, -bladeLen);
+    g.lineTo(-bladeW*0.34, -(bladeLen-22));
+    g.closePath(); g.clip();
+    const gl = g.createLinearGradient(0, gy-26, 0, gy+26);
+    gl.addColorStop(0,   'rgba(255,255,255,0)');
+    gl.addColorStop(0.5, 'rgba(255,255,255,0.85)');
+    gl.addColorStop(1,   'rgba(255,255,255,0)');
+    g.fillStyle = gl;
+    g.fillRect(-bladeW, gy-26, bladeW*2, 52);
+    g.restore();
+  });
+}
+
+// ---- red dot ---------------------------------------------------------------
+function redDot(){
+  push(()=>{
+    const pulse = 0.5 + 0.5*Math.sin(T*TAU);   // 0..1 seamless
+    const r = 14 + pulse*2;
+    const cx = 388, cy = 86;
+    // glow (restrained)
+    const gl = g.createRadialGradient(cx,cy,2, cx,cy, r+9);
+    gl.addColorStop(0, `rgba(255,59,48,${(0.28+0.18*pulse).toFixed(3)})`);
+    gl.addColorStop(1, 'rgba(255,59,48,0)');
+    g.fillStyle = gl;
+    g.beginPath(); g.arc(cx,cy,r+9,0,TAU); g.fill();
+    // body
+    const bd = g.createRadialGradient(cx-4,cy-5,1, cx,cy, r);
+    bd.addColorStop(0, RED_HI); bd.addColorStop(0.35, RED); bd.addColorStop(1, '#d0241b');
+    g.fillStyle = bd;
+    g.beginPath(); g.arc(cx,cy,r,0,TAU); g.fill();
+    // spec highlight
+    g.beginPath(); g.arc(cx-5,cy-6,r*0.28,0,TAU);
+    g.fillStyle = 'rgba(255,255,255,0.7)'; g.fill();
+  });
+}
+
+// ---- compose ---------------------------------------------------------------
+bg();
+
+// clash-sway: gentle oscillation of both swords about the cross
+const sway = Math.sin(T*TAU) * 2.2;            // degrees, seamless
+const CX = 240, CY = 196;                       // cross point
+
+arena();
+
+// gold sword: tip up-left  (pommel bottom-right). base sits below cross.
+sword(CX+14, CY+70, -34 + sway, GOLD, GOLD_HI, GOLD_DK, GOLD, (T*1+0.0));
+// blue sword: tip up-right (pommel bottom-left). drawn on top.
+sword(CX-14, CY+70,  34 + sway, BLUE, BLUE_HI, BLUE_DK, BLUE, (T*1+0.5));
+
+redDot();
+</script>
+</body>
+</html>
