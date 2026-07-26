@@ -50,14 +50,27 @@ interface PracticePart {
   steps: PracticeStep[];
 }
 
+// Visual/perceptual problems (e.g. "how many zeroes does this graph show") have
+// nothing to derive — the answer comes from reading the real figure directly.
+// Forcing these into a step-by-step reveal would fake a derivation that
+// doesn't exist, so they get their own shape: the real figure, a small set of
+// direct-answer options per sub-part, and immediate right/wrong feedback with
+// a one-line "what to look for" — never a multi-step walkthrough.
+interface VisualQuestion {
+  label: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+}
+
 interface PracticeProblem {
   id: string;
   label: string;
   questionText: string;
-  // Single-part problems use `steps` directly. Multi-part real questions use
-  // `parts` instead — exactly one of the two is set, never both.
+  // Exactly one of steps/parts/visual is set per problem, never more than one.
   steps?: PracticeStep[];
   parts?: PracticePart[];
+  visual?: { imageSrc: string; imageAlt: string; questions: VisualQuestion[] };
   verifyLine: string;
 }
 
@@ -400,6 +413,168 @@ const EX_1_2_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
+// Chapter 2 — Polynomials (jemh102.pdf). "Geometrical meaning" (Example 1)
+// and Exercise 2.1 are visual/perceptual — reading a zero-count directly off
+// a real graph, nothing to derive — so they use `visual`, not `steps`/`parts`.
+// Figures are the real Fig. 2.9 / Fig. 2.10 cropped straight from the PDF.
+const GEOMETRICAL_MEANING_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "example-1",
+    label: "Example 1",
+    questionText: "Look at the six graphs of y = p(x) below. For each, find the number of zeroes of p(x).",
+    visual: {
+      imageSrc: "/polynomials-fig-2-9.png",
+      imageAlt: "Fig. 2.9 — six graphs of y = p(x)",
+      questions: [
+        { label: "(i)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
+        { label: "(ii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
+        { label: "(iii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+        { label: "(iv)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "A straight line crosses the x-axis exactly once." },
+        { label: "(v)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The parabola just touches the x-axis at its vertex — one repeated zero." },
+        { label: "(vi)", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
+      ],
+    },
+    verifyLine: "All six read directly off the graph — no algebra needed, just counting crossings ✓",
+  },
+];
+
+const ZEROES_COEFF_QUADRATIC_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "example-2",
+    label: "Example 2",
+    questionText: "Find the zeroes of the quadratic polynomial x² + 7x + 10, and verify the relationship between the zeroes and the coefficients.",
+    steps: [
+      { prompt: "Factorise x² + 7x + 10 by splitting the middle term.", answer: "x² + 7x + 10 = (x + 2)(x + 5)" },
+      { prompt: "So what are the zeroes?", answer: "Zeroes: −2 and −5" },
+      { prompt: "Verify: sum of zeroes vs −(coeff of x) ÷ (coeff of x²).", answer: "−2 + (−5) = −7 = −7 ÷ 1 ✓" },
+      { prompt: "Verify: product of zeroes vs (constant term) ÷ (coeff of x²).", answer: "(−2)(−5) = 10 = 10 ÷ 1 ✓" },
+    ],
+    verifyLine: "Zeroes −2, −5 — both relationships confirmed ✓",
+  },
+  {
+    id: "example-3",
+    label: "Example 3",
+    questionText: "Find the zeroes of the polynomial x² − 3, and verify the relationship between the zeroes and the coefficients.",
+    steps: [
+      { prompt: "Rewrite x² − 3 using a² − b² = (a − b)(a + b).", answer: "x² − 3 = (x − √3)(x + √3)" },
+      { prompt: "So what are the zeroes?", answer: "Zeroes: √3 and −√3", trap: { wrongGuess: "x = √3 only", hint: "x² = 3 has two solutions, not one — don't drop the negative root: x = ±√3." } },
+      { prompt: "Verify: sum of zeroes.", answer: "√3 + (−√3) = 0 = −(0) ÷ 1 ✓ (coefficient of x is 0)" },
+      { prompt: "Verify: product of zeroes.", answer: "(√3)(−√3) = −3 = −3 ÷ 1 ✓" },
+    ],
+    verifyLine: "Zeroes √3, −√3 — both relationships confirmed ✓",
+  },
+  {
+    id: "example-4",
+    label: "Example 4",
+    questionText: "Find a quadratic polynomial, the sum and product of whose zeroes are −3 and 2, respectively.",
+    steps: [
+      { prompt: "Write the two relationships α+β and αβ give you.", answer: "α + β = −3 = −b/a, αβ = 2 = c/a" },
+      { prompt: "Pick a = 1 — what are b and c?", answer: "b = 3, c = 2" },
+      { prompt: "So what's the polynomial?", answer: "x² + 3x + 2" },
+    ],
+    verifyLine: "x² + 3x + 2 has zeroes summing to −3 and multiplying to 2 ✓",
+  },
+];
+
+const ZEROES_COEFF_CUBIC_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "example-5",
+    label: "Example 5",
+    questionText: "Verify that 3, −1, −1⁄3 are the zeroes of the cubic polynomial p(x) = 3x³ − 5x² − 11x − 3, and then verify the relationship between the zeroes and the coefficients.",
+    steps: [
+      { prompt: "Check p(3) = 0.", answer: "p(3) = 3(27) − 5(9) − 11(3) − 3 = 81 − 45 − 33 − 3 = 0 ✓" },
+      { prompt: "Check p(−1) = 0.", answer: "p(−1) = 3(−1) − 5(1) − 11(−1) − 3 = −3 − 5 + 11 − 3 = 0 ✓" },
+      { prompt: "Check p(−1⁄3) = 0.", answer: "p(−1⁄3) = 3(−1⁄27) − 5(1⁄9) − 11(−1⁄3) − 3 = −1⁄9 − 5⁄9 + 33⁄9 − 27⁄9 = 0 ✓" },
+      { prompt: "Verify α+β+γ = −b/a.", answer: "3 + (−1) + (−1⁄3) = 5⁄3 = −(−5) ÷ 3 ✓" },
+      { prompt: "Verify αβ+βγ+γα = c/a.", answer: "3(−1) + (−1)(−1⁄3) + (−1⁄3)(3) = −3 + 1⁄3 − 1 = −11⁄3 = −11⁄3 ✓", trap: { wrongGuess: "−3 + 1⁄3 (stopping after two terms)", hint: "there are three pairs, not two — αβ, βγ, and γα, which wraps back around to multiply the last zero with the first." } },
+      { prompt: "Verify αβγ = −d/a.", answer: "3 × (−1) × (−1⁄3) = 1 = −(−3) ÷ 3 ✓" },
+    ],
+    verifyLine: "All three zeroes verified, and all three coefficient relationships check out ✓",
+  },
+];
+
+const EX_2_1_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "ex2-1-q1",
+    label: "Q1",
+    questionText: "The graphs of y = p(x) are given below, for some polynomials p(x). Find the number of zeroes of p(x) in each case.",
+    visual: {
+      imageSrc: "/polynomials-fig-2-10.png",
+      imageAlt: "Fig. 2.10 — six graphs of y = p(x)",
+      questions: [
+        { label: "(i)", options: ["0", "1", "2", "3", "4"], correctAnswer: "0", explanation: "The graph never touches the x-axis." },
+        { label: "(ii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
+        { label: "(iii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+        { label: "(iv)", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
+        { label: "(v)", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
+        { label: "(vi)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+      ],
+    },
+    verifyLine: "All six zero-counts confirmed ✓",
+  },
+];
+
+const EX_2_2_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "ex2-2-q1",
+    label: "Q1",
+    questionText: "Find the zeroes of the following quadratic polynomials and verify the relationship between the zeroes and the coefficients: (i) x²−2x−8 (ii) 4s²−4s+1 (iii) 6x²−3−7x (iv) 4u²+8u (v) t²−15 (vi) 3x²−x−4",
+    parts: [
+      { label: "(i)", steps: [
+        { prompt: "Factorise x² − 2x − 8.", answer: "x² − 2x − 8 = (x − 4)(x + 2)" },
+        { prompt: "Zeroes and verification?", answer: "Zeroes: 4, −2. Sum = 2 = −(−2)÷1 ✓, Product = −8 = −8÷1 ✓" },
+      ] },
+      { label: "(ii)", steps: [
+        { prompt: "Factorise 4s² − 4s + 1.", answer: "4s² − 4s + 1 = (2s − 1)²" },
+        { prompt: "Zeroes and verification?", answer: "Zero: 1⁄2 (repeated). Sum = 1 = −(−4)÷4 ✓, Product = 1⁄4 = 1÷4 ✓" },
+      ] },
+      { label: "(iii)", steps: [
+        { prompt: "Rewrite 6x² − 3 − 7x in standard form, then factorise.", answer: "6x² − 7x − 3 = (3x + 1)(2x − 3)", trap: { wrongGuess: "6x² − 7x − 3 = (6x + 1)(x − 3)", hint: "expand that back out: 6x² − 18x + x − 3 = 6x² − 17x − 3 — wrong middle term. Split −7x as −9x + 2x instead." } },
+        { prompt: "Zeroes and verification?", answer: "Zeroes: −1⁄3, 3⁄2. Sum = 7⁄6 = −(−7)÷6 ✓, Product = −1⁄2 = −3÷6 ✓" },
+      ] },
+      { label: "(iv)", steps: [
+        { prompt: "Factorise 4u² + 8u.", answer: "4u² + 8u = 4u(u + 2)" },
+        { prompt: "Zeroes and verification?", answer: "Zeroes: 0, −2. Sum = −2 = −8÷4 ✓, Product = 0 = 0÷4 ✓" },
+      ] },
+      { label: "(v)", steps: [
+        { prompt: "Factorise t² − 15.", answer: "t² − 15 = (t − √15)(t + √15)" },
+        { prompt: "Zeroes and verification?", answer: "Zeroes: √15, −√15. Sum = 0 = −(0)÷1 ✓, Product = −15 = −15÷1 ✓" },
+      ] },
+      { label: "(vi)", steps: [
+        { prompt: "Factorise 3x² − x − 4.", answer: "3x² − x − 4 = (3x − 4)(x + 1)" },
+        { prompt: "Zeroes and verification?", answer: "Zeroes: 4⁄3, −1. Sum = 1⁄3 = −(−1)÷3 ✓, Product = −4⁄3 = −4÷3 ✓" },
+      ] },
+    ],
+    verifyLine: "All six pairs verified: sum and product both match the coefficient relationships ✓",
+  },
+  {
+    id: "ex2-2-q2",
+    label: "Q2",
+    questionText: "Find a quadratic polynomial each with the given numbers as the sum and product of its zeroes, respectively: (i) 1⁄4, −1 (ii) √2, 1⁄3 (iii) 0, √5 (iv) 1, 1 (v) −1⁄4, 1⁄4 (vi) 4, 1",
+    parts: [
+      { label: "(i)", steps: [
+        { prompt: "Write x² − (sum)x + (product), then clear the fraction.", answer: "x² − (1⁄4)x + (−1) → ×4 → 4x² − x − 4" },
+      ] },
+      { label: "(ii)", steps: [
+        { prompt: "Write x² − (sum)x + (product), then clear the fraction.", answer: "x² − √2x + 1⁄3 → ×3 → 3x² − 3√2x + 1" },
+      ] },
+      { label: "(iii)", steps: [
+        { prompt: "Write x² − (sum)x + (product).", answer: "x² − 0x + √5 = x² + √5" },
+      ] },
+      { label: "(iv)", steps: [
+        { prompt: "Write x² − (sum)x + (product).", answer: "x² − x + 1" },
+      ] },
+      { label: "(v)", steps: [
+        { prompt: "Write x² − (sum)x + (product), then clear the fraction.", answer: "x² − (−1⁄4)x + 1⁄4 = x² + (1⁄4)x + 1⁄4 → ×4 → 4x² + x + 1", trap: { wrongGuess: "4x² − x + 1", hint: "sum = −1⁄4, so −(sum) = +1⁄4 — the double negative flips the middle term's sign, don't drop it." } },
+      ] },
+      { label: "(vi)", steps: [
+        { prompt: "Write x² − (sum)x + (product).", answer: "x² − 4x + 1" },
+      ] },
+    ],
+    verifyLine: "All six quadratics match the given sum and product ✓",
+  },
+];
+
 const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
@@ -408,6 +583,11 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "composite-proofs": COMPOSITE_PROOFS_PROBLEMS,
   "ex-1-1": EX_1_1_PROBLEMS,
   "ex-1-2": EX_1_2_PROBLEMS,
+  "zeroes-geometrical-meaning": GEOMETRICAL_MEANING_PROBLEMS,
+  "zeroes-coeff-quadratic": ZEROES_COEFF_QUADRATIC_PROBLEMS,
+  "zeroes-coeff-cubic": ZEROES_COEFF_CUBIC_PROBLEMS,
+  "ex-2-1": EX_2_1_PROBLEMS,
+  "ex-2-2": EX_2_2_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -456,13 +636,17 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null);
   const [gradeFeedback, setGradeFeedback] = useState<string | null>(null);
   const [gradeError, setGradeError] = useState<string | null>(null);
+  // Visual/perceptual problems reuse partIdx/completedParts (same "which
+  // sub-part, which are done" shape as the derivation parts) but track the
+  // currently-selected option separately, since there's no step reveal here.
+  const [visualAnswer, setVisualAnswer] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const problem = problems[problemIdx];
   // Multi-part real questions (Q1's five numbers, Q2/Q3's three pairs/triples)
   // walk through whichever sub-part is selected, independently of the others
   // — not one forced linear chain across all sub-parts.
-  const activeSteps: PracticeStep[] = problem.parts ? problem.parts[partIdx].steps : problem.steps!;
+  const activeSteps: PracticeStep[] = problem.parts ? problem.parts[partIdx].steps : (problem.steps ?? []);
 
   // Completion is tracked per PROBLEM, not just per topic — completing
   // Example 2 alone shouldn't silently mark "HCF & LCM — two numbers" as
@@ -492,6 +676,28 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setPhotoDataUrl(null);
     setGradeFeedback(null);
     setGradeError(null);
+    setVisualAnswer(null);
+  }
+
+  // Visual problems: jump to any sub-question at any time (same "always
+  // reachable" rule as selectPart), resetting the shown answer/feedback.
+  function selectVisualQuestion(i: number) {
+    setPartIdx(i);
+    setVisualAnswer(null);
+  }
+
+  function answerVisualQuestion(option: string) {
+    if (!problem.visual) return;
+    setVisualAnswer(option);
+    if (option === problem.visual.questions[partIdx].correctAnswer) {
+      const updated = [...completedParts];
+      updated[partIdx] = true;
+      setCompletedParts(updated);
+      if (updated.filter(Boolean).length === problem.visual.questions.length) {
+        markProblemComplete(problem);
+        setExplainFinished(true);
+      }
+    }
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -607,6 +813,117 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
       </div>
     </div>
   );
+
+  // Visual/perceptual problems bypass the select/explain/pending mode
+  // machinery entirely — there's no derivation to walk through or photo to
+  // grade, just the real figure and a direct answer with immediate feedback.
+  // `mode` never changes away from "select" for these, so the shared
+  // explainFinished check further down (gated behind mode==="explain") would
+  // never be reached — handle completion here instead, duplicating that same
+  // generic completion screen.
+  if (problem.visual) {
+    if (explainFinished) {
+      return (
+        <div style={{ height: "100dvh", display: "flex", flexDirection: "column", backgroundColor: "var(--background)", overflow: "hidden" }}>
+          <StatusBar />
+          {header}
+          <div style={{ height: 1, background: "var(--border)" }} />
+          <div className="flex-1 overflow-y-auto flex flex-col" style={{ padding: "16px 20px 24px", gap: 14 }}>
+            <div className="flex flex-col items-center" style={{ padding: "32px 16px", gap: 12, textAlign: "center" }}>
+              <div className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--success)" }}>
+                <Check style={{ width: 26, height: 26, color: "var(--white)" }} strokeWidth={2.5} />
+              </div>
+              <p style={typo.cardTitleStyle}>You've completed {problem.label}</p>
+              <p style={{ ...typo.cardBodyStyle, maxWidth: 280 }}>{problem.verifyLine}</p>
+            </div>
+            <NextStepsCta />
+          </div>
+        </div>
+      );
+    }
+
+    const questions = problem.visual.questions;
+    const currentQuestion = questions[partIdx];
+    const hasAnswered = visualAnswer !== null;
+    const isCorrect = hasAnswered && visualAnswer === currentQuestion.correctAnswer;
+
+    return (
+      <div style={{ height: "100dvh", display: "flex", flexDirection: "column", backgroundColor: "var(--background)", overflow: "hidden" }}>
+        <StatusBar />
+        {header}
+        <div style={{ height: 1, background: "var(--border)" }} />
+
+        <div className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
+          <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "12px 15px", marginBottom: 14 }}>
+            <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 5 }}>{problem.label}</span>
+            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{problem.questionText}</p>
+          </div>
+
+          <div style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", marginBottom: 16 }}>
+            <img src={problem.visual.imageSrc} alt={problem.visual.imageAlt} style={{ width: "100%", display: "block" }} />
+          </div>
+
+          {/* Sub-question picker — any graph reachable any time, checkmark once answered correctly */}
+          <div className="flex flex-wrap items-center" style={{ gap: 6, marginBottom: 16 }}>
+            {questions.map((q, i) => {
+              const done = completedParts[i];
+              const active = i === partIdx;
+              return (
+                <button
+                  key={q.label}
+                  onClick={() => selectVisualQuestion(i)}
+                  className="flex items-center"
+                  style={{
+                    gap: 4, height: 32, padding: "0 12px", borderRadius: 8, cursor: "pointer",
+                    border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                    background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+                    color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
+                    fontFamily: "var(--font-family-inter)", fontSize: 13, fontWeight: 700,
+                  }}
+                >
+                  {done && <Check style={{ width: 11, height: 11 }} strokeWidth={3} />}
+                  {q.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>How many zeroes does graph {currentQuestion.label} show?</p>
+
+          <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 14 }}>
+            {currentQuestion.options.map((opt) => {
+              const isSelected = visualAnswer === opt;
+              const isThisCorrect = opt === currentQuestion.correctAnswer;
+              let bg = "var(--card)", border = "1px solid var(--border)", color = "var(--foreground)";
+              if (hasAnswered && isSelected && isThisCorrect) { bg = "var(--success-d2)"; border = "1px solid var(--success)"; color = "var(--success)"; }
+              else if (hasAnswered && isSelected && !isThisCorrect) { bg = "var(--error-d2)"; border = "1px solid var(--error)"; color = "var(--error)"; }
+              return (
+                <button
+                  key={opt}
+                  onClick={() => answerVisualQuestion(opt)}
+                  style={{ width: 48, height: 48, borderRadius: 10, cursor: "pointer", background: bg, border, color, fontFamily: "var(--font-family-inter)", fontSize: 16, fontWeight: 700 }}
+                >
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+
+          {hasAnswered && (
+            <div style={{ padding: "12px 14px", borderRadius: 12, border: `1px solid ${isCorrect ? "var(--success)" : "var(--error)"}`, background: isCorrect ? "var(--success-d2)" : "var(--error-d2)" }}>
+              <div className="flex items-center gap-2" style={{ marginBottom: 4 }}>
+                {isCorrect ? <Check style={{ width: 14, height: 14, color: "var(--success)" }} strokeWidth={3} /> : <X style={{ width: 14, height: 14, color: "var(--error)" }} />}
+                <span style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)", color: isCorrect ? "var(--success)" : "var(--error)" }}>
+                  {isCorrect ? "Correct" : `Not quite — it's ${currentQuestion.correctAnswer}`}
+                </span>
+              </div>
+              <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{currentQuestion.explanation}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (mode === "select") {
     return (

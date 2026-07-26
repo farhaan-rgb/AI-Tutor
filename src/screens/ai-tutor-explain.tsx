@@ -15,6 +15,10 @@ import { StatusBar, typo } from "../shared/premium-ui";
 
 interface TopicContent {
   title: string;
+  // Shown in the header above the topic title ("Real Numbers · jumped here").
+  // Was hardcoded to "Real Numbers" — broke the moment a second chapter's
+  // topics were added here.
+  chapterLabel: string;
   intro: string;
   // Optional supporting-theorem block, shown before the main example — used
   // only where the book itself proves a lemma first (Theorem 1.2) before
@@ -24,10 +28,13 @@ interface TopicContent {
   lemmaLines?: string[];
   exampleLabel: string;
   exampleLines: string[];
-  followUpPrompt: string;
-  followUpStudent: string;
-  followUpLabel: string;
-  followUpLines: string[];
+  // Optional — a topic only gets a second worked example if the chapter
+  // actually has a second real one to show. Not every topic has two (e.g.
+  // Ch.2's cubic zero↔coefficient topic has exactly one real Example).
+  followUpPrompt?: string;
+  followUpStudent?: string;
+  followUpLabel?: string;
+  followUpLines?: string[];
   closing: string;
   // Which exercise this concept's section leads into — 1.2's concepts point
   // at Exercise 1.1, 1.3's concepts point at Exercise 1.2. Previously this
@@ -40,6 +47,7 @@ interface TopicContent {
 const TOPIC_COPY: Record<string, TopicContent> = {
   "unique-factorisation": {
     title: "Unique prime factorisation",
+    chapterLabel: "Real Numbers",
     intro:
       "Every composite number breaks down into primes in exactly one way, ignoring order — that's the Fundamental Theorem of Arithmetic. You already do this with factor trees; this just says the tree always ends the same place no matter how you split it.",
     exampleLabel: "Factor tree · 32760",
@@ -54,6 +62,7 @@ const TOPIC_COPY: Record<string, TopicContent> = {
   },
   "hcf-lcm-two": {
     title: "HCF & LCM — two numbers",
+    chapterLabel: "Real Numbers",
     intro:
       "Once a number's prime factorisation is fixed, HCF and LCM become mechanical: HCF takes the smallest shared power of each common prime; LCM takes the largest power of every prime that shows up anywhere.",
     exampleLabel: "Worked example · 6, 20",
@@ -68,6 +77,7 @@ const TOPIC_COPY: Record<string, TopicContent> = {
   },
   "hcf-lcm-three": {
     title: "HCF & LCM — three numbers",
+    chapterLabel: "Real Numbers",
     intro:
       "For two numbers, HCF × LCM gives you the product — but that shortcut doesn't hold with a third number. Instead: take the smallest power of every prime common to all three, and the largest power of every prime that shows up anywhere.",
     exampleLabel: "Worked example · 6, 72, 120",
@@ -82,6 +92,7 @@ const TOPIC_COPY: Record<string, TopicContent> = {
   },
   "root-p-irrational": {
     title: "Proving √p is irrational",
+    chapterLabel: "Real Numbers",
     intro:
       "Before we can prove √2 is irrational (Theorem 1.3), we need one supporting result — Theorem 1.2: if a prime p divides a², it also divides a. Let's see why that's true first.",
     lemmaLabel: "Theorem 1.2 · If p divides a², then p divides a",
@@ -109,6 +120,7 @@ const TOPIC_COPY: Record<string, TopicContent> = {
   },
   "composite-proofs": {
     title: "Proving expressions like 5−√3 are irrational",
+    chapterLabel: "Real Numbers",
     intro:
       "Proving √p is irrational is only half the picture. When the question asks about 5−√3 or 3√2, you assume the whole expression is rational, isolate the irrational part algebraically, then show that leads to √p being rational — a contradiction.",
     exampleLabel: "Worked example · 5 − √3",
@@ -120,6 +132,52 @@ const TOPIC_COPY: Record<string, TopicContent> = {
     closing: "Isolate the irrational term, show the other side is rational, contradiction. Same three steps every time.",
     exerciseId: "ex-1-2",
     exerciseLabel: "Exercise 1.2",
+  },
+
+  // Chapter 2 — Polynomials (jemh102.pdf). "Geometrical meaning" is kind:
+  // "both" via the Remark ("degree n → at most n zeroes") rather than a
+  // numbered Theorem — Ch.2 doesn't number this one, so we cite it as what
+  // it actually is instead of inventing a theorem number.
+  "zeroes-geometrical-meaning": {
+    title: "Geometrical meaning of zeroes",
+    chapterLabel: "Polynomials",
+    intro:
+      "A zero of p(x) is a value where p(x) = 0 — and graphically, that's exactly where the curve y = p(x) crosses the x-axis. A linear polynomial's graph is a straight line, so it crosses the x-axis exactly once. A quadratic's graph is a parabola, which can cross twice, touch it once (a repeated zero), or miss it completely — so a quadratic has at most 2 zeroes. In general, a degree-n polynomial's graph meets the x-axis at most n times, so it has at most n zeroes.",
+    exampleLabel: "Worked example · y = x² − 3x − 4",
+    exampleLines: ["This parabola crosses the x-axis at x = −1 and x = 4", "<strong>So −1 and 4 are the zeroes</strong>", "Check: p(−1) = 1 + 3 − 4 = 0, p(4) = 16 − 12 − 4 = 0 ✓"],
+    followUpPrompt: "A cubic's graph can cross up to 3 times — want to see one?",
+    followUpStudent: "yeah, show me",
+    followUpLabel: "Worked example · y = x³ − 4x",
+    followUpLines: ["x³ − 4x = x(x − 2)(x + 2)", "<strong>Zeroes: −2, 0, 2</strong> — the graph crosses the x-axis 3 times", "Check: p(−2) = −8+8 = 0, p(0) = 0, p(2) = 8−8 = 0 ✓"],
+    closing: "So counting zeroes is just counting how many times the curve touches or crosses the x-axis. Exercise 2.1 gives you six real graphs to read this off directly.",
+    exerciseId: "ex-2-1",
+    exerciseLabel: "Exercise 2.1",
+  },
+  "zeroes-coeff-quadratic": {
+    title: "Zeroes & coefficients — quadratic polynomials",
+    chapterLabel: "Polynomials",
+    intro:
+      "Once you know a quadratic's zeroes, its coefficients are built directly from them. If α and β are the zeroes of ax² + bx + c, then α + β = −b/a and αβ = c/a — because ax² + bx + c must equal k(x − α)(x − β) for some constant k, and matching coefficients after expanding gives exactly those two relationships.",
+    exampleLabel: "Example 2 · x² + 7x + 10",
+    exampleLines: ["Factorise: x² + 7x + 10 = (x + 2)(x + 5)", "<strong>Zeroes: −2 and −5</strong>", "Sum = −2 + (−5) = −7 = −(coefficient of x) ÷ (coefficient of x²) ✓", "Product = (−2)(−5) = 10 = (constant term) ÷ (coefficient of x²) ✓"],
+    followUpPrompt: "It works the other way too — give me a sum and product, and I can build the polynomial. Want to see that?",
+    followUpStudent: "yeah — say the zeroes add to −3 and multiply to 2",
+    followUpLabel: "Example 4 · Building a polynomial from −3 and 2",
+    followUpLines: ["α + β = −3 = −b/a, αβ = 2 = c/a", "Take a = 1 → b = 3, c = 2", "<strong>x² + 3x + 2</strong> has zeroes summing to −3, multiplying to 2"],
+    closing: "Example 3 in Practice checks the same two relationships with an irrational pair (√3, −√3) — they hold regardless of what the zeroes look like. Exercise 2.2 has six more pairs to verify.",
+    exerciseId: "ex-2-2",
+    exerciseLabel: "Exercise 2.2",
+  },
+  "zeroes-coeff-cubic": {
+    title: "Zeroes & coefficients — cubic polynomials",
+    chapterLabel: "Polynomials",
+    intro:
+      "The same idea extends to cubics, with one more relationship. If α, β, γ are the zeroes of ax³ + bx² + cx + d, then α+β+γ = −b/a, the sum of products taken two at a time (αβ+βγ+γα) = c/a, and αβγ = −d/a.",
+    exampleLabel: "Example 5 · Verifying 3x³ − 5x² − 11x − 3",
+    exampleLines: ["Given zeroes 3, −1, −1⁄3 — check each: p(3)=81−45−33−3=0, p(−1)=−3−5+11−3=0, p(−1⁄3)=0 ✓", "Sum: 3+(−1)+(−1⁄3) = 5⁄3 = −b/a ✓", "<strong>αβ+βγ+γα = −11⁄3 = c/a, and αβγ = 1 = −d/a</strong> — both check out"],
+    closing: "Same pattern as the quadratic, just with a third zero folded in. Practice walks through this exact verification step by step.",
+    exerciseId: "ex-2-2",
+    exerciseLabel: "Exercise 2.2",
   },
 };
 
@@ -183,7 +241,7 @@ export function Component() {
           <ArrowLeft style={{ width: 18, height: 18, color: "var(--foreground)" }} />
         </button>
         <div className="flex-1 min-w-0">
-          <p style={{ ...typo.metaStyle, color: "var(--primary)", fontWeight: "var(--font-weight-semibold)", marginBottom: 1 }}>Real Numbers · jumped here</p>
+          <p style={{ ...typo.metaStyle, color: "var(--primary)", fontWeight: "var(--font-weight-semibold)", marginBottom: 1 }}>{topic.chapterLabel} · jumped here</p>
           <p style={typo.pageTitleStyle}>{topic.title}</p>
         </div>
       </div>
@@ -201,10 +259,13 @@ export function Component() {
 
         <WorkedExample label={topic.exampleLabel} lines={topic.exampleLines} />
 
-        <Bubble from="tutor">{topic.followUpPrompt}</Bubble>
-        <Bubble from="student">{topic.followUpStudent}</Bubble>
-
-        <WorkedExample label={topic.followUpLabel} lines={topic.followUpLines} />
+        {topic.followUpPrompt && (
+          <>
+            <Bubble from="tutor">{topic.followUpPrompt}</Bubble>
+            <Bubble from="student">{topic.followUpStudent}</Bubble>
+            <WorkedExample label={topic.followUpLabel!} lines={topic.followUpLines!} />
+          </>
+        )}
 
         <Bubble from="tutor">{topic.closing}</Bubble>
 

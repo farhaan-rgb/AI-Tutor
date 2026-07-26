@@ -6,12 +6,12 @@
  * tracks scroll position via IntersectionObserver — mirroring StickyChapterHeader
  * + ChapterListSheet in the real app.
  *
- * Only Chapter 1 (Real Numbers) has real interactive content (Explain/Solve are
- * built only for its topics). Chapters 2-14 show their real sub-topic line items
- * (sourced from jemh102-114.pdf) inline in the same status-circle + connector
- * timeline as Chapter 1 — dimmed with a lock icon, per the real app's convention
- * of keeping locked and unlocked topics in one unbroken list rather than a
- * separate disconnected screen.
+ * Chapters 1 (Real Numbers) and 2 (Polynomials) have real interactive content
+ * (Explain/Solve built for their topics). Chapters 3-14 show their real
+ * sub-topic line items (sourced from jemh103-114.pdf) inline in the same
+ * status-circle + connector timeline as Chapters 1-2 — dimmed with a lock
+ * icon, per the real app's convention of keeping locked and unlocked topics
+ * in one unbroken list rather than a separate disconnected screen.
  */
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
@@ -76,16 +76,37 @@ const CH1_SECTIONS: Section[] = [
   },
 ];
 
-// Real sub-topic line items for Chapters 2-14 — theorems, named examples, real
+// Chapter 2 — everything starts not-started, same convention as Chapter 1.
+// "Geometrical meaning" is kind: "both" via the Remark ("degree n → at most
+// n zeroes") rather than a numbered Theorem — Ch.2 doesn't number this one,
+// so the meta cites what the book actually calls it (see CONTENT_RULEBOOK.md
+// rule 2). Exercise 2.1 and Example 1 are visual/perceptual (read zero-count
+// off a real graph) — still Practice, just a different interaction inside
+// ai-tutor-solve.tsx, not a different Explain/Practice classification.
+const CH2_SECTIONS: Section[] = [
+  {
+    label: "2.2 — Geometrical Meaning of the Zeroes of a Polynomial",
+    topics: [
+      { id: "zeroes-geometrical-meaning", title: "Geometrical meaning of zeroes", meta: "Not started · Example 1", status: "not-started", explainQuery: "zeroes-geometrical-meaning", kind: "both" },
+      { id: "ex-2-1", title: "Exercise 2.1 — Practice", meta: "Not started · 1 question", status: "not-started" },
+    ],
+  },
+  {
+    label: "2.3 — Relationship between Zeroes and Coefficients",
+    topics: [
+      { id: "zeroes-coeff-quadratic", title: "Zeroes & coefficients — quadratic", meta: "Not started · Examples 2–4", status: "not-started", explainQuery: "zeroes-coeff-quadratic", kind: "both" },
+      { id: "zeroes-coeff-cubic", title: "Zeroes & coefficients — cubic", meta: "Not started · Example 5", status: "not-started", explainQuery: "zeroes-coeff-cubic", kind: "both" },
+      { id: "ex-2-2", title: "Exercise 2.2 — Practice", meta: "Not started · 2 questions", status: "not-started" },
+    ],
+  },
+];
+
+// Real sub-topic line items for Chapters 3-14 — theorems, named examples, real
 // exercise question counts, sourced from each chapter's actual body text
-// (jemh102.pdf-jemh114.pdf). These chapters have no built Explain/Solve content
+// (jemh103.pdf-jemh114.pdf). These chapters have no built Explain/Solve content
 // yet, so every topic here stays "locked" regardless of enrollment — the lock
 // represents "not built in this prototype," same treatment either way.
 const LOCKED_CHAPTER_RAW: Record<number, { label: string; topics: string[]; exercise: string }[]> = {
-  1: [
-    { label: "2.2 — Geometrical Meaning of the Zeroes of a Polynomial", topics: ["Zeroes = where the graph crosses the x-axis", "Quadratic: at most 2 zeroes", "Cubic: at most 3 zeroes"], exercise: "Exercise 2.1 — 1 question" },
-    { label: "2.3 — Relationship between Zeroes and Coefficients", topics: ["Sum & product of zeroes — quadratic", "Sum & product of zeroes — cubic", "Building a polynomial from its zeroes"], exercise: "Exercise 2.2 — 2 questions" },
-  ],
   2: [
     { label: "3.2 — Graphical Method of Solution", topics: ["Intersecting, parallel, or coincident lines", "Consistent vs. inconsistent pairs"], exercise: "Exercise 3.1 — 7 questions" },
     { label: "3.3.1 — Substitution Method", topics: ["Solving by substituting one variable", "Recognising infinite / no solutions"], exercise: "Exercise 3.2 — 3 questions" },
@@ -152,7 +173,7 @@ function lockedSectionsFor(chapterIdx: number): Section[] {
 
 const ALL_CHAPTERS: ChapterData[] = CHAPTER_TITLES.map((title, i) => ({
   title,
-  sections: i === 0 ? CH1_SECTIONS : lockedSectionsFor(i),
+  sections: i === 0 ? CH1_SECTIONS : i === 1 ? CH2_SECTIONS : lockedSectionsFor(i),
 }));
 
 const STATUS_COLOR: Record<TopicStatus, string> = {
