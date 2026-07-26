@@ -50,14 +50,18 @@ interface PracticePart {
   steps: PracticeStep[];
 }
 
-// Visual/perceptual problems (e.g. "how many zeroes does this graph show") have
-// nothing to derive — the answer comes from reading the real figure directly.
-// Forcing these into a step-by-step reveal would fake a derivation that
-// doesn't exist, so they get their own shape: the real figure, a small set of
-// direct-answer options per sub-part, and immediate right/wrong feedback with
-// a one-line "what to look for" — never a multi-step walkthrough.
+// Visual/perceptual problems (e.g. "how many zeroes does this graph show")
+// and fact-recall problems (e.g. "what type of reaction is this") both have
+// nothing to *derive* — the answer comes from reading a real figure or
+// recalling/classifying a real fact directly. Forcing either into a
+// step-by-step reveal would fake a derivation that doesn't exist, so they
+// share one shape instead: an optional real figure, a small set of
+// direct-answer options per sub-part, and immediate right/wrong feedback
+// with a one-line explanation — never a multi-step walkthrough. imageSrc is
+// set for visual problems (the real graph) and omitted for fact-recall ones.
 interface VisualQuestion {
   label: string;
+  prompt: string;
   options: string[];
   correctAnswer: string;
   explanation: string;
@@ -70,7 +74,7 @@ interface PracticeProblem {
   // Exactly one of steps/parts/visual is set per problem, never more than one.
   steps?: PracticeStep[];
   parts?: PracticePart[];
-  visual?: { imageSrc: string; imageAlt: string; questions: VisualQuestion[] };
+  visual?: { imageSrc?: string; imageAlt?: string; questions: VisualQuestion[] };
   verifyLine: string;
 }
 
@@ -426,12 +430,12 @@ const GEOMETRICAL_MEANING_PROBLEMS: PracticeProblem[] = [
       imageSrc: "/polynomials-fig-2-9.png",
       imageAlt: "Fig. 2.9 — six graphs of y = p(x)",
       questions: [
-        { label: "(i)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
-        { label: "(ii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
-        { label: "(iii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
-        { label: "(iv)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "A straight line crosses the x-axis exactly once." },
-        { label: "(v)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The parabola just touches the x-axis at its vertex — one repeated zero." },
-        { label: "(vi)", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
+        { label: "(i)", prompt: "How many zeroes does graph (i) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
+        { label: "(ii)", prompt: "How many zeroes does graph (ii) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
+        { label: "(iii)", prompt: "How many zeroes does graph (iii) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+        { label: "(iv)", prompt: "How many zeroes does graph (iv) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "A straight line crosses the x-axis exactly once." },
+        { label: "(v)", prompt: "How many zeroes does graph (v) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The parabola just touches the x-axis at its vertex — one repeated zero." },
+        { label: "(vi)", prompt: "How many zeroes does graph (vi) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
       ],
     },
     verifyLine: "All six read directly off the graph — no algebra needed, just counting crossings ✓",
@@ -502,12 +506,12 @@ const EX_2_1_PROBLEMS: PracticeProblem[] = [
       imageSrc: "/polynomials-fig-2-10.png",
       imageAlt: "Fig. 2.10 — six graphs of y = p(x)",
       questions: [
-        { label: "(i)", options: ["0", "1", "2", "3", "4"], correctAnswer: "0", explanation: "The graph never touches the x-axis." },
-        { label: "(ii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
-        { label: "(iii)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
-        { label: "(iv)", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
-        { label: "(v)", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
-        { label: "(vi)", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+        { label: "(i)", prompt: "How many zeroes does graph (i) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "0", explanation: "The graph never touches the x-axis." },
+        { label: "(ii)", prompt: "How many zeroes does graph (ii) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "1", explanation: "The graph crosses the x-axis at exactly one point." },
+        { label: "(iii)", prompt: "How many zeroes does graph (iii) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
+        { label: "(iv)", prompt: "How many zeroes does graph (iv) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "2", explanation: "The graph crosses the x-axis at two points." },
+        { label: "(v)", prompt: "How many zeroes does graph (v) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "4", explanation: "The graph crosses the x-axis at four points." },
+        { label: "(vi)", prompt: "How many zeroes does graph (vi) show?", options: ["0", "1", "2", "3", "4"], correctAnswer: "3", explanation: "The graph crosses the x-axis at three points." },
       ],
     },
     verifyLine: "All six zero-counts confirmed ✓",
@@ -575,6 +579,79 @@ const EX_2_2_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
+// Science — Chapter 1, "Chemical Reactions and Equations" (jesc101.pdf).
+// Sample-chapter scope, matching the taxonomy: balancing is procedural (same
+// step/parts shape as Maths); classifying a reaction or naming what's
+// oxidised/reduced is fact-recall — no derivation exists for "what type is
+// this," so these reuse the same direct-answer `visual` shape as Ch.2's
+// graph-reading problems, just without an image.
+const BALANCING_EQUATIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "balancing-fe-h2o",
+    label: "Worked example",
+    questionText: "Balance the chemical equation: Fe + H₂O → Fe₃O₄ + H₂",
+    steps: [
+      { prompt: "Count atoms of each element on both sides — is it balanced?", answer: "Fe: 1 vs 3, H: 2 vs 2, O: 1 vs 4 — Fe and O don't match" },
+      { prompt: "Start with the element that has the most atoms — balance oxygen first.", answer: "4 O atoms on the right (in Fe₃O₄), only 1 on the left (in H₂O) — put 4 in front of H₂O" },
+      { prompt: "That changes the H count — rebalance hydrogen.", answer: "4H₂O now has 8 H on the left — put 4 in front of H₂ on the right", trap: { wrongGuess: "put 4 in front of H₂O only, leave H₂ as is", hint: "changing H₂O's coefficient changes how many H atoms are on the left — the right side needs to match too, so H₂ needs a 4 as well." } },
+      { prompt: "One element left — balance iron.", answer: "3 Fe atoms on the right (in Fe₃O₄), only 1 on the left — put 3 in front of Fe" },
+      { prompt: "Final balanced equation?", answer: "3Fe + 4H₂O → Fe₃O₄ + 4H₂" },
+    ],
+    verifyLine: "3 Fe, 8 H, 4 O on both sides — balanced ✓",
+  },
+  {
+    id: "translate-and-balance",
+    label: "Practice",
+    questionText: "Write the balanced equation for the following chemical reactions: (i) Hydrogen + Chlorine → Hydrogen chloride (ii) Barium chloride + Aluminium sulphate → Barium sulphate + Aluminium chloride (iii) Sodium + Water → Sodium hydroxide + Hydrogen",
+    parts: [
+      { label: "(i)", steps: [
+        { prompt: "Write the skeletal equation.", answer: "H₂ + Cl₂ → HCl" },
+        { prompt: "Count atoms — what needs balancing?", answer: "2 H and 2 Cl on the left, only 1 each on the right — put 2 in front of HCl" },
+        { prompt: "Balanced equation?", answer: "H₂ + Cl₂ → 2HCl" },
+      ] },
+      { label: "(ii)", steps: [
+        { prompt: "Write the skeletal equation.", answer: "BaCl₂ + Al₂(SO₄)₃ → BaSO₄ + AlCl₃" },
+        { prompt: "Which compound has the most atoms to track? Start there.", answer: "Al₂(SO₄)₃ has 2 Al and 3 SO₄ groups — put 3 in front of BaSO₄ and 2 in front of AlCl₃", trap: { wrongGuess: "balance Ba first since it's written first", hint: "starting with the compound that has the most atoms (Al₂(SO₄)₃) is easier — Ba and Cl fall into place once that's fixed." } },
+        { prompt: "Now balance Ba and Cl to match.", answer: "3 Ba needs 3 BaCl₂ on the left; Cl: 3×2=6 on the left, 2×3=6 on the right ✓" },
+        { prompt: "Balanced equation?", answer: "3BaCl₂ + Al₂(SO₄)₃ → 3BaSO₄ + 2AlCl₃" },
+      ] },
+      { label: "(iii)", steps: [
+        { prompt: "Write the skeletal equation.", answer: "Na + H₂O → NaOH + H₂" },
+        { prompt: "Count atoms — what needs balancing?", answer: "1 Na, 2 H, 1 O on the left vs 1 Na, 3 H, 1 O on the right — H doesn't match" },
+        { prompt: "Balance by doubling Na and H₂O.", answer: "2Na + 2H₂O → 2NaOH + H₂" },
+      ] },
+    ],
+    verifyLine: "All three reactions balanced — atom counts match on both sides ✓",
+  },
+];
+
+const REACTION_TYPES_REDOX_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "reaction-classification",
+    label: "Practice",
+    questionText: "Classify each of the following real reactions.",
+    visual: {
+      questions: [
+        { label: "(i)", prompt: "2PbO(s) + C(s) → 2Pb(s) + CO₂(g). Which statements about this reaction are incorrect? (a) Lead is getting reduced (b) Carbon dioxide is getting oxidised (c) Carbon is getting oxidised (d) Lead oxide is getting reduced", options: ["(a) and (b)", "(a) and (c)", "(a), (b) and (c)", "all four"], correctAnswer: "(a) and (b)", explanation: "PbO loses oxygen, so lead OXIDE is reduced (d is correct) — saying 'lead' itself is reduced (a) misattributes it. Carbon gains oxygen, so CARBON is oxidised (c is correct) — CO₂ is already the oxidised product, it doesn't 'get oxidised' (b is wrong)." },
+        { label: "(ii)", prompt: "Fe₂O₃(s) + 2Al(s) → Al₂O₃(s) + 2Fe(s) — what type of reaction is this?", options: ["Combination", "Double displacement", "Decomposition", "Displacement"], correctAnswer: "Displacement", explanation: "Aluminium is more reactive than iron, so it displaces iron from its oxide — this is the classic thermite reaction." },
+      ],
+    },
+    verifyLine: "Both classifications confirmed ✓",
+  },
+  {
+    id: "identify-oxidised-reduced",
+    label: "Practice",
+    questionText: "In the reaction CuO(s) + H₂(g) → Cu(s) + H₂O(l), identify which substance is oxidised and which is reduced.",
+    visual: {
+      questions: [
+        { label: "CuO", prompt: "What happens to CuO in this reaction?", options: ["Oxidised", "Reduced"], correctAnswer: "Reduced", explanation: "CuO loses oxygen (becomes Cu) — losing oxygen means it's reduced." },
+        { label: "H₂", prompt: "What happens to H₂ in this reaction?", options: ["Oxidised", "Reduced"], correctAnswer: "Oxidised", explanation: "H₂ gains oxygen (becomes H₂O) — gaining oxygen means it's oxidised." },
+      ],
+    },
+    verifyLine: "CuO is reduced, H₂ is oxidised — this is a redox reaction ✓",
+  },
+];
+
 const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
@@ -588,6 +665,8 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "zeroes-coeff-cubic": ZEROES_COEFF_CUBIC_PROBLEMS,
   "ex-2-1": EX_2_1_PROBLEMS,
   "ex-2-2": EX_2_2_PROBLEMS,
+  "balancing-chemical-equations": BALANCING_EQUATIONS_PROBLEMS,
+  "reaction-types-redox": REACTION_TYPES_REDOX_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -854,16 +933,42 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
         <div style={{ height: 1, background: "var(--border)" }} />
 
         <div className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
+          {/* Visual problems bypass "select" mode entirely, so this topic's
+              own multi-problem picker (e.g. Q1 vs Q2) has to live here too —
+              otherwise a topic with >1 visual problem would have no way to
+              switch between them. */}
+          {problems.length > 1 && (
+            <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 14 }}>
+              {problems.map((p, i) => (
+                <button
+                  key={p.id}
+                  onClick={() => selectProblem(i)}
+                  style={{
+                    height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
+                    border: i === problemIdx ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                    background: isProblemDone(p) ? "var(--success-d2)" : i === problemIdx ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+                    color: i === problemIdx ? "var(--primary)" : isProblemDone(p) ? "var(--success)" : "var(--foreground)",
+                    fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
+                  }}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          )}
+
           <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "12px 15px", marginBottom: 14 }}>
             <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 5 }}>{problem.label}</span>
             <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{problem.questionText}</p>
           </div>
 
-          <div style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", marginBottom: 16 }}>
-            <img src={problem.visual.imageSrc} alt={problem.visual.imageAlt} style={{ width: "100%", display: "block" }} />
-          </div>
+          {problem.visual.imageSrc && (
+            <div style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", marginBottom: 16 }}>
+              <img src={problem.visual.imageSrc} alt={problem.visual.imageAlt} style={{ width: "100%", display: "block" }} />
+            </div>
+          )}
 
-          {/* Sub-question picker — any graph reachable any time, checkmark once answered correctly */}
+          {/* Sub-question picker — any graph/fact reachable any time, checkmark once answered correctly */}
           <div className="flex flex-wrap items-center" style={{ gap: 6, marginBottom: 16 }}>
             {questions.map((q, i) => {
               const done = completedParts[i];
@@ -888,7 +993,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             })}
           </div>
 
-          <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>How many zeroes does graph {currentQuestion.label} show?</p>
+          <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>{currentQuestion.prompt}</p>
 
           <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 14 }}>
             {currentQuestion.options.map((opt) => {
@@ -1376,6 +1481,13 @@ const TOPIC_TITLES: Record<string, string> = {
   "composite-proofs": "Proving expressions like 5−√3 are irrational",
   "ex-1-1": "Exercise 1.1",
   "ex-1-2": "Exercise 1.2",
+  "zeroes-geometrical-meaning": "Geometrical meaning of zeroes",
+  "zeroes-coeff-quadratic": "Zeroes & coefficients — quadratic",
+  "zeroes-coeff-cubic": "Zeroes & coefficients — cubic",
+  "ex-2-1": "Exercise 2.1",
+  "ex-2-2": "Exercise 2.2",
+  "balancing-chemical-equations": "Writing & balancing equations",
+  "reaction-types-redox": "Types of reactions, oxidation & reduction",
 };
 
 export function Component() {

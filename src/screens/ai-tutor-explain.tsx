@@ -179,6 +179,41 @@ const TOPIC_COPY: Record<string, TopicContent> = {
     exerciseId: "ex-2-2",
     exerciseLabel: "Exercise 2.2",
   },
+
+  // Science — Chapter 1, "Chemical Reactions and Equations" (jesc101.pdf).
+  // Sample-chapter scope: 2 of the chapter's real sections, not all 5 reaction
+  // types or the full 20-question end exercise — see the AI Tutor conversation
+  // for why (proof-of-concept for a second subject, not a full commitment yet).
+  "balancing-chemical-equations": {
+    title: "Writing & balancing chemical equations",
+    chapterLabel: "Chemical Reactions and Equations",
+    intro:
+      "A chemical equation is a word-equation written with formulae instead of words — reactants on the left, products on the right, joined by an arrow. But a raw ('skeletal') equation isn't automatically correct: the law of conservation of mass says atoms can't appear or disappear in a reaction, so the number of atoms of each element must match on both sides. When they don't, you balance it — by adjusting coefficients in front of formulae, never by changing the formulae themselves.",
+    exampleLabel: "Worked example · Fe + H₂O → Fe₃O₄ + H₂",
+    exampleLines: ["Count atoms on both sides: Fe (1 vs 3), H (2 vs 2), O (1 vs 4) — Fe and O don't match", "Balance O first (it has the most atoms, in Fe₃O₄): put 4 in front of H₂O", "That changes H too — put 4 in front of H₂ as well: Fe + 4H₂O → Fe₃O₄ + 4H₂", "<strong>Now balance Fe: 3Fe + 4H₂O → Fe₃O₄ + 4H₂</strong> ✓ (3 Fe, 8 H, 4 O both sides)"],
+    followUpPrompt: "Equations can also show physical states and reaction conditions — want to see that?",
+    followUpStudent: "yeah, show me",
+    followUpLabel: "Adding state symbols and conditions",
+    followUpLines: ["States go in brackets after each formula: (s) solid, (l) liquid, (g) gas, (aq) dissolved in water", "<strong>3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)</strong>", "Conditions like heat, light, or a catalyst go above/below the arrow when relevant"],
+    closing: "Same balancing method every time: count atoms, fix the element with the most atoms first, work through the rest. Practice has three more real reactions to balance yourself.",
+    exerciseId: "balancing-chemical-equations",
+    exerciseLabel: "Practice",
+  },
+  "reaction-types-redox": {
+    title: "Types of reactions, oxidation & reduction",
+    chapterLabel: "Chemical Reactions and Equations",
+    intro:
+      "Reactions fall into recognisable patterns. A combination reaction joins two or more substances into one (CaO + H₂O → Ca(OH)₂). A decomposition reaction is the reverse — one substance breaks into several (heating FeSO₄ gives Fe₂O₃ + SO₂ + SO₃). A displacement reaction is one element pushing another out of a compound. A double displacement swaps ions between two compounds, often producing an insoluble precipitate.",
+    exampleLabel: "Worked example · Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)",
+    exampleLines: ["Iron atoms replace copper atoms in the compound", "<strong>This is a displacement reaction</strong> — iron is more reactive than copper, so it displaces it", "The blue copper sulphate fades as iron sulphate (pale green) forms, and copper deposits on the nail"],
+    followUpPrompt: "Reactions also involve gaining or losing oxygen — want to see how that's classified?",
+    followUpStudent: "yeah, what's oxidation vs reduction",
+    followUpLabel: "Worked example · CuO + H₂ → Cu + H₂O",
+    followUpLines: ["Copper(II) oxide loses oxygen → <strong>CuO is reduced</strong>", "Hydrogen gains oxygen → <strong>H₂ is oxidised</strong>", "One substance is always oxidised while the other is reduced — this is a redox reaction"],
+    closing: "Once you can spot which pattern a reaction follows, classifying a new one is pattern-matching. Practice gives you real reactions to classify yourself.",
+    exerciseId: "reaction-types-redox",
+    exerciseLabel: "Practice",
+  },
 };
 
 function Bubble({ from, children }: { from: "tutor" | "student"; children: React.ReactNode }) {
