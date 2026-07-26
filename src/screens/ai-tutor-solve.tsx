@@ -19,8 +19,8 @@
  *      show a (i)/(ii)/... picker on this screen so any sub-part is reachable
  *      directly, each with its own multi-step derivation — not one forced
  *      linear chain across every sub-part.
- *   5. Submitted-answer path → feedback (demo-only: the presenter picks
- *      correct/incorrect to control which path to show live).
+ *   5. Submitted-answer path → real feedback: the photo is sent to
+ *      ai-tutor-server (/server), which grades it with a vision model.
  *   6. Wrong answer → routes into the same step-by-step walkthrough.
  *   7. Finishing either path always offers a next step — the other problem
  *      in this topic if it's not done yet, or back to the curriculum if it is.
@@ -427,6 +427,22 @@ function StepCircle({ state, index }: { state: StepState; index: number }) {
 // is correct: at that point you've committed to the upload path.
 type Mode = "select" | "explain" | "pending" | "correct" | "incorrect";
 
+// Local ai-tutor-server (see /server) — grades an uploaded answer photo with
+// a real vision model instead of the old presenter-picks-the-result demo.
+const API_BASE = "http://localhost:8787";
+
+// What the grading model is told counts as "correct" — the real final
+// answer(s), not the whole derivation, so the model judges the student's
+// result rather than re-deriving the problem itself.
+function correctAnswerSummary(problem: PracticeProblem): string {
+  if (problem.parts) {
+    const perPart = problem.parts.map((part) => `${part.label} ${part.steps[part.steps.length - 1].answer}`).join("; ");
+    return `${perPart}. ${problem.verifyLine}`;
+  }
+  const steps = problem.steps!;
+  return `${steps[steps.length - 1].answer}. ${problem.verifyLine}`;
+}
+
 function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; topicTitle: string; problems: PracticeProblem[] }) {
   const navigate = useNavigate();
   const [problemIdx, setProblemIdx] = useState(0);
@@ -438,6 +454,8 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   const [revealed, setRevealed] = useState(false);
   const [explainFinished, setExplainFinished] = useState(false);
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null);
+  const [gradeFeedback, setGradeFeedback] = useState<string | null>(null);
+  const [gradeError, setGradeError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const problem = problems[problemIdx];
@@ -472,6 +490,8 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setRevealed(false);
     setExplainFinished(false);
     setPhotoDataUrl(null);
+    setGradeFeedback(null);
+    setGradeError(null);
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -480,6 +500,31 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     const reader = new FileReader();
     reader.onload = () => setPhotoDataUrl(reader.result as string);
     reader.readAsDataURL(file);
+  }
+
+  // Sends the uploaded photo to ai-tutor-server for real grading (GPT-4o-mini
+  // vision) — replaces the old "presenter picks Mark Correct/Incorrect" demo.
+  async function submitForGrading() {
+    if (!photoDataUrl) return;
+    setMode("pending");
+    setGradeError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/grade-photo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          imageDataUrl: photoDataUrl,
+          questionText: problem.questionText,
+          correctAnswer: correctAnswerSummary(problem),
+        }),
+      });
+      if (!res.ok) throw new Error(`Grading request failed (${res.status})`);
+      const data = await res.json();
+      setGradeFeedback(data.feedback || null);
+      setMode(data.correct ? "correct" : "incorrect");
+    } catch {
+      setGradeError("Couldn't reach the grading service — make sure ai-tutor-server is running (npm run dev in /server).");
+    }
   }
 
   function startExplain() {
@@ -579,21 +624,27 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             <>
               <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a problem</p>
               <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 16 }}>
-                {problems.map((p, i) => (
-                  <button
-                    key={p.id}
-                    onClick={() => selectProblem(i)}
-                    style={{
-                      height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
-                      border: i === problemIdx ? "1.5px solid var(--primary)" : "1px solid var(--border)",
-                      background: i === problemIdx ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
-                      color: i === problemIdx ? "var(--primary)" : "var(--foreground)",
-                      fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
-                    }}
-                  >
-                    {p.label}
-                  </button>
-                ))}
+                {problems.map((p, i) => {
+                  const done = isProblemDone(p);
+                  const active = i === problemIdx;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => selectProblem(i)}
+                      className="flex items-center"
+                      style={{
+                        gap: 4, height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
+                        border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                        background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+                        color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
+                        fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
+                      }}
+                    >
+                      {done && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
+                      {p.label}
+                    </button>
+                  );
+                })}
               </div>
             </>
           )}
@@ -667,7 +718,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                     </button>
                     <span style={{ ...typo.metaStyle, textAlign: "center" }}>Tap the photo to choose a different one</span>
                     <button
-                      onClick={() => setMode("pending")}
+                      onClick={submitForGrading}
                       className="flex items-center justify-center"
                       style={{ height: 44, borderRadius: 12, background: "var(--primary)", border: "none", cursor: "pointer" }}
                     >
@@ -699,20 +750,24 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                 )}
                 <div className="flex items-center gap-2">
                   <Sparkles style={{ width: 18, height: 18, color: "var(--primary)", flexShrink: 0 }} />
-                  <span style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>Checking your answer for {problem.label}…</span>
+                  <span style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>
+                    {gradeError ? "Couldn't check your answer" : `Checking your answer for ${problem.label}…`}
+                  </span>
                 </div>
               </div>
-              <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 12, border: "1px dashed var(--border)" }}>
-                <p style={{ ...typo.metaStyle, marginBottom: 10 }}>Demo controls — simulate the result:</p>
-                <div className="flex gap-2">
-                  <button onClick={() => setMode("correct")} style={{ flex: 1, height: 40, borderRadius: 10, border: "none", background: "var(--success)", color: "var(--white)", fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", cursor: "pointer" }}>
-                    Mark Correct
-                  </button>
-                  <button onClick={() => setMode("incorrect")} style={{ flex: 1, height: 40, borderRadius: 10, border: "none", background: "var(--error)", color: "var(--white)", fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", cursor: "pointer" }}>
-                    Mark Incorrect
-                  </button>
+              {gradeError && (
+                <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--error)", background: "var(--error-d2)" }}>
+                  <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>{gradeError}</p>
+                  <div className="flex gap-2">
+                    <button onClick={submitForGrading} style={{ flex: 1, height: 40, borderRadius: 10, border: "none", background: "var(--primary)", color: "var(--white)", fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", cursor: "pointer" }}>
+                      Try again
+                    </button>
+                    <button onClick={startExplain} style={{ flex: 1, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", color: "var(--foreground)", fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", cursor: "pointer" }}>
+                      See step-by-step instead
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
 
@@ -723,7 +778,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                   <Check style={{ width: 26, height: 26, color: "var(--white)" }} strokeWidth={2.5} />
                 </div>
                 <p style={typo.cardTitleStyle}>Nice work — that's right</p>
-                <p style={{ ...typo.cardBodyStyle, maxWidth: 260 }}>{problem.verifyLine} Marked as complete.</p>
+                <p style={{ ...typo.cardBodyStyle, maxWidth: 260 }}>{gradeFeedback || problem.verifyLine}</p>
               </div>
               <NextStepsCta />
             </>
@@ -736,7 +791,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                   <AlertTriangle style={{ width: 26, height: 26, color: "var(--white)" }} />
                 </div>
                 <p style={typo.cardTitleStyle}>Not quite there yet</p>
-                <p style={{ ...typo.cardBodyStyle, maxWidth: 280 }}>Something's off in {problem.label} — let's walk through it together.</p>
+                <p style={{ ...typo.cardBodyStyle, maxWidth: 280 }}>{gradeFeedback || `Let's walk through ${problem.label} together.`}</p>
               </div>
               <button
                 onClick={startExplain}

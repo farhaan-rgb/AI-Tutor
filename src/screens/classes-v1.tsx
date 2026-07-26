@@ -2205,7 +2205,7 @@ export function Component() {
                 />
                 <div className="flex-1 min-w-0">
                   <p style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", marginBottom: 2 }}>
-                    Class 10 NCERT Maths is on the Marketplace
+                    Class 10 NCERT Maths
                   </p>
                   <p style={{ fontSize: "var(--text-xs)", color: "var(--muted-foreground)", lineHeight: 1.4 }}>
                     A dedicated teacher for every concept and problem in your textbook
