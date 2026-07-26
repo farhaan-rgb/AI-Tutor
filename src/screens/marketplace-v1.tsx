@@ -21,7 +21,7 @@ import { useNavigate, useLocation } from "react-router";
 import { OlympiadEntryBanner } from "./classes";
 import { useScrollRestoration } from "../shared/use-scroll-restoration";
 import { motion } from "motion/react";
-import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles } from "lucide-react";
+import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles, Microscope } from "lucide-react";
 import { StatusBar } from "../shared/premium-ui";
 import { useTheme } from "../app/contexts/theme-context";
 import {
@@ -1183,63 +1183,99 @@ export function Component() {
     originalPrice: c.originalPrice,
   }));
 
-  // AI-tutor vision-memo demo: ?demo=ai-tutor shows only the one course this
+  // AI-tutor vision-memo demo: ?demo=ai-tutor shows only the courses this
   // scenario needs, instead of the full real marketplace. Bottom nav still
   // wraps this screen as normal (rendered by AppLayout, not by this component).
   const isAiTutorDemo = new URLSearchParams(location.search).get("demo") === "ai-tutor";
   if (isAiTutorDemo) {
-    const demoAccent = "#597ef7";
-    const isEnrolledInDemoCourse = localStorage.getItem("cc_selected_sku") === "ncert-10-maths";
+    // Maths has a real photo (sourced earlier in this project); Science
+    // doesn't have an equivalent real photo yet, so it gets a gradient +
+    // icon treatment instead of a fabricated stock photo.
+    const demoCourses = [
+      {
+        sku: "ncert-10-maths",
+        accent: "#597ef7",
+        title: "Class 10 NCERT Maths",
+        subtitle: "Mathematics · Full NCERT Syllabus",
+        image: "/ncert-10-maths-listing.jpg",
+        imageAlt: "Teacher presenting the Class 10 NCERT Maths textbook",
+      },
+      {
+        sku: "ncert-10-science",
+        accent: "#9254de",
+        title: "Class 10 NCERT Science",
+        subtitle: "Science · Full NCERT Syllabus",
+        image: null,
+        imageAlt: "",
+      },
+    ];
+    const description = "Learn with a dedicated teacher who covers your entire NCERT textbook, chapter by chapter — every concept explained, every problem solved, step by step.";
+
     return (
       <div style={{ fontFamily: "var(--font-family-inter)", backgroundColor: "var(--background)", height: "100vh", overflowY: "auto" }}>
         <StatusBar />
         <div style={{ padding: "8px 20px 16px" }}>
           <span style={{ fontSize: "var(--text-2xl)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)" }}>Discover</span>
         </div>
-        <div style={{ padding: "0 20px 32px" }}>
-          <p style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", marginBottom: 16 }}>1 course available</p>
-          <button
-            onClick={() => navigate(isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : "/ai-tutor/curriculum-preview?demo=ai-tutor")}
-            className="flex flex-col w-full text-left"
-            style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
-          >
-            <div style={{ position: "relative" }}>
-              <img
-                src="/ncert-10-maths-listing.jpg"
-                alt="Teacher presenting the Class 10 NCERT Maths textbook"
-                style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
-              />
-              {isEnrolledInDemoCourse && (
-                <div
-                  className="flex items-center"
-                  style={{
-                    position: "absolute", bottom: 10, left: 10, gap: 4,
-                    paddingLeft: 6, paddingRight: 8, height: 22, borderRadius: 4,
-                    backgroundColor: `${demoAccent}26`,
-                    border: `0.5px solid ${demoAccent}66`,
-                    backdropFilter: "blur(8px)",
-                    WebkitBackdropFilter: "blur(8px)",
-                  }}
-                >
-                  <span aria-hidden style={{ width: 6, height: 6, borderRadius: 9999, backgroundColor: demoAccent, boxShadow: `0 0 6px ${demoAccent}`, flexShrink: 0 }} />
-                  <span style={{ fontSize: "var(--text-2xs)", fontWeight: 800, color: demoAccent, letterSpacing: 0.4 }}>ENROLLED</span>
+        <div className="flex flex-col" style={{ padding: "0 20px 32px", gap: 16 }}>
+          <p style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)" }}>{demoCourses.length} courses available</p>
+          {demoCourses.map((course) => {
+            const isEnrolledInDemoCourse = localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
+            return (
+              <button
+                key={course.sku}
+                onClick={() => navigate(isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
+                className="flex flex-col w-full text-left"
+                style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
+              >
+                <div style={{ position: "relative" }}>
+                  {course.image ? (
+                    <img
+                      src={course.image}
+                      alt={course.imageAlt}
+                      style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                    />
+                  ) : (
+                    <div
+                      className="flex items-center justify-center"
+                      style={{ width: "100%", height: 200, background: `linear-gradient(135deg, color-mix(in srgb, ${course.accent} 22%, #0a0612) 0%, color-mix(in srgb, ${course.accent} 45%, #0a0612) 100%)` }}
+                    >
+                      <Microscope style={{ width: 48, height: 48, color: "rgba(255,255,255,0.85)" }} />
+                    </div>
+                  )}
+                  {isEnrolledInDemoCourse && (
+                    <div
+                      className="flex items-center"
+                      style={{
+                        position: "absolute", bottom: 10, left: 10, gap: 4,
+                        paddingLeft: 6, paddingRight: 8, height: 22, borderRadius: 4,
+                        backgroundColor: `${course.accent}26`,
+                        border: `0.5px solid ${course.accent}66`,
+                        backdropFilter: "blur(8px)",
+                        WebkitBackdropFilter: "blur(8px)",
+                      }}
+                    >
+                      <span aria-hidden style={{ width: 6, height: 6, borderRadius: 9999, backgroundColor: course.accent, boxShadow: `0 0 6px ${course.accent}`, flexShrink: 0 }} />
+                      <span style={{ fontSize: "var(--text-2xs)", fontWeight: 800, color: course.accent, letterSpacing: 0.4 }}>ENROLLED</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div style={{ padding: "16px 20px" }}>
-              <span style={{ fontSize: "var(--text-xl)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", display: "block", marginBottom: 4 }}>
-                Class 10 NCERT Maths
-              </span>
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", display: "block", marginBottom: 12 }}>Mathematics · Full NCERT Syllabus</span>
-              <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.6, display: "block", marginBottom: 14 }}>
-                Learn with a dedicated teacher who covers your entire NCERT textbook, chapter by chapter — every concept explained, every problem solved, step by step.
-              </span>
-              <div className="flex items-center justify-center gap-2" style={{ height: 44, borderRadius: "var(--radius-button)", background: demoAccent, color: "var(--white)" }}>
-                <Sparkles style={{ width: 16, height: 16 }} />
-                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue Learning" : "View course"}</span>
-              </div>
-            </div>
-          </button>
+                <div style={{ padding: "16px 20px" }}>
+                  <span style={{ fontSize: "var(--text-xl)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", display: "block", marginBottom: 4 }}>
+                    {course.title}
+                  </span>
+                  <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", display: "block", marginBottom: 12 }}>{course.subtitle}</span>
+                  <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.6, display: "block", marginBottom: 14 }}>
+                    {description}
+                  </span>
+                  <div className="flex items-center justify-center gap-2" style={{ height: 44, borderRadius: "var(--radius-button)", background: course.accent, color: "var(--white)" }}>
+                    <Sparkles style={{ width: 16, height: 16 }} />
+                    <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue Learning" : "View course"}</span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     );

@@ -78,7 +78,10 @@ export function Component() {
       persistRef.current = true;
       try {
         if (is1112) {
-          localStorage.setItem("cc_selected_sku", info1112!.sku);
+          // Per-sku flag, not a singleton — a student can be enrolled in more
+          // than one 11-12/crash course at once (e.g. both ncert-10-maths and
+          // ncert-10-science).
+          localStorage.setItem(`cc_enrolled_${info1112!.sku}`, "1");
         } else {
           localStorage.setItem("cc_selected_class", String(cls));
         }

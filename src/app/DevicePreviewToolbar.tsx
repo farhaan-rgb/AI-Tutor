@@ -2,16 +2,20 @@ import { useState, useRef, useEffect } from "react";
 
 const PREVIEW_PATH_KEY = "devicePreviewToolbar.currentPath";
 
-// This build covers exactly one journey — Class 10 NCERT Maths via the AI
-// Tutor prototype — so the scenario list only lists screens that are
-// actually reachable from it, instead of the full production app's ~130.
+// This build covers two journeys — Class 10 NCERT Maths and Science via the
+// AI Tutor prototype — so the scenario list only lists screens that are
+// actually reachable from them, instead of the full production app's ~130.
 const PAGES = [
   { path: "/classes-v1?demo=ai-tutor", label: "★ AI Tutor · Demo: no classes → enroll → schedule → new screens" },
   { path: "/ai-tutor", label: "AI Tutor · hub" },
-  { path: "/ai-tutor/chapter-home", label: "AI Tutor · Chapter Home" },
-  { path: "/ai-tutor/curriculum-preview?demo=ai-tutor", label: "AI Tutor · Curriculum preview, free Ch.1" },
-  { path: "/ai-tutor/explain", label: "AI Tutor · Explain" },
-  { path: "/ai-tutor/solve", label: "AI Tutor · Solve" },
+  { path: "/ai-tutor/chapter-home", label: "AI Tutor · Chapter Home (Maths)" },
+  { path: "/ai-tutor/chapter-home?sku=ncert-10-science", label: "AI Tutor · Chapter Home (Science)" },
+  { path: "/ai-tutor/curriculum-preview?demo=ai-tutor", label: "AI Tutor · Curriculum preview, free Ch.1 (Maths)" },
+  { path: "/ai-tutor/curriculum-preview?demo=ai-tutor&sku=ncert-10-science", label: "AI Tutor · Curriculum preview, free Ch.1 (Science)" },
+  { path: "/ai-tutor/explain?topic=balancing-chemical-equations", label: "AI Tutor · Explain (Science sample)" },
+  { path: "/ai-tutor/solve?topic=reaction-types-redox", label: "AI Tutor · Solve (Science sample)" },
+  { path: "/ai-tutor/explain", label: "AI Tutor · Explain (Maths)" },
+  { path: "/ai-tutor/solve", label: "AI Tutor · Solve (Maths)" },
   { path: "/ai-tutor/guided-lesson", label: "AI Tutor · Guided Lesson" },
 
   { path: "/classes", label: "classes" },
@@ -37,6 +41,10 @@ const PAGES = [
   { path: "/crash-course-enrolled?sku=ncert-10-maths", label: "crash-course-enrolled · NCERT Maths" },
   { path: "/onboarding-crash-course?sku=ncert-10-maths", label: "onboarding-crash-course · NCERT Maths (stepper)" },
   { path: "/crash-course-success?sku=ncert-10-maths", label: "crash-course-success · NCERT Maths (all set)" },
+  { path: "/crash-course-detail?sku=ncert-10-science&demo=ai-tutor", label: "crash-course-detail · NCERT Science" },
+  { path: "/crash-course-enrolled?sku=ncert-10-science", label: "crash-course-enrolled · NCERT Science" },
+  { path: "/onboarding-crash-course?sku=ncert-10-science", label: "onboarding-crash-course · NCERT Science (stepper)" },
+  { path: "/crash-course-success?sku=ncert-10-science", label: "crash-course-success · NCERT Science (all set)" },
 ];
 
 export default function DevicePreviewToolbar({
@@ -234,16 +242,19 @@ export default function DevicePreviewToolbar({
           )}
         </div>
 
-        {/* Reset AI-tutor demo — clears the sku's enrollment localStorage keys
-            (cc_selected_sku / cc_setup_complete_ / cc_progress_), the demo-only
-            per-topic Explain/Practice completion flags, and jumps back to the
-            starred demo entry, so testing the not-purchased/not-started state
-            doesn't require manually clearing browser storage every time. */}
+        {/* Reset AI-tutor demo — clears both courses' enrollment localStorage
+            keys (cc_enrolled_<sku> / cc_setup_complete_<sku> / cc_progress_<sku>),
+            the demo-only per-topic Explain/Practice completion flags, and jumps
+            back to the starred demo entry, so testing the not-purchased/
+            not-started state doesn't require manually clearing browser storage
+            every time. */}
         <button
           onClick={() => {
-            localStorage.removeItem("cc_selected_sku");
-            localStorage.removeItem("cc_setup_complete_ncert-10-maths");
-            localStorage.removeItem("cc_progress_ncert-10-maths");
+            for (const sku of ["ncert-10-maths", "ncert-10-science"]) {
+              localStorage.removeItem(`cc_enrolled_${sku}`);
+              localStorage.removeItem(`cc_setup_complete_${sku}`);
+              localStorage.removeItem(`cc_progress_${sku}`);
+            }
             Object.keys(localStorage)
               .filter((k) => k.startsWith("ai_tutor_demo_"))
               .forEach((k) => localStorage.removeItem(k));

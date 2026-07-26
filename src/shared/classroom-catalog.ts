@@ -147,7 +147,7 @@ export const DUMMY_CRASH_COURSE_PROGRESS: Record<number, Record<CrashCourseSubje
 
 export type CrashStreamId = "pcm" | "pcb" | "maths";
 export type CrashClassLevel = 10 | 11 | 12;
-export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology";
+export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science";
 
 export interface CrashCourse1112Subject {
   id: CrashCourse1112SubjectId;
@@ -183,6 +183,7 @@ const SUBJ_ACCENT = {
   chemistry: { accent: "#13c2c2", gradientBg: "linear-gradient(135deg, #002626 0%, #003a3a 55%, #006d75 100%)" }, // AntD cyan-6
   maths:     { accent: "#597ef7", gradientBg: "linear-gradient(135deg, #050a1f 0%, #0a153d 55%, #1d2f7a 100%)" }, // AntD geekblue-5
   biology:   { accent: "#73d13d", gradientBg: "linear-gradient(135deg, #051a02 0%, #103d0a 55%, #226814 100%)" }, // AntD green-5
+  science:   { accent: "#9254de", gradientBg: "linear-gradient(135deg, #12071f 0%, #22103d 55%, #391a6d 100%)" }, // AntD purple-5
 } as const;
 
 // NCERT chapter lists — current syllabus, post-2024 rationalization.
@@ -258,6 +259,22 @@ const CHAPTERS_10_MATH = [
   "Surface Areas and Volumes",
   "Statistics",
   "Probability",
+];
+// NCERT Class 10 Science — real chapter titles, verified against jesc101-113.pdf.
+const CHAPTERS_10_SCIENCE = [
+  "Chemical Reactions and Equations",
+  "Acids, Bases and Salts",
+  "Metals and Non-metals",
+  "Carbon and its Compounds",
+  "Life Processes",
+  "Control and Coordination",
+  "How do Organisms Reproduce?",
+  "Heredity",
+  "Light – Reflection and Refraction",
+  "The Human Eye and the Colourful World",
+  "Electricity",
+  "Magnetic Effects of Electric Current",
+  "Our Environment",
 ];
 const CHAPTERS_11_MATH = [
   "Sets",
@@ -370,6 +387,25 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
       mkSubject("maths", "Mathematics", "MATH", CHAPTERS_10_MATH),
     ],
   },
+  // Second AI-tutor demo course — same shape as ncert-10-maths, added once the
+  // Maths-only journey had a real second sample chapter to point at.
+  "ncert-10-science": {
+    sku: "ncert-10-science",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Science",
+    examTarget: "CBSE Class 10 Boards",
+    title: "Class 10 NCERT Science",
+    subtitleShort: "Science · Full NCERT Syllabus",
+    description: "Class 10 NCERT Science, chapter by chapter — every section of the real textbook, every exercise, with an AI tutor that explains any concept on request, solves any problem step by step, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("science", "Science", "SCI", CHAPTERS_10_SCIENCE),
+    ],
+  },
   "crash-11-pcm": {
     sku: "crash-11-pcm",
     classLevel: 11,
@@ -448,7 +484,7 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
   },
 };
 
-export const CRASH_1112_SKUS = ["ncert-10-maths", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
+export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
 export type Crash1112Sku = (typeof CRASH_1112_SKUS)[number];
 
 export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112Sku {
@@ -458,6 +494,14 @@ export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112
 export function getCrash1112Info(sku: string | null | undefined): CrashCourse1112Info | null {
   if (!isCrash1112Sku(sku)) return null;
   return DUMMY_CRASH_COURSES_1112[sku];
+}
+
+// Which 11-12/crash skus have the real /ai-tutor/* experience built (vs. the
+// generic crash-course-hub placeholder the other skus still use). Update this
+// alongside chapter-home's per-sku chapter data whenever a new course is added.
+export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science"] as const;
+export function isAiTutorSku(sku: string | null | undefined): boolean {
+  return !!sku && (AI_TUTOR_SKUS as readonly string[]).includes(sku);
 }
 
 // TODO(api): GET /api/crash-courses/11-12/progress?sku=X&userId=Y

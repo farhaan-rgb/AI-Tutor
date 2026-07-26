@@ -8,6 +8,7 @@ import {
   DUMMY_CRASH_COURSES_1112,
   getVocabFastPack,
   VOCABFAST_BRAND,
+  AI_TUTOR_SKUS,
   type OtherCourse,
 } from "../shared/classroom-catalog";
 import { OtherCourseCard } from "../shared/classroom-cards";
@@ -2009,9 +2010,13 @@ export function Component() {
     const v = localStorage.getItem("cc_selected_class");
     return v ? parseInt(v, 10) : null;
   });
-  // 11-12 keyspace (see crash-course-detail.tsx) — the AI-tutor demo course
-  // ("ncert-10-maths") enrolls through this path, not the legacy cc_selected_class.
-  const [savedCrashSku, setSavedCrashSku] = useState<string | null>(() => localStorage.getItem("cc_selected_sku"));
+  // 11-12 keyspace (see crash-course-detail.tsx) — AI-tutor demo courses
+  // enroll through this path, not the legacy cc_selected_class. Each sku gets
+  // its own flag (cc_enrolled_<sku>), not a singleton — a student can be
+  // enrolled in more than one at once (e.g. both Maths and Science).
+  const [enrolledAiTutorSkus, setEnrolledAiTutorSkus] = useState<string[]>(() =>
+    AI_TUTOR_SKUS.filter((sku) => localStorage.getItem(`cc_enrolled_${sku}`) === "1")
+  );
   const vocabPurchases = useVocabFastPurchases();
   const gamesPass = useGamesPass();
   const [purchasedCampTrack] = useState<"explorer" | "creator" | null>(() => {
@@ -2041,7 +2046,7 @@ export function Component() {
 
     const v = localStorage.getItem("cc_selected_class");
     setSavedCrashClass(v ? parseInt(v, 10) : null);
-    setSavedCrashSku(localStorage.getItem("cc_selected_sku"));
+    setEnrolledAiTutorSkus(AI_TUTOR_SKUS.filter((sku) => localStorage.getItem(`cc_enrolled_${sku}`) === "1"));
 
     if (searchParams.get("ftue") === "1" && !localStorage.getItem(FTUE_SHOWN_KEY)) {
       const timer = setTimeout(() => setShowFTUESheet(true), 600);
@@ -2062,11 +2067,12 @@ export function Component() {
 
   // AI-tutor vision-memo demo: ?demo=ai-tutor strips the page down to just the
   // classroom state — "no classes yet" until the real enroll+schedule flow for
-  // ncert-10-maths has run, then a single Crash-tagged Maths classroom card.
-  // Every other rail (Today, Play & Compete, My Learning, Discover) is hidden
-  // so the demo stays a two-state story instead of the full production page.
+  // ncert-10-maths and/or ncert-10-science has run, then one Crash-tagged
+  // classroom card per enrolled course. Every other rail (Today, Play &
+  // Compete, My Learning, Discover) is hidden so the demo stays a two-state
+  // story instead of the full production page.
   const isAiTutorDemo = searchParams.get("demo") === "ai-tutor";
-  const isEnrolledInDemoCourse = savedCrashSku === "ncert-10-maths";
+  const isEnrolledInDemoCourse = enrolledAiTutorSkus.length > 0;
 
   return (
     <div className="flex flex-col" style={{ height: "100%", backgroundColor: "var(--background)", overflow: "hidden" }}>
@@ -2221,22 +2227,28 @@ export function Component() {
                   Classrooms
                 </span>
                 <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-medium)", color: "var(--muted-foreground)" }}>
-                  (1)
+                  ({enrolledAiTutorSkus.length})
                 </span>
               </div>
               <ClassroomSubRail label="Other">
-                <PrepClassroomCard
-                  item={{
-                    id: "cc-ncert-10-maths",
-                    subject: DUMMY_CRASH_COURSES_1112["ncert-10-maths"].subjects[0].title,
-                    course: `Crash Course · Class ${DUMMY_CRASH_COURSES_1112["ncert-10-maths"].classLevel}`,
-                    days: ["Mo", "Tu", "We", "Th", "Fr"],
-                    lessons: DUMMY_CRASH_COURSES_1112["ncert-10-maths"].subjects[0].chapters,
-                    subjectId: "maths",
-                    examId: "crash-courses",
-                  }}
-                  onClick={() => navigate("/ai-tutor/chapter-home")}
-                />
+                {enrolledAiTutorSkus.map((sku) => {
+                  const info = DUMMY_CRASH_COURSES_1112[sku];
+                  return (
+                    <PrepClassroomCard
+                      key={sku}
+                      item={{
+                        id: `cc-${sku}`,
+                        subject: info.subjects[0].title,
+                        course: `Crash Course · Class ${info.classLevel}`,
+                        days: ["Mo", "Tu", "We", "Th", "Fr"],
+                        lessons: info.subjects[0].chapters,
+                        subjectId: info.subjects[0].id,
+                        examId: "crash-courses",
+                      }}
+                      onClick={() => navigate(`/ai-tutor/chapter-home?sku=${sku}`)}
+                    />
+                  );
+                })}
               </ClassroomSubRail>
             </div>
           )

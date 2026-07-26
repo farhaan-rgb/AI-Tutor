@@ -11,6 +11,7 @@ import {
   DUMMY_CRASH_COURSE_INFO,
   getCrash1112Info,
   isCrash1112Sku,
+  isAiTutorSku,
   type CrashCourse1112Info,
 } from "../shared/classroom-catalog";
 import { StatusBar } from "../shared/premium-ui";
@@ -260,12 +261,15 @@ export function Component() {
 
   // Enrollment + progress state (read from localStorage).
   // 6–10 keyspace: cc_selected_class, cc_setup_complete_<N>, cc_progress_<N>
-  // 11–12 keyspace: cc_selected_sku, cc_setup_complete_<sku>, cc_progress_<sku>
+  // 11–12 keyspace: cc_enrolled_<sku> (a flag per sku, not a singleton — a
+  // student can be enrolled in more than one 11-12/crash course at once),
+  // cc_setup_complete_<sku>, cc_progress_<sku>
   const enrollmentKey = is1112 ? info1112!.sku : String(cls);
-  const savedRaw = typeof window !== "undefined"
-    ? (is1112 ? localStorage.getItem("cc_selected_sku") : localStorage.getItem("cc_selected_class"))
-    : null;
-  const isEnrolledThis = is1112 ? savedRaw === info1112!.sku : savedRaw === String(cls);
+  const isEnrolledThis = typeof window === "undefined"
+    ? false
+    : is1112
+      ? localStorage.getItem(`cc_enrolled_${info1112!.sku}`) === "1"
+      : localStorage.getItem("cc_selected_class") === String(cls);
   const setupComplete = typeof window !== "undefined"
     && localStorage.getItem(`cc_setup_complete_${enrollmentKey}`) === "1";
   const hasStarted = typeof window !== "undefined"
@@ -290,7 +294,7 @@ export function Component() {
       return;
     }
     navigate(
-      is1112 && info1112!.sku === "ncert-10-maths" ? "/ai-tutor/chapter-home" : `/crash-course-hub?${q}`,
+      is1112 && isAiTutorSku(info1112!.sku) ? `/ai-tutor/chapter-home?sku=${info1112!.sku}` : `/crash-course-hub?${q}`,
       { replace: true }
     );
   }
@@ -487,11 +491,11 @@ export function Component() {
             </div>
           )}
 
-          {/* CTA buttons — Free Demo + Curriculum. ncert-10-maths has no
+          {/* CTA buttons — Free Demo + Curriculum. AI-tutor courses have no
               separate recorded demo — Chapter 1 itself is the free preview —
-              so only the Curriculum button shows for it. */}
+              so only the Curriculum button shows for them. */}
           <div className="flex" style={{ gap: 12 }}>
-            {!(is1112 && info1112!.sku === "ncert-10-maths") && (
+            {!(is1112 && isAiTutorSku(info1112!.sku)) && (
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={() => navigate("/recording-v2")}
@@ -513,10 +517,10 @@ export function Component() {
             <motion.button
               whileTap={{ scale: 0.97 }}
               onClick={() => navigate(
-                is1112 && info1112!.sku === "ncert-10-maths"
+                is1112 && isAiTutorSku(info1112!.sku)
                   ? isEnrolledThis
-                    ? "/ai-tutor/chapter-home"
-                    : "/ai-tutor/curriculum-preview?demo=ai-tutor"
+                    ? `/ai-tutor/chapter-home?sku=${info1112!.sku}`
+                    : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${info1112!.sku}`
                   : is1112
                     ? `/course-curriculum?course=crash&sku=${info1112!.sku}`
                     : `/course-curriculum?course=crash&class=${cls}`

@@ -6,18 +6,22 @@
  * has no progress data (Concepts explained / Problems solved) — nothing has been
  * attempted yet, so showing fabricated percentages here would misrepresent state.
  */
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Lock, Sparkles, ChevronRight, Info } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
-import { DUMMY_CRASH_COURSES_1112 } from "../shared/classroom-catalog";
+import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
 
-const COURSE = DUMMY_CRASH_COURSES_1112["ncert-10-maths"];
-const CHAPTERS = COURSE.subjects[0].chapterList;
+const DEFAULT_SKU = "ncert-10-maths";
 const CRASH_PRICE = 999;
 const CRASH_ORIGINAL_PRICE = 1999;
 
 export function Component() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const sku = params.get("sku") ?? DEFAULT_SKU;
+  const course = getCrash1112Info(sku) ?? DUMMY_CRASH_COURSES_1112[DEFAULT_SKU];
+  const subject = course.subjects[0];
+  const chapters = subject.chapterList;
   const discountPct = Math.round((1 - CRASH_PRICE / CRASH_ORIGINAL_PRICE) * 100);
 
   return (
@@ -29,11 +33,11 @@ export function Component() {
           <ArrowLeft style={{ width: 18, height: 18, color: "var(--foreground)" }} />
         </button>
         <div className="flex-1 min-w-0">
-          <p style={{ ...typo.metaStyle, marginBottom: 1 }}>Class 10 · Mathematics</p>
+          <p style={{ ...typo.metaStyle, marginBottom: 1 }}>Class 10 · {subject.title}</p>
           <p style={typo.pageTitleStyle}>Curriculum</p>
         </div>
         <button
-          onClick={() => navigate("/crash-course-detail?sku=ncert-10-maths&demo=ai-tutor")}
+          onClick={() => navigate(`/crash-course-detail?sku=${sku}&demo=ai-tutor`)}
           className="flex items-center justify-center shrink-0"
           style={{ width: 36, height: 36, borderRadius: "var(--radius-button)", background: "var(--card)", border: "1px solid var(--border)" }}
           aria-label="Course details"
@@ -50,17 +54,17 @@ export function Component() {
         >
           <Sparkles style={{ width: 15, height: 15, color: "var(--primary)", flexShrink: 0 }} />
           <span style={{ ...typo.metaStyle, color: "var(--foreground)" }}>
-            Chapter 1 is free to explore in full. Enroll to unlock Chapters 2–14.
+            Chapter 1 is free to explore in full. Enroll to unlock Chapters 2–{chapters.length}.
           </span>
         </div>
 
         <div className="flex flex-col" style={{ gap: 8 }}>
-          {CHAPTERS.map((title, i) => {
+          {chapters.map((title, i) => {
             const isFree = i === 0;
             return (
               <button
                 key={title}
-                onClick={() => navigate(`/ai-tutor/chapter-home?chapter=${i}&preview=1`)}
+                onClick={() => navigate(`/ai-tutor/chapter-home?chapter=${i}&preview=1&sku=${sku}`)}
                 className="flex items-center w-full text-left"
                 style={{
                   gap: 12, padding: "14px 14px", borderRadius: 12,
@@ -124,7 +128,7 @@ export function Component() {
           </span>
         </div>
         <button
-          onClick={() => navigate("/crash-course-enrolled?sku=ncert-10-maths")}
+          onClick={() => navigate(`/crash-course-enrolled?sku=${sku}`)}
           className="flex items-center justify-center"
           style={{ height: 40, width: 140, borderRadius: 12, background: "var(--primary)", border: "none", cursor: "pointer" }}
         >

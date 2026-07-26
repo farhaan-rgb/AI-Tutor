@@ -20,9 +20,11 @@ import { ArrowLeft, Check, Play, AlertCircle, ChevronDown, Sparkles, BookOpen, L
 import { StatusBar, AnimatedProgress, typo } from "../shared/premium-ui";
 import { FloatingAITutor } from "../shared/floating-ai-tutor";
 import { BottomSheet } from "../shared/bottom-sheet";
-import { DUMMY_CRASH_COURSES_1112 } from "../shared/classroom-catalog";
+import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
 
-const CHAPTER_TITLES = DUMMY_CRASH_COURSES_1112["ncert-10-maths"].subjects[0].chapterList;
+// Chapter list is resolved per-sku at render time (see chapterTitlesFor /
+// sectionsForChapter below) — this file now serves more than one course.
+const DEFAULT_SKU = "ncert-10-maths";
 
 type TopicStatus = "completed" | "in-progress" | "not-started" | "open-doubt" | "locked";
 
@@ -101,12 +103,45 @@ const CH2_SECTIONS: Section[] = [
   },
 ];
 
-// Real sub-topic line items for Chapters 3-14 — theorems, named examples, real
-// exercise question counts, sourced from each chapter's actual body text
+// Science Chapter 1 — "Chemical Reactions and Equations" (jesc101.pdf). Sample
+// scope (see CONTENT_RULEBOOK.md / the AI Tutor conversation): 2 of the
+// chapter's real sections, not all 5 reaction types or the full 20-question
+// end exercise. No standalone "Exercise — Practice" topics here (unlike
+// Maths) — the real practice content lives inside each topic's own Practice
+// set instead (see BALANCING_EQUATIONS_PROBLEMS / REACTION_TYPES_REDOX_PROBLEMS
+// in ai-tutor-solve.tsx).
+const CH1_SCIENCE_SECTIONS: Section[] = [
+  {
+    label: "1.1 — Chemical Equations",
+    topics: [
+      { id: "balancing-chemical-equations", title: "Writing & balancing chemical equations", meta: "Not started · Worked example + Practice", status: "not-started", explainQuery: "balancing-chemical-equations", kind: "both" },
+    ],
+  },
+  {
+    label: "1.2 — Types of Chemical Reactions",
+    topics: [
+      { id: "reaction-types-redox", title: "Types of reactions, oxidation & reduction", meta: "Not started · Worked examples + Practice", status: "not-started", explainQuery: "reaction-types-redox", kind: "both" },
+    ],
+  },
+];
+
+// Science chapters 2-13 have no built Explain/Solve content yet, and unlike
+// Maths chapters 3-14, their real sub-topic bullets haven't been researched
+// from jesc102-113.pdf yet either (only Ch.1 has) — so this is an honest
+// generic "locked, not yet broken down" placeholder rather than inventing
+// specific bullet points from memory.
+function scienceLockedSections(chapterIdx: number): Section[] {
+  return [
+    { label: "Full chapter", topics: [{ id: `sci-c${chapterIdx}-locked`, title: "Concepts & practice", meta: "", status: "locked" }] },
+  ];
+}
+
+// Real sub-topic line items for Maths Chapters 3-14 — theorems, named examples,
+// real exercise question counts, sourced from each chapter's actual body text
 // (jemh103.pdf-jemh114.pdf). These chapters have no built Explain/Solve content
 // yet, so every topic here stays "locked" regardless of enrollment — the lock
 // represents "not built in this prototype," same treatment either way.
-const LOCKED_CHAPTER_RAW: Record<number, { label: string; topics: string[]; exercise: string }[]> = {
+const MATHS_LOCKED_CHAPTER_RAW: Record<number, { label: string; topics: string[]; exercise: string }[]> = {
   2: [
     { label: "3.2 — Graphical Method of Solution", topics: ["Intersecting, parallel, or coincident lines", "Consistent vs. inconsistent pairs"], exercise: "Exercise 3.1 — 7 questions" },
     { label: "3.3.1 — Substitution Method", topics: ["Solving by substituting one variable", "Recognising infinite / no solutions"], exercise: "Exercise 3.2 — 3 questions" },
@@ -160,8 +195,8 @@ const LOCKED_CHAPTER_RAW: Record<number, { label: string; topics: string[]; exer
   ],
 };
 
-function lockedSectionsFor(chapterIdx: number): Section[] {
-  const raw = LOCKED_CHAPTER_RAW[chapterIdx] ?? [];
+function mathsLockedSectionsFor(chapterIdx: number): Section[] {
+  const raw = MATHS_LOCKED_CHAPTER_RAW[chapterIdx] ?? [];
   return raw.map((s, si) => ({
     label: s.label,
     topics: [
@@ -171,10 +206,27 @@ function lockedSectionsFor(chapterIdx: number): Section[] {
   }));
 }
 
-const ALL_CHAPTERS: ChapterData[] = CHAPTER_TITLES.map((title, i) => ({
-  title,
-  sections: i === 0 ? CH1_SECTIONS : i === 1 ? CH2_SECTIONS : lockedSectionsFor(i),
-}));
+// This screen now serves more than one course — chapter list and per-chapter
+// content both need to resolve against whichever sku is actually active,
+// not just assume ncert-10-maths.
+function chapterTitlesFor(sku: string): string[] {
+  const info = getCrash1112Info(sku) ?? DUMMY_CRASH_COURSES_1112[DEFAULT_SKU];
+  return info.subjects[0].chapterList;
+}
+
+function sectionsForChapter(sku: string, chapterIdx: number): Section[] {
+  if (sku === "ncert-10-science") {
+    return chapterIdx === 0 ? CH1_SCIENCE_SECTIONS : scienceLockedSections(chapterIdx);
+  }
+  return chapterIdx === 0 ? CH1_SECTIONS : chapterIdx === 1 ? CH2_SECTIONS : mathsLockedSectionsFor(chapterIdx);
+}
+
+function allChaptersFor(sku: string): ChapterData[] {
+  return chapterTitlesFor(sku).map((title, i) => ({
+    title,
+    sections: sectionsForChapter(sku, i),
+  }));
+}
 
 const STATUS_COLOR: Record<TopicStatus, string> = {
   completed: "var(--success)",
@@ -470,7 +522,9 @@ export function Component() {
   const [params] = useSearchParams();
   // Free preview of Chapter 1, reached pre-enrollment from curriculum-preview.tsx.
   const isPreview = params.get("preview") === "1";
-  const initialChapter = Math.min(Math.max(parseInt(params.get("chapter") ?? "0", 10), 0), ALL_CHAPTERS.length - 1);
+  const skuParam = params.get("sku") ?? DEFAULT_SKU;
+  const allChapters = allChaptersFor(skuParam);
+  const initialChapter = Math.min(Math.max(parseInt(params.get("chapter") ?? "0", 10), 0), allChapters.length - 1);
 
   const [currentChapter, setCurrentChapter] = useState(initialChapter);
   const [showJumpSheet, setShowJumpSheet] = useState(false);
@@ -508,7 +562,7 @@ export function Component() {
     chapterRefs.current[idx]?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  const currentChapterData = ALL_CHAPTERS[currentChapter];
+  const currentChapterData = allChapters[currentChapter];
   const isViewingLockedChapter = currentChapter > 0;
 
   return (
@@ -536,7 +590,7 @@ export function Component() {
       <div style={{ height: 1, background: "var(--border)" }} />
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
-        {ALL_CHAPTERS.map((c, ci) => (
+        {allChapters.map((c, ci) => (
           <div
             key={c.title}
             ref={(el) => { chapterRefs.current[ci] = el; }}
@@ -605,7 +659,7 @@ export function Component() {
                     isPreview={isPreview}
                     onExplain={(t) => navigate(`/ai-tutor/explain?topic=${t.explainQuery ?? t.id}`)}
                     onPractice={(t) => navigate(`/ai-tutor/solve?topic=${t.explainQuery ?? t.id}`)}
-                    onLockedTap={() => navigate("/crash-course-enrolled?sku=ncert-10-maths")}
+                    onLockedTap={() => navigate(`/crash-course-enrolled?sku=${skuParam}`)}
                   />
                 ))}
               </div>
@@ -618,14 +672,14 @@ export function Component() {
 
       {isPreview && isViewingLockedChapter && (
         <FreemiumUnlockBanner
-          onViewDetails={() => navigate("/crash-course-detail?sku=ncert-10-maths&demo=ai-tutor")}
-          onEnroll={() => navigate("/crash-course-enrolled?sku=ncert-10-maths")}
+          onViewDetails={() => navigate(`/crash-course-detail?sku=${skuParam}&demo=ai-tutor`)}
+          onEnroll={() => navigate(`/crash-course-enrolled?sku=${skuParam}`)}
         />
       )}
 
       <BottomSheet isOpen={showJumpSheet} onClose={() => setShowJumpSheet(false)} title="Jump to Lesson">
         <div className="flex flex-col" style={{ padding: "8px 16px 20px", gap: 6 }}>
-          {ALL_CHAPTERS.map((c, ci) => (
+          {allChapters.map((c, ci) => (
             <button
               key={c.title}
               onClick={() => scrollToChapter(ci)}

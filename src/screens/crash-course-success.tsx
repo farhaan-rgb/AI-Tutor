@@ -1,9 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { motion } from "motion/react";
-import { Check, BookOpen, FlaskConical, Atom, FlaskRound, Sigma, Leaf } from "lucide-react";
+import { Check, BookOpen, FlaskConical, Atom, FlaskRound, Sigma, Leaf, Microscope } from "lucide-react";
 import {
   DUMMY_CRASH_COURSE_INFO,
   getCrash1112Info,
+  isAiTutorSku,
   type CrashCourse1112SubjectId,
 } from "../shared/classroom-catalog";
 
@@ -14,6 +15,7 @@ const SUBJ_ICON_1112: Record<CrashCourse1112SubjectId, typeof Atom> = {
   chemistry: FlaskRound,
   maths:     Sigma,
   biology:   Leaf,
+  science:   Microscope,
 };
 
 export function Component() {
@@ -182,7 +184,7 @@ export function Component() {
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => navigate(
-            skuParam === "ncert-10-maths" ? "/ai-tutor/chapter-home" : `/crash-course-hub?${continueQuery}`,
+            isAiTutorSku(skuParam) ? `/ai-tutor/chapter-home?sku=${skuParam}` : `/crash-course-hub?${continueQuery}`,
             { replace: true }
           )}
           className="flex items-center justify-center"

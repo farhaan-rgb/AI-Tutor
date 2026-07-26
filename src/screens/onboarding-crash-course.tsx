@@ -263,7 +263,8 @@ export function Component() {
     const enrollmentKey = is1112 ? info1112!.sku : String(cls);
     const continueQuery = is1112 ? `sku=${info1112!.sku}` : `class=${cls}`;
     if (is1112) {
-      localStorage.setItem('cc_selected_sku', info1112!.sku);
+      // Per-sku flag, not a singleton — see crash-course-enrolled.tsx.
+      localStorage.setItem(`cc_enrolled_${info1112!.sku}`, '1');
     } else {
       localStorage.setItem('cc_selected_class', String(cls));
     }
