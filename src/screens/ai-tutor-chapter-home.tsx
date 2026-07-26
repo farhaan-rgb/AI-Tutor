@@ -106,21 +106,28 @@ const CH2_SECTIONS: Section[] = [
 // Science Chapter 1 — "Chemical Reactions and Equations" (jesc101.pdf). Sample
 // scope (see CONTENT_RULEBOOK.md / the AI Tutor conversation): 2 of the
 // chapter's real sections, not all 5 reaction types or the full 20-question
-// end exercise. No standalone "Exercise — Practice" topics here (unlike
-// Maths) — the real practice content lives inside each topic's own Practice
-// set instead (see BALANCING_EQUATIONS_PROBLEMS / REACTION_TYPES_REDOX_PROBLEMS
-// in ai-tutor-solve.tsx).
+// end exercise. Per rulebook rule 3a, each concept topic's own Practice is
+// just its matching worked example — the book's own separate "QUESTIONS"
+// box (section 1.1) and end-of-chapter "EXERCISES" section each get their
+// own standalone topic instead of being folded into a concept topic.
 const CH1_SCIENCE_SECTIONS: Section[] = [
   {
     label: "1.1 — Chemical Equations",
     topics: [
-      { id: "balancing-chemical-equations", title: "Writing & balancing chemical equations", meta: "Not started · Worked example + Practice", status: "not-started", explainQuery: "balancing-chemical-equations", kind: "both" },
+      { id: "balancing-chemical-equations", title: "Writing & balancing chemical equations", meta: "Not started · Worked example", status: "not-started", explainQuery: "balancing-chemical-equations", kind: "both" },
+      { id: "sec-1-1-questions", title: "In-text Questions — Practice", meta: "Not started · 3 questions", status: "not-started" },
     ],
   },
   {
     label: "1.2 — Types of Chemical Reactions",
     topics: [
-      { id: "reaction-types-redox", title: "Types of reactions, oxidation & reduction", meta: "Not started · Worked examples + Practice", status: "not-started", explainQuery: "reaction-types-redox", kind: "both" },
+      { id: "reaction-types-redox", title: "Types of reactions, oxidation & reduction", meta: "Not started · Worked example", status: "not-started", explainQuery: "reaction-types-redox", kind: "both" },
+    ],
+  },
+  {
+    label: "End-of-chapter Exercises",
+    topics: [
+      { id: "ch1-sci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · Q1–Q2 of 20 (sample)", status: "not-started" },
     ],
   },
 ];

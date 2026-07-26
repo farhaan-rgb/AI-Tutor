@@ -585,6 +585,11 @@ const EX_2_2_PROBLEMS: PracticeProblem[] = [
 // oxidised/reduced is fact-recall — no derivation exists for "what type is
 // this," so these reuse the same direct-answer `visual` shape as Ch.2's
 // graph-reading problems, just without an image.
+// A concept topic's own Practice is reserved for the SAME worked example
+// already shown in its Explain screen (rule 1) — the real inline "QUESTIONS"
+// box under section 1.1 is a separate, distinct block in the book (rule 3a)
+// and gets its own standalone topic below (SECTION_1_1_QUESTIONS_PROBLEMS),
+// not folded in here.
 const BALANCING_EQUATIONS_PROBLEMS: PracticeProblem[] = [
   {
     id: "balancing-fe-h2o",
@@ -599,9 +604,37 @@ const BALANCING_EQUATIONS_PROBLEMS: PracticeProblem[] = [
     ],
     verifyLine: "3 Fe, 8 H, 4 O on both sides — balanced ✓",
   },
+];
+
+// The real inline "QUESTIONS" box under section 1.1 (jesc101.pdf p.6) — three
+// real questions, all three used (rule 3): Q1 is fact-recall (no derivation
+// exists for "why clean the ribbon"), Q2/Q3 are procedural.
+const SECTION_1_1_QUESTIONS_PROBLEMS: PracticeProblem[] = [
   {
-    id: "translate-and-balance",
-    label: "Practice",
+    id: "sec1-1-q1",
+    label: "Q1",
+    questionText: "Why should a magnesium ribbon be cleaned before burning in air?",
+    visual: {
+      questions: [
+        {
+          label: "Q1",
+          prompt: "Why should a magnesium ribbon be cleaned before burning in air?",
+          options: [
+            "To remove the layer of magnesium oxide that would prevent it from burning properly",
+            "To remove moisture that could cause the metal to explode",
+            "It's just a lab safety precaution — there's no chemical reason",
+            "To make the flame burn a different colour",
+          ],
+          correctAnswer: "To remove the layer of magnesium oxide that would prevent it from burning properly",
+          explanation: "Magnesium reacts slowly with atmospheric oxygen even at room temperature, forming a thin coating of magnesium oxide on its surface. That layer is unreactive and stops the metal underneath from burning cleanly — sandpaper removes it so the fresh metal can react properly.",
+        },
+      ],
+    },
+    verifyLine: "Cleaning removes the oxide coating so the metal actually burns ✓",
+  },
+  {
+    id: "sec1-1-q2",
+    label: "Q2",
     questionText: "Write the balanced equation for the following chemical reactions: (i) Hydrogen + Chlorine → Hydrogen chloride (ii) Barium chloride + Aluminium sulphate → Barium sulphate + Aluminium chloride (iii) Sodium + Water → Sodium hydroxide + Hydrogen",
     parts: [
       { label: "(i)", steps: [
@@ -623,24 +656,35 @@ const BALANCING_EQUATIONS_PROBLEMS: PracticeProblem[] = [
     ],
     verifyLine: "All three reactions balanced — atom counts match on both sides ✓",
   },
+  {
+    id: "sec1-1-q3",
+    label: "Q3",
+    questionText: "Write a balanced chemical equation with state symbols for the following reactions: (i) Solutions of barium chloride and sodium sulphate in water react to give insoluble barium sulphate and the solution of sodium chloride. (ii) Sodium hydroxide solution reacts with hydrochloric acid solution to produce sodium chloride solution and water.",
+    parts: [
+      { label: "(i)", steps: [
+        { prompt: "Write the skeletal equation with formulae.", answer: "BaCl₂ + Na₂SO₄ → BaSO₄ + NaCl" },
+        { prompt: "Count atoms — what needs balancing?", answer: "2 Na and 2 Cl on the left need matching on the right — put 2 in front of NaCl" },
+        { prompt: "Add state symbols — which reactants are dissolved, and which product is insoluble?", answer: "BaCl₂(aq) + Na₂SO₄(aq) → BaSO₄(s) + 2NaCl(aq)", trap: { wrongGuess: "BaSO₄(aq)", hint: "the question says barium sulphate is insoluble — an insoluble solid gets (s), not (aq)." } },
+      ] },
+      { label: "(ii)", steps: [
+        { prompt: "Write the skeletal equation with formulae.", answer: "NaOH + HCl → NaCl + H₂O" },
+        { prompt: "Count atoms — is it already balanced?", answer: "1 Na, 1 Cl, 2 H, 1 O on both sides — already balanced 1:1:1:1" },
+        { prompt: "Add state symbols — both reactants are solutions.", answer: "NaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)" },
+      ] },
+    ],
+    verifyLine: "Both equations balanced with the correct state symbols ✓",
+  },
 ];
 
+// A concept topic's own Practice is reserved for the SAME worked example
+// already shown in its Explain screen (rule 1) — the real end-of-chapter
+// "EXERCISES" section is a separate, distinct block in the book (rule 3a)
+// and gets its own standalone topic below (CHAPTER_1_EXERCISES_PROBLEMS),
+// not folded in here.
 const REACTION_TYPES_REDOX_PROBLEMS: PracticeProblem[] = [
   {
-    id: "reaction-classification",
-    label: "Practice",
-    questionText: "Classify each of the following real reactions.",
-    visual: {
-      questions: [
-        { label: "(i)", prompt: "2PbO(s) + C(s) → 2Pb(s) + CO₂(g). Which statements about this reaction are incorrect? (a) Lead is getting reduced (b) Carbon dioxide is getting oxidised (c) Carbon is getting oxidised (d) Lead oxide is getting reduced", options: ["(a) and (b)", "(a) and (c)", "(a), (b) and (c)", "all four"], correctAnswer: "(a) and (b)", explanation: "PbO loses oxygen, so lead OXIDE is reduced (d is correct) — saying 'lead' itself is reduced (a) misattributes it. Carbon gains oxygen, so CARBON is oxidised (c is correct) — CO₂ is already the oxidised product, it doesn't 'get oxidised' (b is wrong)." },
-        { label: "(ii)", prompt: "Fe₂O₃(s) + 2Al(s) → Al₂O₃(s) + 2Fe(s) — what type of reaction is this?", options: ["Combination", "Double displacement", "Decomposition", "Displacement"], correctAnswer: "Displacement", explanation: "Aluminium is more reactive than iron, so it displaces iron from its oxide — this is the classic thermite reaction." },
-      ],
-    },
-    verifyLine: "Both classifications confirmed ✓",
-  },
-  {
     id: "identify-oxidised-reduced",
-    label: "Practice",
+    label: "Worked example",
     questionText: "In the reaction CuO(s) + H₂(g) → Cu(s) + H₂O(l), identify which substance is oxidised and which is reduced.",
     visual: {
       questions: [
@@ -649,6 +693,24 @@ const REACTION_TYPES_REDOX_PROBLEMS: PracticeProblem[] = [
       ],
     },
     verifyLine: "CuO is reduced, H₂ is oxidised — this is a redox reaction ✓",
+  },
+];
+
+// Real end-of-chapter "EXERCISES" section (jesc101.pdf p.14) — 20 real
+// questions total; sample scope uses Q1-Q2 only (see CONTENT_RULEBOOK.md /
+// the AI Tutor conversation for why this build doesn't cover all 20 yet).
+const CHAPTER_1_EXERCISES_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "reaction-classification",
+    label: "Q1–Q2",
+    questionText: "Classify each of the following real reactions.",
+    visual: {
+      questions: [
+        { label: "(i)", prompt: "2PbO(s) + C(s) → 2Pb(s) + CO₂(g). Which statements about this reaction are incorrect? (a) Lead is getting reduced (b) Carbon dioxide is getting oxidised (c) Carbon is getting oxidised (d) Lead oxide is getting reduced", options: ["(a) and (b)", "(a) and (c)", "(a), (b) and (c)", "all four"], correctAnswer: "(a) and (b)", explanation: "PbO loses oxygen, so lead OXIDE is reduced (d is correct) — saying 'lead' itself is reduced (a) misattributes it. Carbon gains oxygen, so CARBON is oxidised (c is correct) — CO₂ is already the oxidised product, it doesn't 'get oxidised' (b is wrong)." },
+        { label: "(ii)", prompt: "Fe₂O₃(s) + 2Al(s) → Al₂O₃(s) + 2Fe(s) — what type of reaction is this?", options: ["Combination", "Double displacement", "Decomposition", "Displacement"], correctAnswer: "Displacement", explanation: "Aluminium is more reactive than iron, so it displaces iron from its oxide — this is the classic thermite reaction." },
+      ],
+    },
+    verifyLine: "Both classifications confirmed ✓",
   },
 ];
 
@@ -666,7 +728,9 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "ex-2-1": EX_2_1_PROBLEMS,
   "ex-2-2": EX_2_2_PROBLEMS,
   "balancing-chemical-equations": BALANCING_EQUATIONS_PROBLEMS,
+  "sec-1-1-questions": SECTION_1_1_QUESTIONS_PROBLEMS,
   "reaction-types-redox": REACTION_TYPES_REDOX_PROBLEMS,
+  "ch1-sci-exercises": CHAPTER_1_EXERCISES_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -1487,7 +1551,9 @@ const TOPIC_TITLES: Record<string, string> = {
   "ex-2-1": "Exercise 2.1",
   "ex-2-2": "Exercise 2.2",
   "balancing-chemical-equations": "Writing & balancing equations",
+  "sec-1-1-questions": "In-text Questions — 1.1",
   "reaction-types-redox": "Types of reactions, oxidation & reduction",
+  "ch1-sci-exercises": "Chapter Exercises",
 };
 
 export function Component() {

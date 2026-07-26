@@ -87,6 +87,30 @@ one problem. A standalone Exercise topic → every real question in that
 exercise, not a sample. Don't manufacture a second problem to "fill a slot,"
 and don't drop a real one to hit a round number.
 
+## 3a. Every distinct question block gets its own line item
+
+A book delineates its own question sets visually and structurally — a boxed
+"EXERCISE 2.1", an inline "QUESTIONS" box mid-section, an end-of-chapter
+"EXERCISES" block. Whatever the label, if the book presents it as a separate
+block of questions (not the worked example inside the running explanatory
+text), it becomes its **own standalone Practice-only topic** — never folded
+into a concept topic's own Practice set.
+
+A concept topic's own Practice is reserved for the *same worked example(s)
+already shown in its Explain screen* (rule 1's reuse principle) — nothing
+else. This was gotten wrong for Science Ch.1: the real inline "QUESTIONS"
+box under section 1.1 (three real questions — why clean a magnesium ribbon,
+balance three reactions, balance two more with state symbols) got partially
+merged into the "balancing chemical equations" concept topic (only one of
+its three questions used) instead of becoming its own topic, the way
+Chapter 1 Maths's "Exercise 1.1" is separate from "Unique prime
+factorisation." Likewise the real end-of-chapter "EXERCISES" section is a
+distinct block from the section 1.2 concept topic it got folded into.
+
+Self-check when building a chapter: for every inline "QUESTIONS"/"EXERCISE"
+block in the source, does it have its own topic — and does that topic use
+every real question in the block (rule 3), not a subset?
+
 ## 4. Steps must show real derivation, not skip to the answer
 
 A step is one operation (one division, one factor pulled out, one line of
