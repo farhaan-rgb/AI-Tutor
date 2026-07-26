@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { Plus, ChevronRight, BookOpen, Clock, Radio, User, SlidersHorizontal, CalendarDays, Users, Bell, X, RefreshCw, Check, Video, CheckCircle2, ExternalLink, Brain, Flame, Gamepad2, ArrowRight, ArrowUp, Sparkles, Mountain, Puzzle, Swords, FlaskConical, Trophy } from "lucide-react";
+import { Plus, ChevronRight, BookOpen, Clock, Radio, User, SlidersHorizontal, CalendarDays, Users, Bell, X, RefreshCw, Check, Video, CheckCircle2, ExternalLink, Brain, Flame, Gamepad2, ArrowRight, ArrowUp, Sparkles, Mountain, Puzzle, Swords, FlaskConical, Trophy, Microscope } from "lucide-react";
 import {
   DUMMY_OTHER_COURSES,
   DUMMY_CRASH_COURSE_INFO,
@@ -1999,6 +1999,25 @@ function ClassroomSubRail({ label, children }: { label?: string; children: React
   );
 }
 
+// Homepage banner rotation — one banner slot, auto-scrolling between both
+// live AI-tutor courses, rather than a second static banner stacked below
+// the first (which is what "add a Science banner" would otherwise mean).
+const BANNER_COURSES = [
+  {
+    sku: "ncert-10-maths",
+    title: "Class 10 NCERT Maths",
+    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    image: "/ncert-10-maths-listing.jpg",
+  },
+  {
+    sku: "ncert-10-science",
+    title: "Class 10 NCERT Science",
+    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    image: null,
+  },
+] as const;
+const BANNER_ROTATE_MS = 3500;
+
 export function Component() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -2073,6 +2092,14 @@ export function Component() {
   // story instead of the full production page.
   const isAiTutorDemo = searchParams.get("demo") === "ai-tutor";
   const isEnrolledInDemoCourse = enrolledAiTutorSkus.length > 0;
+
+  const [bannerIndex, setBannerIndex] = useState(0);
+  useEffect(() => {
+    if (isAiTutorDemo && !isEnrolledInDemoCourse) {
+      const timer = setInterval(() => setBannerIndex((i) => (i + 1) % BANNER_COURSES.length), BANNER_ROTATE_MS);
+      return () => clearInterval(timer);
+    }
+  }, [isAiTutorDemo, isEnrolledInDemoCourse]);
 
   return (
     <div className="flex flex-col" style={{ height: "100%", backgroundColor: "var(--background)", overflow: "hidden" }}>
@@ -2195,30 +2222,69 @@ export function Component() {
                 </div>
               </div>
 
-              {/* Banner pointing at the one live marketplace listing this demo
-                  cares about — more specific than a generic "browse" CTA, and
-                  the direct path into the same single-listing Discover screen
+              {/* Banner pointing at the live marketplace listings this demo
+                  cares about — one banner slot, auto-scrolling between every
+                  course (not a second banner stacked underneath), landing on
+                  the same side-by-side Discover screen either way
                   (marketplace-v1.tsx's isAiTutorDemo branch). */}
-              <button
-                onClick={() => navigate("/marketplace-v1?demo=ai-tutor")}
-                className="flex items-center w-full text-left"
-                style={{ gap: 12, padding: 12, borderRadius: "var(--radius-card)", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
-              >
-                <img
-                  src="/ncert-10-maths-listing.jpg"
-                  alt="Class 10 NCERT Maths"
-                  style={{ width: 56, height: 56, borderRadius: 10, objectFit: "cover", flexShrink: 0 }}
-                />
-                <div className="flex-1 min-w-0">
-                  <p style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", marginBottom: 2 }}>
-                    Class 10 NCERT Maths
-                  </p>
-                  <p style={{ fontSize: "var(--text-xs)", color: "var(--muted-foreground)", lineHeight: 1.4 }}>
-                    A dedicated teacher for every concept and problem in your textbook
-                  </p>
+              <div className="flex flex-col" style={{ gap: 8 }}>
+                <div style={{ position: "relative", overflow: "hidden", borderRadius: "var(--radius-card)" }}>
+                  <AnimatePresence mode="wait">
+                    {(() => {
+                      const banner = BANNER_COURSES[bannerIndex];
+                      return (
+                        <motion.button
+                          key={banner.sku}
+                          initial={{ opacity: 0, x: 16 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -16 }}
+                          transition={{ duration: 0.35, ease: "easeInOut" }}
+                          onClick={() => navigate("/marketplace-v1?demo=ai-tutor")}
+                          className="flex items-center w-full text-left"
+                          style={{ gap: 12, padding: 12, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
+                        >
+                          {banner.image ? (
+                            <img
+                              src={banner.image}
+                              alt={banner.title}
+                              style={{ width: 56, height: 56, borderRadius: 10, objectFit: "cover", flexShrink: 0 }}
+                            />
+                          ) : (
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ width: 56, height: 56, borderRadius: 10, flexShrink: 0, background: "linear-gradient(135deg, color-mix(in srgb, #9254de 22%, #0a0612) 0%, color-mix(in srgb, #9254de 45%, #0a0612) 100%)" }}
+                            >
+                              <Microscope style={{ width: 22, height: 22, color: "rgba(255,255,255,0.85)" }} />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", marginBottom: 2 }}>
+                              {banner.title}
+                            </p>
+                            <p style={{ fontSize: "var(--text-xs)", color: "var(--muted-foreground)", lineHeight: 1.4 }}>
+                              {banner.subtitle}
+                            </p>
+                          </div>
+                          <ChevronRight style={{ width: 18, height: 18, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                        </motion.button>
+                      );
+                    })()}
+                  </AnimatePresence>
                 </div>
-                <ChevronRight style={{ width: 18, height: 18, color: "var(--muted-foreground)", flexShrink: 0 }} />
-              </button>
+                <div className="flex items-center justify-center" style={{ gap: 5 }}>
+                  {BANNER_COURSES.map((c, i) => (
+                    <span
+                      key={c.sku}
+                      aria-hidden
+                      style={{
+                        width: i === bannerIndex ? 14 : 5, height: 5, borderRadius: 9999,
+                        background: i === bannerIndex ? "var(--primary)" : "var(--border)",
+                        transition: "all 0.3s ease",
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col" style={{ gap: 16, paddingTop: 20, paddingBottom: 20 }}>

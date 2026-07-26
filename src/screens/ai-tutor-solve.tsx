@@ -877,8 +877,14 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   }
 
   function startExplain() {
-    setPartIdx(0);
-    setCompletedParts(problem.parts ? problem.parts.map(() => false) : []);
+    // partIdx is intentionally NOT reset here — the student may have already
+    // picked a sub-part on the select screen, and jumping into explain mode
+    // should honor that instead of always restarting at (i). completedParts
+    // is only (re)initialized if it doesn't already match this problem's
+    // part count, so progress survives re-entering explain mode.
+    if (problem.parts && completedParts.length !== problem.parts.length) {
+      setCompletedParts(problem.parts.map(() => false));
+    }
     setStepIdx(0);
     setRevealed(false);
     setExplainFinished(false);
@@ -1059,7 +1065,10 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
 
           <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>{currentQuestion.prompt}</p>
 
-          <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 14 }}>
+          {/* Full-width rows, not fixed-size tiles — option text ranges from
+              a single digit (graph zero-counts) to a full sentence (fact-
+              recall answers), and a fixed square only ever fit the former. */}
+          <div className="flex flex-col" style={{ gap: 8, marginBottom: 14 }}>
             {currentQuestion.options.map((opt) => {
               const isSelected = visualAnswer === opt;
               const isThisCorrect = opt === currentQuestion.correctAnswer;
@@ -1070,7 +1079,8 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                 <button
                   key={opt}
                   onClick={() => answerVisualQuestion(opt)}
-                  style={{ width: 48, height: 48, borderRadius: 10, cursor: "pointer", background: bg, border, color, fontFamily: "var(--font-family-inter)", fontSize: 16, fontWeight: 700 }}
+                  className="text-left"
+                  style={{ padding: "12px 14px", borderRadius: 10, cursor: "pointer", background: bg, border, color, fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", lineHeight: 1.4 }}
                 >
                   {opt}
                 </button>
@@ -1128,6 +1138,39 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                     >
                       {done && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
                       {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+
+          {/* A multi-part real question's sub-parts are their own selectable
+              questions too — shown as soon as the problem is chosen, not
+              hidden until "Ask AI tutor" is tapped. Selecting one here just
+              sets which sub-part Ask AI tutor / the question card focuses on. */}
+          {problem.parts && (
+            <>
+              <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a sub-part</p>
+              <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 16 }}>
+                {problem.parts.map((part, i) => {
+                  const done = completedParts[i];
+                  const active = i === partIdx;
+                  return (
+                    <button
+                      key={part.label}
+                      onClick={() => selectPart(i)}
+                      className="flex items-center"
+                      style={{
+                        gap: 4, height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
+                        border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                        background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+                        color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
+                        fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
+                      }}
+                    >
+                      {done && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
+                      {part.label}
                     </button>
                   );
                 })}

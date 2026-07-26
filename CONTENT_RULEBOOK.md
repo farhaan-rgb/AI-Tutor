@@ -48,6 +48,15 @@ render path — not a bent version of the existing step sequence. Build the
 new shape when the first real instance of that kind shows up (Chapter 2's
 Exercise 2.1 is the first), rather than pre-building all of them speculatively.
 
+**Never size a choice/option button to a fixed box.** Visual and fact-recall
+questions share one quiz UI (rule 0's table), and its option text ranges
+from a single digit (a graph's zero-count) to a full sentence (a fact-
+recall answer). A fixed-size tile fits the former and overlaps into
+unreadable garbage for the latter — real bug, real screenshot. Option
+buttons are always full-width rows sized to their own content, never a
+fixed square/tile, because there is no way to predict in advance how long
+a real answer option will be.
+
 ## 1. Content must be real, not invented
 
 - Every Explain concept and every Practice problem traces back to an actual
@@ -124,7 +133,20 @@ chain (140 ÷ 2 = 70, 70 ÷ 2 = 35, 35 = 5 × 7), not a single jump to
 If a real question has (i)/(ii)/(iii)... sub-parts, each is its own
 selectable mini-walkthrough with its own step sequence — never force-
 linearized into one chain a student has to click through in order to reach
-a later part. Show a sub-part picker on the step-by-step screen itself.
+a later part.
+
+## 5a. Sub-parts are selectable the moment the problem is chosen, not hidden behind a mode
+
+The sub-part picker must appear as soon as a multi-part problem is on
+screen — not only after committing to "Ask AI tutor to solve it." A student
+should be able to see and jump to (ii) or (iii) before deciding how they
+want to solve it, the same way the top-level "choose a problem" picker
+(Q1 vs Q2) is visible immediately, not gated behind a mode. This was
+missed in an earlier build: the sub-part picker only rendered inside the
+step-by-step screen, so a multi-part question's own select screen showed
+the parts folded into one combined question with no way to jump to a
+specific one — exactly the problem rule 5 already existed to prevent, just
+one screen too late.
 
 ## 6. A trap only earns its place if it's the single most likely mistake
 

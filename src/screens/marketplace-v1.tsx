@@ -1209,73 +1209,74 @@ export function Component() {
         imageAlt: "",
       },
     ];
-    const description = "Learn with a dedicated teacher who covers your entire NCERT textbook, chapter by chapter — every concept explained, every problem solved, step by step.";
-
     return (
       <div style={{ fontFamily: "var(--font-family-inter)", backgroundColor: "var(--background)", height: "100vh", overflowY: "auto" }}>
         <StatusBar />
         <div style={{ padding: "8px 20px 16px" }}>
           <span style={{ fontSize: "var(--text-2xl)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)" }}>Discover</span>
         </div>
-        <div className="flex flex-col" style={{ padding: "0 20px 32px", gap: 16 }}>
-          <p style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)" }}>{demoCourses.length} courses available</p>
-          {demoCourses.map((course) => {
-            const isEnrolledInDemoCourse = localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
-            return (
-              <button
-                key={course.sku}
-                onClick={() => navigate(isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
-                className="flex flex-col w-full text-left"
-                style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
-              >
-                <div style={{ position: "relative" }}>
-                  {course.image ? (
-                    <img
-                      src={course.image}
-                      alt={course.imageAlt}
-                      style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
-                    />
-                  ) : (
-                    <div
-                      className="flex items-center justify-center"
-                      style={{ width: "100%", height: 200, background: `linear-gradient(135deg, color-mix(in srgb, ${course.accent} 22%, #0a0612) 0%, color-mix(in srgb, ${course.accent} 45%, #0a0612) 100%)` }}
-                    >
-                      <Microscope style={{ width: 48, height: 48, color: "rgba(255,255,255,0.85)" }} />
-                    </div>
-                  )}
-                  {isEnrolledInDemoCourse && (
-                    <div
-                      className="flex items-center"
-                      style={{
-                        position: "absolute", bottom: 10, left: 10, gap: 4,
-                        paddingLeft: 6, paddingRight: 8, height: 22, borderRadius: 4,
-                        backgroundColor: `${course.accent}26`,
-                        border: `0.5px solid ${course.accent}66`,
-                        backdropFilter: "blur(8px)",
-                        WebkitBackdropFilter: "blur(8px)",
-                      }}
-                    >
-                      <span aria-hidden style={{ width: 6, height: 6, borderRadius: 9999, backgroundColor: course.accent, boxShadow: `0 0 6px ${course.accent}`, flexShrink: 0 }} />
-                      <span style={{ fontSize: "var(--text-2xs)", fontWeight: 800, color: course.accent, letterSpacing: 0.4 }}>ENROLLED</span>
-                    </div>
-                  )}
-                </div>
-                <div style={{ padding: "16px 20px" }}>
-                  <span style={{ fontSize: "var(--text-xl)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", display: "block", marginBottom: 4 }}>
-                    {course.title}
-                  </span>
-                  <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", display: "block", marginBottom: 12 }}>{course.subtitle}</span>
-                  <span style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", lineHeight: 1.6, display: "block", marginBottom: 14 }}>
-                    {description}
-                  </span>
-                  <div className="flex items-center justify-center gap-2" style={{ height: 44, borderRadius: "var(--radius-button)", background: course.accent, color: "var(--white)" }}>
-                    <Sparkles style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue Learning" : "View course"}</span>
+        <div style={{ padding: "0 20px 32px" }}>
+          <p style={{ fontSize: "var(--text-sm)", color: "var(--muted-foreground)", marginBottom: 12 }}>{demoCourses.length} courses available</p>
+          {/* Side by side, not stacked — two courses shouldn't need a full
+              scroll each just to compare. Text is trimmed to title + one
+              short line; the full pitch already lives on curriculum-preview,
+              one tap away, so repeating it here was pure redundancy. */}
+          <div className="grid grid-cols-2" style={{ gap: 12 }}>
+            {demoCourses.map((course) => {
+              const isEnrolledInDemoCourse = localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
+              return (
+                <button
+                  key={course.sku}
+                  onClick={() => navigate(isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
+                  className="flex flex-col text-left min-w-0"
+                  style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
+                >
+                  <div style={{ position: "relative" }}>
+                    {course.image ? (
+                      <img
+                        src={course.image}
+                        alt={course.imageAlt}
+                        style={{ width: "100%", height: 110, objectFit: "cover", display: "block" }}
+                      />
+                    ) : (
+                      <div
+                        className="flex items-center justify-center"
+                        style={{ width: "100%", height: 110, background: `linear-gradient(135deg, color-mix(in srgb, ${course.accent} 22%, #0a0612) 0%, color-mix(in srgb, ${course.accent} 45%, #0a0612) 100%)` }}
+                      >
+                        <Microscope style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
+                      </div>
+                    )}
+                    {isEnrolledInDemoCourse && (
+                      <div
+                        className="flex items-center"
+                        style={{
+                          position: "absolute", bottom: 6, left: 6, gap: 3,
+                          paddingLeft: 5, paddingRight: 6, height: 18, borderRadius: 4,
+                          backgroundColor: `${course.accent}26`,
+                          border: `0.5px solid ${course.accent}66`,
+                          backdropFilter: "blur(8px)",
+                          WebkitBackdropFilter: "blur(8px)",
+                        }}
+                      >
+                        <span aria-hidden style={{ width: 5, height: 5, borderRadius: 9999, backgroundColor: course.accent, boxShadow: `0 0 6px ${course.accent}`, flexShrink: 0 }} />
+                        <span style={{ fontSize: 9, fontWeight: 800, color: course.accent, letterSpacing: 0.3 }}>ENROLLED</span>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </button>
-            );
-          })}
+                  <div style={{ padding: "10px 12px" }}>
+                    <span className="truncate" style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", display: "block", marginBottom: 2 }}>
+                      {course.title}
+                    </span>
+                    <span className="truncate" style={{ fontSize: "var(--text-2xs)", color: "var(--muted-foreground)", display: "block", marginBottom: 10 }}>{course.subtitle}</span>
+                    <div className="flex items-center justify-center gap-1.5" style={{ height: 34, borderRadius: "var(--radius-button)", background: course.accent, color: "var(--white)" }}>
+                      <Sparkles style={{ width: 13, height: 13 }} />
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue" : "View"}</span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
