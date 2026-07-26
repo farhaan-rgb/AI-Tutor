@@ -27,15 +27,9 @@ interface WishlistItem {
 
 // ─── DUMMY Data ───────────────────────────────────────────────────────────────
 // TODO(api): GET /api/user/wishlist
-const DUMMY_WISHLIST: WishlistItem[] = [
-  { id: "wl-c1", kind: "course", categoryId: "courses", title: "JEE Main 2027 Complete Course", subtitle: "12-Month Access", price: 3499, originalPrice: 6999, rating: 4.8 },
-  { id: "wl-c4", kind: "course", categoryId: "courses", title: "CAT 2025 Complete Preparation", subtitle: "6-Month Access + Mock Tests", price: 2999, originalPrice: 5999, rating: 4.8 },
-  { id: "wl-c2", kind: "course", categoryId: "courses", title: "UPSC CSE Foundation Course", subtitle: "18-Month Access", price: 7999, originalPrice: 14999, rating: 4.7 },
-  { id: "wl-m1", kind: "mock-test", categoryId: "mock-tests", title: "NEET 2025 Mock Test Series", subtitle: "20 Full-Length Papers + PYQs", price: 699, originalPrice: 1299, rating: 4.7 },
-  { id: "wl-m2", kind: "mock-test", categoryId: "mock-tests", title: "JEE Advanced Full Mock Series", subtitle: "10 Full Length + 15 Chapter Tests", price: 899, originalPrice: 1499, rating: 4.9 },
-  { id: "wl-p1", kind: "physical", categoryId: "books", title: "HC Verma Concepts of Physics", subtitle: "Vol. 1 & Vol. 2 Set", price: 499, originalPrice: 850, rating: 4.9 },
-  { id: "wl-p3", kind: "physical", categoryId: "stationery", title: "PrepMaster Study Kit", subtitle: "5 Notebooks + Pens + Highlighters", price: 399, originalPrice: 799, rating: 4.5 },
-];
+// Empty by default — this build only covers the Class 10 NCERT Maths
+// journey, so there are no unrelated exam-prep items to wishlist yet.
+const DUMMY_WISHLIST: WishlistItem[] = [];
 
 const KIND_LABEL: Record<ProductKind, string> = {
   "course": "Course",
@@ -385,46 +379,6 @@ export function Component() {
             )}
           </div>
 
-          {/* Cart icon with badge */}
-          <div style={{ position: "relative" }}>
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => navigate("/marketplace/cart")}
-              aria-label="View cart"
-              style={{
-                width: 36, height: 36, borderRadius: 8,
-                border: "1px solid var(--border)",
-                backgroundColor: "var(--card)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer",
-              }}
-            >
-              <ShoppingCart style={{ width: 16, height: 16, color: "var(--foreground)", strokeWidth: 1.5 }} />
-            </motion.button>
-            <AnimatePresence>
-              {cartCount > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                  style={{
-                    position: "absolute", top: -4, right: -4,
-                    minWidth: 18, height: 18, borderRadius: 9999,
-                    backgroundColor: "var(--primary-500)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontFamily: "var(--font-family-inter)",
-                    fontSize: "var(--text-2xs)",
-                    fontWeight: "var(--font-weight-bold)",
-                    color: "var(--white)",
-                    paddingLeft: 4, paddingRight: 4,
-                  }}
-                >
-                  {cartCount}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </div>
         </div>
       </GlassHeader>
 
@@ -432,7 +386,7 @@ export function Component() {
         <AnimatePresence mode="wait">
           {items.length === 0 ? (
             <motion.div key="empty-global" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <EmptyState filter="all" onExplore={() => navigate("/marketplace")} />
+              <EmptyState filter="all" onExplore={() => navigate("/marketplace-v1")} />
             </motion.div>
           ) : (
             <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
@@ -441,7 +395,7 @@ export function Component() {
               <AnimatePresence mode="wait">
                 {filtered.length === 0 ? (
                   <motion.div key={`empty-${filter}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <EmptyState filter={filter} onExplore={() => navigate("/marketplace")} />
+                    <EmptyState filter={filter} onExplore={() => navigate("/marketplace-v1")} />
                   </motion.div>
                 ) : (
                   <motion.div key={`grid-${filter}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>

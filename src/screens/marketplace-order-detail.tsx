@@ -517,9 +517,9 @@ function QuickActionBar({ order }: { order: OrderDetail }) {
         onClick={() => {
           // Test series → pack detail (fall back to Classes, where the My Test
           // Series rail lives, if the pack can't be resolved). Other digital →
-          // learning path. No branch is a no-op.
+          // back to the order itself. No branch is a no-op.
           if (isTestSeries) navigate(packId ? `/my-test-series/${packId}` : "/classes");
-          else navigate("/learning-path");
+          else navigate("/marketplace/orders");
         }}
         className="flex items-center justify-center w-full"
         style={{

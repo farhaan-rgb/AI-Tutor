@@ -192,22 +192,6 @@ const DUMMY_ORDERS: Order[] = [
     ],
   },
   {
-    id: "o-ts",
-    orderId: "PM2024051201",
-    date: "12 May 2026",
-    status: "Active",
-    totalItems: 1,
-    totalPrice: 599,
-    validTill: "12 May 2027",
-    items: [
-      {
-        id: "i-ts",
-        title: "JEE Main Mock Series 2026 — Standard (30 Tests)",
-        kind: "test-series",
-      },
-    ],
-  },
-  {
     id: "o-1",
     orderId: "PM2024041001",
     date: "15 Apr 2026",

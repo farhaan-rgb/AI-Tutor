@@ -487,24 +487,28 @@ export function Component() {
             </div>
           )}
 
-          {/* CTA buttons — Free Demo + Curriculum */}
+          {/* CTA buttons — Free Demo + Curriculum. ncert-10-maths has no
+              separate recorded demo — Chapter 1 itself is the free preview —
+              so only the Curriculum button shows for it. */}
           <div className="flex" style={{ gap: 12 }}>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/recording-v2")}
-              className="flex items-center justify-center"
-              style={{
-                flex: 1, height: 40, borderRadius: 12, gap: 6,
-                backgroundColor: "transparent",
-                border: "1px solid var(--primary)",
-                cursor: "pointer", fontFamily: "inherit",
-              }}
-            >
-              <Play size={14} fill="var(--primary)" style={{ color: "var(--primary)" }} />
-              <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", color: "var(--primary)" }}>
-                Free Demo
-              </span>
-            </motion.button>
+            {!(is1112 && info1112!.sku === "ncert-10-maths") && (
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                onClick={() => navigate("/recording-v2")}
+                className="flex items-center justify-center"
+                style={{
+                  flex: 1, height: 40, borderRadius: 12, gap: 6,
+                  backgroundColor: "transparent",
+                  border: "1px solid var(--primary)",
+                  cursor: "pointer", fontFamily: "inherit",
+                }}
+              >
+                <Play size={14} fill="var(--primary)" style={{ color: "var(--primary)" }} />
+                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", color: "var(--primary)" }}>
+                  Free Demo
+                </span>
+              </motion.button>
+            )}
 
             <motion.button
               whileTap={{ scale: 0.97 }}
