@@ -365,6 +365,45 @@ narration scripts, video on-screen text, everything. Audio and video carry an
 even tighter bar than on-screen text: a student can re-read a confusing
 sentence in a chat bubble, but a narrated line is heard once and gone.
 
+## 1d. Every piece of UI chrome text needs the same "would the student
+understand and need this" check — not just Explain/Practice content
+
+Rule 1c is about explanatory prose being plain English. This is the same
+check applied to everything else on screen — button labels, loading states,
+error messages, section headers — anything the student reads that isn't
+itself the lesson content. Two real failure modes caught so far:
+
+**Jargon that reads as exam-board/engineering vocabulary, not student
+vocabulary.** The analytical Practice format's "Ask AI tutor for a model
+answer" button used "model answer" — a real term, but one that reads more
+like something printed on an answer key than something a student would say
+themselves. Renamed to "sample answer" throughout the student-facing copy
+(the internal variable/function/endpoint names like `modelAnswer` and
+`/api/model-answer` didn't need renaming — this is about what's *rendered*,
+not what the code calls it internally).
+
+**A loading state with nothing to look at, described in words the reader
+has to parse instead of just seeing.** "Writing a model answer…" sat as a
+static line of text for the several real seconds a live model call takes.
+Fixed with an actual animation — a pulsing sparkle plus skeleton placeholder
+lines (reusing the `Skeleton` component already used elsewhere in the app,
+not a new bespoke spinner) — alongside simpler copy ("Your AI tutor is
+thinking…"). Check any loading/waiting state for both halves of this: is
+there something to *look at*, and is the text next to it something a
+student would actually say, not a technical description of what's
+happening backend-side.
+
+**Known, deliberate exception: developer-diagnostic error text.** A few
+error states in this prototype (e.g. "Couldn't reach the grading service —
+make sure ai-tutor-server is running (npm run dev in /server)") name the
+actual dev-server fix rather than a student-friendly generic message. This
+is a real, conscious tradeoff, not an oversight: this prototype's actual
+current audience includes whoever is testing/demoing it, and that exact
+message has already been the correct, actionable fix more than once during
+this build. Worth revisiting before this is ever positioned as
+student-facing rather than a pitch/dev prototype, but not silently
+"fixed" into vaguer copy without saying so.
+
 ## 2. Topic categorization: Explain vs Practice vs Both
 
 A topic (line item on Chapter Home) gets:
