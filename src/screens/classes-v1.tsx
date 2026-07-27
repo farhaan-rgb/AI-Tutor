@@ -2019,7 +2019,7 @@ const BANNER_COURSES = [
     sku: "ncert-10-history",
     title: "Class 10 NCERT History",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
-    image: null as string | null,
+    image: "/ncert-10-history-listing.jpg",
   },
 ] as const;
 const BANNER_ROTATE_MS = 3500;

@@ -1210,14 +1210,12 @@ export function Component() {
       },
       {
         sku: "ncert-10-history",
-        // Same accent again — third subject, same product family. No real
-        // photo supplied for this one yet, so it falls back to the
-        // gradient + icon treatment below (Landmark, not Microscope).
+        // Same accent again — third subject, same product family.
         accent: "#597ef7",
         title: "Class 10 NCERT History",
         subtitle: "History · Full NCERT Syllabus",
-        image: null as string | null,
-        imageAlt: "",
+        image: "/ncert-10-history-listing.jpg",
+        imageAlt: "Teacher presenting the Class 10 NCERT Social Science textbook",
       },
     ];
     return (
