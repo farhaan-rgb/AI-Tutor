@@ -57,6 +57,37 @@ buttons are always full-width rows sized to their own content, never a
 fixed square/tile, because there is no way to predict in advance how long
 a real answer option will be.
 
+**A single-sub-question visual problem doesn't get a second copy of its own
+question.** The visual/fact-recall shape has two text slots — the problem's
+own `questionText` (shown in the top card) and each sub-question's own
+`prompt` (shown above its options). With multiple real sub-questions (e.g.
+Q1's (i)/(ii)/(iii)), those two slots carry genuinely different text — a
+shared framing plus each part's specific ask — and both belong on screen.
+With exactly one sub-question, writing a `prompt` that just restates
+`questionText` in slightly different words puts the same question on screen
+twice — real bug, real screenshot (Science Ch.1 Q3, "What happens when
+dilute hydrochloric acid..." shown once as the card, once as the prompt,
+one sentence apart). The lone sub-question picker chip that comes with it
+is equally pointless — there's nothing to pick between with only one
+option. Fixed by hiding both the repeated prompt and the picker whenever a
+visual problem has exactly one sub-question; the top card alone already
+states it in full.
+
+**A problem-index doesn't get to grow with the problem count.** The
+"choose a problem" selector (topic → which of N real problems) is
+UI chrome, not content — its job is to get the student to the actual
+question, not to compete with it for screen space. A wrapping pill grid is
+fine for a handful of problems, but a chapter's full 20-question exercise
+set wrapped it across 5 rows, pushing the real question below the fold —
+real bug, real screenshot. Once a topic has enough real problems that the
+selector would take that much space, it needs a fixed-height design (e.g.
+prev/next + a sheet for jumping directly), not a version of the same grid
+that just keeps growing. This is a general property of any selector built
+from "however many real problems/questions this topic has" — check it
+whenever a topic's problem count is large (an in-text QUESTIONS box with
+2-3 real questions won't hit this; a full end-of-chapter EXERCISES section
+covering all real questions will).
+
 ## 1. Content must be real, not invented
 
 - Every Explain concept and every Practice problem traces back to an actual

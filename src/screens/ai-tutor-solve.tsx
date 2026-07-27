@@ -30,8 +30,9 @@
  */
 import { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
+import { BottomSheet } from "../shared/bottom-sheet";
 
 type StepState = "done" | "active" | "locked";
 
@@ -1246,6 +1247,93 @@ function correctAnswerSummary(problem: PracticeProblem): string {
   return `${steps[steps.length - 1].answer}. ${problem.verifyLine}`;
 }
 
+// Shared by both the "select" screen and the visual/MCQ screen — previously
+// each rendered its own copy of this wrapping pill grid, which was fine up to
+// ~5 problems but for a 19-problem topic (all 20 Chapter Exercises) pushed
+// the actual question below the fold across 5 rows of pills. Past 5
+// problems, switch to a fixed-height prev/next bar with a sheet for jumping
+// directly to one; at 5 or fewer, the original wrap is already compact.
+function ProblemIndex({ problems, problemIdx, isProblemDone, onSelect }: {
+  problems: PracticeProblem[];
+  problemIdx: number;
+  isProblemDone: (p: PracticeProblem) => boolean;
+  onSelect: (i: number) => void;
+}) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+  // A single-problem topic has nothing to "choose" between.
+  if (problems.length <= 1) return null;
+
+  const pillStyle = (active: boolean, done: boolean) => ({
+    gap: 4, height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer" as const,
+    border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+    background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+    color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
+    fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
+  });
+
+  if (problems.length > 5) {
+    const current = problems[problemIdx];
+    const prevIdx = problemIdx > 0 ? problemIdx - 1 : null;
+    const nextIdx = problemIdx < problems.length - 1 ? problemIdx + 1 : null;
+    return (
+      <>
+        <div className="flex items-center" style={{ gap: 8, marginBottom: 16 }}>
+          <button
+            onClick={() => prevIdx !== null && onSelect(prevIdx)}
+            disabled={prevIdx === null}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 40, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", cursor: prevIdx === null ? "default" : "pointer", opacity: prevIdx === null ? 0.4 : 1 }}
+          >
+            <ChevronLeft style={{ width: 18, height: 18, color: "var(--foreground)" }} />
+          </button>
+          <button
+            onClick={() => setSheetOpen(true)}
+            className="flex-1 flex items-center justify-center"
+            style={{ gap: 6, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
+          >
+            {isProblemDone(current) && <Check style={{ width: 13, height: 13, color: "var(--success)" }} strokeWidth={3} />}
+            <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)" }}>{current.label}</span>
+            <span style={typo.metaStyle}>· {problemIdx + 1} of {problems.length}</span>
+            <ChevronDown style={{ width: 15, height: 15, color: "var(--muted-foreground)" }} />
+          </button>
+          <button
+            onClick={() => nextIdx !== null && onSelect(nextIdx)}
+            disabled={nextIdx === null}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 40, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", cursor: nextIdx === null ? "default" : "pointer", opacity: nextIdx === null ? 0.4 : 1 }}
+          >
+            <ChevronRight style={{ width: 18, height: 18, color: "var(--foreground)" }} />
+          </button>
+        </div>
+        <BottomSheet isOpen={sheetOpen} onClose={() => setSheetOpen(false)} title="Choose a question">
+          <div className="flex flex-wrap" style={{ gap: 8, padding: 16 }}>
+            {problems.map((p, i) => (
+              <button key={p.id} onClick={() => { onSelect(i); setSheetOpen(false); }} className="flex items-center" style={pillStyle(i === problemIdx, isProblemDone(p))}>
+                {isProblemDone(p) && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </BottomSheet>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a problem</p>
+      <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 16 }}>
+        {problems.map((p, i) => (
+          <button key={p.id} onClick={() => onSelect(i)} className="flex items-center" style={pillStyle(i === problemIdx, isProblemDone(p))}>
+            {isProblemDone(p) && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
+            {p.label}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
 function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; topicTitle: string; problems: PracticeProblem[] }) {
   const navigate = useNavigate();
   const [problemIdx, setProblemIdx] = useState(0);
@@ -1487,25 +1575,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
               own multi-problem picker (e.g. Q1 vs Q2) has to live here too —
               otherwise a topic with >1 visual problem would have no way to
               switch between them. */}
-          {problems.length > 1 && (
-            <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 14 }}>
-              {problems.map((p, i) => (
-                <button
-                  key={p.id}
-                  onClick={() => selectProblem(i)}
-                  style={{
-                    height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
-                    border: i === problemIdx ? "1.5px solid var(--primary)" : "1px solid var(--border)",
-                    background: isProblemDone(p) ? "var(--success-d2)" : i === problemIdx ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
-                    color: i === problemIdx ? "var(--primary)" : isProblemDone(p) ? "var(--success)" : "var(--foreground)",
-                    fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
-                  }}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          )}
+          <ProblemIndex problems={problems} problemIdx={problemIdx} isProblemDone={isProblemDone} onSelect={selectProblem} />
 
           <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "12px 15px", marginBottom: 14 }}>
             <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 5 }}>{problem.label}</span>
@@ -1518,32 +1588,43 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             </div>
           )}
 
-          {/* Sub-question picker — any graph/fact reachable any time, checkmark once answered correctly */}
-          <div className="flex flex-wrap items-center" style={{ gap: 6, marginBottom: 16 }}>
-            {questions.map((q, i) => {
-              const done = completedParts[i];
-              const active = i === partIdx;
-              return (
-                <button
-                  key={q.label}
-                  onClick={() => selectVisualQuestion(i)}
-                  className="flex items-center"
-                  style={{
-                    gap: 4, height: 32, padding: "0 12px", borderRadius: 8, cursor: "pointer",
-                    border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
-                    background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
-                    color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
-                    fontFamily: "var(--font-family-inter)", fontSize: 13, fontWeight: 700,
-                  }}
-                >
-                  {done && <Check style={{ width: 11, height: 11 }} strokeWidth={3} />}
-                  {q.label}
-                </button>
-              );
-            })}
-          </div>
+          {/* Sub-question picker — any graph/fact reachable any time, checkmark
+              once answered correctly. Hidden with exactly one sub-question:
+              there's nothing to pick between, and the question card above
+              already states it in full. */}
+          {questions.length > 1 && (
+            <div className="flex flex-wrap items-center" style={{ gap: 6, marginBottom: 16 }}>
+              {questions.map((q, i) => {
+                const done = completedParts[i];
+                const active = i === partIdx;
+                return (
+                  <button
+                    key={q.label}
+                    onClick={() => selectVisualQuestion(i)}
+                    className="flex items-center"
+                    style={{
+                      gap: 4, height: 32, padding: "0 12px", borderRadius: 8, cursor: "pointer",
+                      border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                      background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
+                      color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
+                      fontFamily: "var(--font-family-inter)", fontSize: 13, fontWeight: 700,
+                    }}
+                  >
+                    {done && <Check style={{ width: 11, height: 11 }} strokeWidth={3} />}
+                    {q.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-          <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>{currentQuestion.prompt}</p>
+          {/* Only shown with more than one sub-question — with exactly one,
+              this restates the same question already shown in the card
+              above (see CONTENT_RULEBOOK.md on avoiding redundant screen
+              copy). */}
+          {questions.length > 1 && (
+            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: 10 }}>{currentQuestion.prompt}</p>
+          )}
 
           {/* Full-width rows, not fixed-size tiles — option text ranges from
               a single digit (graph zero-counts) to a full sentence (fact-
@@ -1593,37 +1674,10 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
 
         <div className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
           {/* A single-problem topic has nothing to "choose" between — the
-              selector only makes sense once there's an actual choice. Pills
-              size to their own content and wrap, rather than stretching to
-              fill a row, since some topics have 7 of these, not 2. */}
-          {problems.length > 1 && (
-            <>
-              <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a problem</p>
-              <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 16 }}>
-                {problems.map((p, i) => {
-                  const done = isProblemDone(p);
-                  const active = i === problemIdx;
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => selectProblem(i)}
-                      className="flex items-center"
-                      style={{
-                        gap: 4, height: 36, padding: "0 14px", borderRadius: 10, cursor: "pointer",
-                        border: active ? "1.5px solid var(--primary)" : "1px solid var(--border)",
-                        background: done ? "var(--success-d2)" : active ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--card)",
-                        color: active ? "var(--primary)" : done ? "var(--success)" : "var(--foreground)",
-                        fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)",
-                      }}
-                    >
-                      {done && <Check style={{ width: 12, height: 12 }} strokeWidth={3} />}
-                      {p.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
+              selector only makes sense once there's an actual choice. Past 5
+              problems this switches from a wrapping pill grid to a compact
+              prev/next bar + sheet — see ProblemIndex. */}
+          <ProblemIndex problems={problems} problemIdx={problemIdx} isProblemDone={isProblemDone} onSelect={selectProblem} />
 
           {/* A multi-part real question's sub-parts are their own selectable
               questions too — shown as soon as the problem is chosen, not
