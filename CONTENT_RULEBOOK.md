@@ -10,8 +10,19 @@ Source of truth for every fact below: the real NCERT PDF for the chapter
 (`jemh1XX.pdf` for Maths, `jesc1XX.pdf` for Science, `jess1XX.pdf` for
 Geography/`jess2XX.pdf` for Economics/`jess3XX.pdf` for History/`jess4XX.pdf`
 for Political Science — Class 10 Social Science is four separate books, not
-one — all fetched from `ncert.nic.in/textbook/pdf/`). Never invent a number,
-a proof step, or a question under a citation's name.
+one; `jeff1XX.pdf` for English's First Flight/`jefp1XX.pdf` for Footprints
+without Feet; `jhks1XX.pdf` for Hindi's Kshitij/`jhkr1XX.pdf` for Kritika —
+all fetched from `ncert.nic.in/textbook/pdf/`). Never invent a number, a
+proof step, or a question under a citation's name.
+
+**Not every real Class 10 subject has one of these.** Computer Applications
+(CBSE Code 165) is governed by a CBSE syllabus document, not a single
+canonical NCERT textbook — various private publishers cover it differently,
+so there's no one real source to trace citations against the way every
+other subject here has. Flagged to the user rather than silently picked a
+textbook or built from the syllabus outline alone (which has unit topics and
+learning outcomes but no worked examples/exercises to build Practice from)
+— skipped pending a decision, not silently built to a lower bar.
 
 ## 0. Match the format to what the problem actually is
 
@@ -257,6 +268,41 @@ instead? Silently dropping the image with no note reads, on a later audit,
 identically to "forgot the image existed" — which is exactly what rule 0b
 already exists to prevent for whole activities, not just this one for
 individual figures.
+
+## 0d. Language/composition content, built at scale (English + Hindi)
+
+Rule 0's table named Language/composition as the one kind of question left
+unbuilt, reusing the `analytical` shape provisionally. English ("A Letter
+to God" + two Frost poems) and Hindi (Surdas's भ्रमरगीत) are the first two
+subjects built where a real majority of the content is genuinely this
+kind — grammar drills, vocabulary matching, open comprehension, and
+creative/expressive writing prompts — and the `analytical` shape held up
+at that scale with no new shape needed. Two real patterns emerged:
+
+**Vocabulary/grammar drills with one real determinate answer are
+`visual`, not `analytical`.** Storm-name matching, the metaphor table, "find
+the sentence with this negative word," the rhyme-scheme question — each has
+one real correct answer traceable to the source text, so they use the
+`visual`/fact-recall shape (options + correctAnswer + explanation), not
+open-response. Only questions with a genuinely open range of acceptable
+answers (comprehension "why," creative "give your own argument," "does this
+connect to something you've observed") are `analytical`. Classify each real
+question individually against rule 0's table — a single "Thinking about
+Language" block in the source can genuinely split across both shapes (see
+English's split of storm-names/metaphors/negatives-finding as `visual`
+versus relative-clause-joining as `analytical`, since many phrasings of a
+joined sentence are correct).
+
+**Real quotes stay in their original language; grading criteria and
+grounding notes are written in English.** English's `questionText`/
+`groundingNotes` quote the story/poems verbatim; Hindi's do the same in
+Devanagari (पद text, शब्द-संपदा glossary terms) — quoting a translation
+instead of the real printed words would break rule 1's "traces back to an
+actual citation" test. But `criteria` and `groundingNotes`' explanatory
+prose are written in Hindi to match the question, since the surrounding
+grading/explanation needs to work in the same language a Hindi-subject
+student and grading model would actually use — matching whichever language
+the real question itself is in, not defaulting to English chrome.
 
 ## 1. Content must be real, not invented
 
@@ -663,3 +709,39 @@ crowding problem this fixed), group them behind one entry point + a
 picker screen, rather than either (a) showing every real course as its own
 top-level card, or (b) collapsing them into one course that loses the
 real per-subject enrollment/progress boundaries.
+
+## 14. Two real prescribed books studied as one subject — a different
+pattern from Social Science's four-way split
+
+English (First Flight + Footprints without Feet) and Hindi (Kshitij +
+Kritika) are each genuinely two separate real NCERT books — but unlike
+Social Science's four books, both are studied and examined as **one**
+subject, not four separately-chosen ones. So each gets exactly **one**
+`sku` (`ncert-10-english`, `ncert-10-hindi`), with a single `chapterList`
+that appends the supplementary reader's real chapters after the main
+reader's (not interleaved) — matching how the two books are physically
+separate and typically taught in that order. No Discover-page grouping/
+picker screen is needed here (that's rule 13's pattern, for when the
+underlying courses are separately enrolled) — this is a single course
+whose chapter list happens to be sourced from two real PDFs.
+
+**Where a subject genuinely has more than one real curriculum variant,
+name the assumption, don't silently pick one.** CBSE Hindi has two parallel
+courses — Course A (Kshitij/Kritika, built here) and Course B (Sparsh/
+Sanchayan) — and different schools teach different ones. Rather than
+silently building one and presenting it as *the* Hindi course, the code
+comment next to `CHAPTERS_10_HINDI` states the assumption directly (Course
+A is more widely taught, so it's the default) and says explicitly that a
+school teaching Course B would need the other book's content instead. This
+is the same discipline as rule 0b/0c's "name the tradeoff" — a reasonable
+default is fine, a silent one is not, especially when a real, differently-
+labelled alternative exists that a specific school might actually use.
+
+**A subject with no single canonical textbook is a stop-and-ask situation,
+not a silent best-guess.** Computer Applications (CBSE Code 165) has no
+NCERT book at all — just a syllabus document and multiple private-
+publisher textbooks, none of which is *the* obvious real source the way
+every NCERT-published subject is. This breaks the foundational assumption
+every rule above depends on (a single real PDF to cite against), so it was
+surfaced to the user for a decision rather than silently choosing a
+textbook or building placeholder content from the syllabus outline alone.
