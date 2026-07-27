@@ -1188,9 +1188,6 @@ export function Component() {
   // wraps this screen as normal (rendered by AppLayout, not by this component).
   const isAiTutorDemo = new URLSearchParams(location.search).get("demo") === "ai-tutor";
   if (isAiTutorDemo) {
-    // Maths has a real photo (sourced earlier in this project); Science
-    // doesn't have an equivalent real photo yet, so it gets a gradient +
-    // icon treatment instead of a fabricated stock photo.
     const demoCourses = [
       {
         sku: "ncert-10-maths",
@@ -1208,8 +1205,8 @@ export function Component() {
         accent: "#597ef7",
         title: "Class 10 NCERT Science",
         subtitle: "Science · Full NCERT Syllabus",
-        image: null,
-        imageAlt: "",
+        image: "/ncert-10-science-listing.jpg",
+        imageAlt: "Teacher presenting the Class 10 NCERT Science textbook",
       },
     ];
     return (
