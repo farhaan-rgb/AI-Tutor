@@ -69,6 +69,62 @@ app.post("/api/grade-photo", async (req, res) => {
   }
 });
 
+// Grades an open-response (analytical/argumentative) answer — e.g. History's
+// "Discuss" and "Write in brief" questions, which have no single determinate
+// answer. Unlike /api/grade-photo, this deliberately never returns a
+// correct/incorrect verdict (see CONTENT_RULEBOOK.md rule 0's Analytical
+// row) — only qualitative feedback on completeness/soundness against the
+// question's own real evaluative criteria.
+app.post("/api/grade-text", async (req, res) => {
+  const { questionText, studentAnswer, criteria, groundingNotes } = req.body ?? {};
+
+  if (!questionText || !studentAnswer || !Array.isArray(criteria) || criteria.length === 0) {
+    return res.status(400).json({
+      error: "questionText, studentAnswer, and a non-empty criteria array are all required",
+    });
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an AI tutor giving feedback on a student's written answer to an open-ended " +
+            "history discussion question. This question has no single correct answer — never say " +
+            "the answer is 'correct' or 'incorrect', and never imply there's one right answer. " +
+            "You will be given the question, the real evaluative criteria a strong answer should " +
+            "cover, background notes grounding those criteria in the real chapter, and the " +
+            "student's own answer. Judge how completely and soundly the student's answer covers " +
+            "the real criteria — name what they covered well and what's missing or underdeveloped, " +
+            "using the grounding notes to be specific rather than generic. " +
+            'Respond with strict JSON only, in this exact shape: {"feedback": string}. ' +
+            "Keep feedback to 2-4 sentences, encouraging but specific, written directly to the student.",
+        },
+        {
+          role: "user",
+          content:
+            `Question: ${questionText}\n\n` +
+            `Criteria a strong answer should cover:\n${criteria.map((c) => `- ${c}`).join("\n")}\n\n` +
+            `Background grounding these criteria in the real chapter:\n${groundingNotes ?? ""}\n\n` +
+            `Student's answer:\n${studentAnswer}`,
+        },
+      ],
+    });
+
+    const raw = completion.choices[0]?.message?.content ?? "{}";
+    const parsed = JSON.parse(raw);
+    res.json({
+      feedback: typeof parsed.feedback === "string" ? parsed.feedback : "",
+    });
+  } catch (err) {
+    console.error("grade-text failed:", err);
+    res.status(502).json({ error: "Grading failed — please try again." });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`ai-tutor-server listening on http://localhost:${PORT}`);
 });

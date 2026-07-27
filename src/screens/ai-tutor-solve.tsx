@@ -68,14 +68,30 @@ interface VisualQuestion {
   explanation: string;
 }
 
+// Analytical/argumentative problems (e.g. History's "Discuss" questions —
+// "why did nationalist tensions emerge in the Balkans") have no single
+// determinate answer — grading it right/wrong would misrepresent what's
+// actually being assessed (rule 0's Analytical row). The student writes
+// their own answer; an AI tutor judges it against the question's own real
+// evaluative criteria and gives qualitative feedback — never a
+// correct/incorrect verdict. `groundingNotes` are real facts/argument from
+// the chapter that back the AI's grading — sent to the server as grading
+// context, never shown to the student as "the answer."
+interface Analytical {
+  criteria: string[];
+  groundingNotes: string;
+}
+
 interface PracticeProblem {
   id: string;
   label: string;
   questionText: string;
-  // Exactly one of steps/parts/visual is set per problem, never more than one.
+  // Exactly one of steps/parts/visual/analytical is set per problem, never
+  // more than one.
   steps?: PracticeStep[];
   parts?: PracticePart[];
   visual?: { imageSrc?: string; imageAlt?: string; questions: VisualQuestion[] };
+  analytical?: Analytical;
   verifyLine: string;
 }
 
@@ -1356,6 +1372,13 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   // sub-part, which are done" shape as the derivation parts) but track the
   // currently-selected option separately, since there's no step reveal here.
   const [visualAnswer, setVisualAnswer] = useState<string | null>(null);
+  // Analytical/open-response problems: the student's draft, the AI's
+  // qualitative feedback once graded, and a separate error state (reusing
+  // gradeError would conflate this with the photo-grading path).
+  const [analyticalAnswer, setAnalyticalAnswer] = useState("");
+  const [analyticalFeedback, setAnalyticalFeedback] = useState<string | null>(null);
+  const [analyticalSubmitting, setAnalyticalSubmitting] = useState(false);
+  const [analyticalError, setAnalyticalError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const problem = problems[problemIdx];
@@ -1393,6 +1416,9 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setGradeFeedback(null);
     setGradeError(null);
     setVisualAnswer(null);
+    setAnalyticalAnswer("");
+    setAnalyticalFeedback(null);
+    setAnalyticalError(null);
   }
 
   // Visual problems: jump to any sub-question at any time (same "always
@@ -1400,6 +1426,38 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   function selectVisualQuestion(i: number) {
     setPartIdx(i);
     setVisualAnswer(null);
+  }
+
+  // Sends the student's written answer to ai-tutor-server for real
+  // qualitative grading (GPT-4o-mini) against this problem's own real
+  // evaluative criteria. Completion is marked on a genuine attempt, not on
+  // "correctness" — analytical questions have no fixed correct answer
+  // (rule 0), so there's nothing to gate completion on besides having
+  // actually written and submitted a real answer.
+  async function submitAnalytical() {
+    if (!problem.analytical || !analyticalAnswer.trim()) return;
+    setAnalyticalSubmitting(true);
+    setAnalyticalError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/grade-text`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionText: problem.questionText,
+          studentAnswer: analyticalAnswer,
+          criteria: problem.analytical.criteria,
+          groundingNotes: problem.analytical.groundingNotes,
+        }),
+      });
+      if (!res.ok) throw new Error(`Grading request failed (${res.status})`);
+      const data = await res.json();
+      setAnalyticalFeedback(data.feedback || null);
+      markProblemComplete(problem);
+    } catch {
+      setAnalyticalError("Couldn't reach the grading service — make sure ai-tutor-server is running (npm run dev in /server).");
+    } finally {
+      setAnalyticalSubmitting(false);
+    }
   }
 
   function answerVisualQuestion(option: string) {
@@ -1535,6 +1593,96 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
       </div>
     </div>
   );
+
+  // Analytical/open-response problems bypass the select/explain/upload mode
+  // machinery too — there's no step-by-step derivation and no fixed correct
+  // answer to grade a photo against, just a real question, a place to write
+  // a real answer, and qualitative AI feedback once submitted.
+  if (problem.analytical) {
+    const criteria = problem.analytical.criteria;
+    return (
+      <div style={{ height: "100dvh", display: "flex", flexDirection: "column", backgroundColor: "var(--background)", overflow: "hidden" }}>
+        <StatusBar />
+        {header}
+        <div style={{ height: 1, background: "var(--border)" }} />
+
+        <div className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
+          <ProblemIndex problems={problems} problemIdx={problemIdx} isProblemDone={isProblemDone} onSelect={selectProblem} />
+
+          <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "12px 15px", marginBottom: 14 }}>
+            <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 5 }}>{problem.label}</span>
+            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{problem.questionText}</p>
+          </div>
+
+          <textarea
+            value={analyticalAnswer}
+            onChange={(e) => setAnalyticalAnswer(e.target.value)}
+            disabled={analyticalSubmitting || !!analyticalFeedback}
+            placeholder="Write your answer here..."
+            style={{
+              width: "100%", minHeight: 140, borderRadius: 12, padding: "12px 14px", marginBottom: 12, resize: "vertical",
+              border: "1px solid var(--border)", background: "var(--card)", color: "var(--foreground)",
+              fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", lineHeight: 1.5,
+            }}
+          />
+
+          {!analyticalFeedback && (
+            <button
+              onClick={submitAnalytical}
+              disabled={!analyticalAnswer.trim() || analyticalSubmitting}
+              className="flex items-center justify-center"
+              style={{
+                width: "100%", height: 44, borderRadius: 12, border: "none", marginBottom: 12,
+                background: !analyticalAnswer.trim() || analyticalSubmitting ? "var(--muted-foreground)" : "var(--primary)",
+                cursor: !analyticalAnswer.trim() || analyticalSubmitting ? "default" : "pointer",
+              }}
+            >
+              <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>
+                {analyticalSubmitting ? "Getting feedback…" : "Submit for feedback"}
+              </span>
+            </button>
+          )}
+
+          {analyticalError && (
+            <div className="flex items-start gap-2" style={{ padding: "10px 12px", borderRadius: 10, background: "var(--error-d2)", marginBottom: 12 }}>
+              <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
+              <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{analyticalError}</p>
+            </div>
+          )}
+
+          {/* Never a right/wrong badge — qualitative feedback only, per
+              rule 0's Analytical row. Criteria are revealed alongside the
+              feedback (not before answering) as a self-check checklist,
+              not a pre-loaded answer key. */}
+          {analyticalFeedback && (
+            <div className="flex flex-col" style={{ gap: 12 }}>
+              <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--primary)", background: "color-mix(in srgb, var(--primary) 10%, var(--card))" }}>
+                <div className="flex items-center gap-2" style={{ marginBottom: 6 }}>
+                  <Sparkles style={{ width: 14, height: 14, color: "var(--primary)" }} />
+                  <span style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)", color: "var(--primary)" }}>AI tutor feedback</span>
+                </div>
+                <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{analyticalFeedback}</p>
+              </div>
+
+              <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
+                <p style={{ ...typo.metaStyle, marginBottom: 8 }}>What a strong answer covers</p>
+                <div className="flex flex-col" style={{ gap: 6 }}>
+                  {criteria.map((c) => (
+                    <div key={c} className="flex items-start gap-2">
+                      <div className="shrink-0" style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--muted-foreground)", marginTop: 7 }} />
+                      <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{c}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <NextStepsCta />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   // Visual/perceptual problems bypass the select/explain/pending mode
   // machinery entirely — there's no derivation to walk through or photo to
