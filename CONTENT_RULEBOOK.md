@@ -7,9 +7,11 @@ and-forth to get right — the goal is to hit this bar on the first pass for
 every chapter after it, not rediscover these rules one correction at a time.
 
 Source of truth for every fact below: the real NCERT PDF for the chapter
-(`jemh1XX.pdf` for Maths, `jesc1XX.pdf` for Science — fetched from
-`ncert.nic.in/textbook/pdf/`). Never invent a number, a proof step, or a
-question under a citation's name.
+(`jemh1XX.pdf` for Maths, `jesc1XX.pdf` for Science, `jess1XX.pdf` for
+Geography/`jess2XX.pdf` for Economics/`jess3XX.pdf` for History/`jess4XX.pdf`
+for Political Science — Class 10 Social Science is four separate books, not
+one — all fetched from `ncert.nic.in/textbook/pdf/`). Never invent a number,
+a proof step, or a question under a citation's name.
 
 ## 0. Match the format to what the problem actually is
 
@@ -41,12 +43,18 @@ exercise sitting right next to Exercise 2.2, which *is* procedural (factor,
 find zeroes, verify the sum/product relationship). Same chapter, two
 different real question-types, two different Practice treatments.
 
-**Engineering note:** only the *procedural* and *applied* rows are built
-today (`ai-tutor-solve.tsx`'s step/parts model). Visual, fact-recall, and
-analytical treatments need their own `PracticeProblem` shape and their own
-render path — not a bent version of the existing step sequence. Build the
-new shape when the first real instance of that kind shows up (Chapter 2's
-Exercise 2.1 is the first), rather than pre-building all of them speculatively.
+**Engineering note:** procedural, applied, visual, and fact-recall are built
+(`ai-tutor-solve.tsx`'s step/parts model for the first two, the shared
+visual/fact-recall quiz shape for the other two). Analytical/argumentative
+is also now built (History Ch.1 was the first subject where it was actually
+needed at scale) — see the "Analytical/open-response format" section below.
+Only Language/composition remains unbuilt as its own shape; the two
+composition-flavoured History questions built so far (writing an eyewitness
+report, describing a perspective) reused the analytical shape rather than
+waiting for a dedicated one, since the interaction (write freely, get
+qualitative feedback, never right/wrong) is identical — only the grading
+criteria's emphasis differs. Build a genuinely new shape only once a real
+question shows up that the analytical shape can't actually represent.
 
 **Never size a choice/option button to a fixed box.** Visual and fact-recall
 questions share one quiz UI (rule 0's table), and its option text ranges
@@ -103,6 +111,90 @@ whenever a topic's problem count is large (an in-text QUESTIONS box with
 2-3 real questions won't hit this; a full end-of-chapter EXERCISES section
 covering all real questions will).
 
+## 0a. The analytical/open-response format (History Ch.1, first use)
+
+Built for History Ch.1, "The Rise of Nationalism in Europe" — the first
+chapter where a real majority of the content is Analytical/argumentative
+rather than procedural, per rule 0's table. Every "Discuss," "Write in
+brief," and most in-text "Activity" questions in this chapter have no
+single determinate answer, so grading them right/wrong would misrepresent
+what's actually being assessed.
+
+**Shape:** `analytical: { criteria: string[]; groundingNotes: string }` on
+`PracticeProblem`. `criteria` are the real things a strong answer should
+cover — drawn from what the chapter itself actually says, never invented
+generically ("discusses the topic well" is not a real criterion; "cites
+Renan's 'daily plebiscite' phrase" is). `groundingNotes` are the real facts/
+quotes backing those criteria, sent to the grading model as context — never
+shown to the student before they answer, since that would hand them the
+answer instead of letting them attempt it.
+
+**Interaction:** student writes a real answer in a textarea, submits it to
+`/api/grade-text` (mirrors the existing `/api/grade-photo` pattern), and
+gets back qualitative feedback — never a correct/incorrect verdict, per the
+system prompt's explicit instruction to the grading model. Completion marks
+on a genuine attempt (a real answer was submitted and graded), not on
+"correctness" — there's nothing to gate that on. The real criteria are
+revealed *alongside* the feedback, after submission, as a self-check
+checklist — not shown upfront as an answer key.
+
+**Composition-flavoured questions reuse this shape too.** A couple of real
+History questions (write an eyewitness report, describe how you'd relate to
+a symbol from someone else's perspective) are Language/composition rather
+than strictly argumentative — but the interaction is identical (write
+freely, get qualitative feedback), so they use the same `analytical` shape
+with criteria that check for real grounding + adopted voice rather than
+argument soundness. Don't build a separate shape until a real question
+shows up that this one genuinely can't represent.
+
+**Multi-part real questions with mixed formats get split by format, not
+kept as one problem.** History's Fig. 14(a)/14(b) Activity is one real
+box, but two of its four sentences ask something genuinely visual (read the
+map's year-coding — a real, determinate answer) and the rest ask something
+genuinely analytical (do you think these people saw themselves as Italians
+— no fixed answer). Splitting it into one `visual` problem and one
+`analytical` problem is correct — rule 0's classification applies at the
+problem level, and forcing a fixed-answer map-reading question and a no-
+fixed-answer opinion question through the same shape would misrepresent one
+of them, whichever shape was picked.
+
+## 0b. Some real activities are genuinely out of scope — say so, don't drop them silently
+
+Not every real question a textbook asks can become an in-app Practice
+interaction. History Ch.1 has two: "plot on a map of Europe the changes
+drawn up by the Vienna Congress" (a real drawing/plotting activity this app
+has no map-plotting surface for) and the end-of-chapter "Project" (find
+nationalist symbols outside Europe — a genuine multi-day open research
+task, not a single-sitting practice question). Both are real, both were
+found during the rule-3b inventory, and both are excluded — but the
+exclusion itself is written down, next to the inventory, with the reason.
+The test is the same as rule 3's "no silent caps": a citation that's out of
+scope is still a citation that was found and accounted for, not one that
+quietly never got mentioned.
+
+**Verify a chapter's real facts by fetching them, not by recalling them.**
+Building History's course-catalog entry required knowing the book's real
+5-chapter list and each chapter's real title — rather than trusting
+memory (which chapter numbering maps to which subject-code prefix is easy
+to misremember, and Class 10 Social Science alone has four different
+subject-code prefixes), every chapter's PDF was actually downloaded from
+`ncert.nic.in` and its first real page checked directly. The same
+discipline applies to any fact that feeds a catalog entry, a chapter list,
+or a citation — if it can be fetched and checked, fetch and check it,
+even when it feels like something you already "know."
+
+**A real citation's own numbering can be ambiguous — note that, don't
+silently resolve it.** One History Activity, as printed, refers to "Fig.
+17" in a spot where the surrounding page layout and the question's actual
+content clearly point at Fig. 18 instead (likely a page-numbering artifact
+in how the two figures sit on consecutive pages). Rather than quietly
+"correcting" the citation to what seemed intended, or building the
+question exactly as literally printed while ignoring the mismatch, the
+right move is to build the question grounded in what the content clearly
+requires (both figures, and the real contrast between them) while noting
+the discrepancy explicitly in the grounding notes — so anyone auditing the
+content later can see the ambiguity was noticed, not missed.
+
 ## 1. Content must be real, not invented
 
 - Every Explain concept and every Practice problem traces back to an actual
@@ -116,6 +208,66 @@ covering all real questions will).
   error caught only by a full manual re-derivation of all 17 problems —
   assume errors happen and check for them, don't assume the first pass is
   correct.
+
+## 1a. Content must be complete, not just accurate
+
+Rule 1 stops you from inventing facts — it doesn't stop you from leaving real
+ones out. A citation can be completely accurate (a real Theorem, a real
+Example, correct numbers) and still be an incomplete account of what the
+textbook actually says about that concept, if a defining illustration or
+property from the source got dropped along the way.
+
+This happened for Chapter 1's "Unique prime factorisation" topic: the intro
+correctly cited Theorem 1.1 and the 32760 factor tree, and Example 1 was
+fully and correctly worked — but the textbook's own concrete illustration of
+what "unique apart from order" actually means (2 × 3 × 5 × 7 regarded as the
+same factorisation as 7 × 5 × 3 × 2) was never included. The topic passed
+every existing check — real citation, correct category, correct numbers —
+and still had a real gap, caught only when a narration script built *from*
+this already-approved intro was diffed against the source PDF directly,
+months after the topic was first marked done.
+
+Before marking any Explain concept done, re-read its source PDF section
+fresh — not from memory of the earlier build — and diff every explanatory
+element (theorem statements, defining illustrations, properties the concept
+depends on) against what's on screen. Two categories:
+- **Required**: anything that defines or illustrates the core property being
+  taught. Missing one of these is the same class of bug as rule 1's
+  "invented content," just the opposite direction — an incomplete account
+  presented as if it were the full one.
+- **Safely omittable**: motivating scaffolding/lead-in questions, historical
+  or biographical asides, notation conventions, and repeat worked examples
+  that reinforce a point already demonstrated some other way. Leaving these
+  out doesn't change whether the concept is understood.
+
+If in doubt which category something falls into, ask: "would a student who
+only saw what's on screen be missing something they need to actually grasp
+the concept, or just something extra?"
+
+## 1b. Practice problem statements must be complete, not just accurate
+
+Rule 1a checks whether a *concept's* exposition is a complete account of the
+source. This is the same check applied to a *problem's* statement, and it's
+a distinct failure mode from what rules 3/3a/3b and rule 4 already catch:
+
+- Rules 3/3a/3b catch a missing **question** — a whole citation or
+  question-block that never became a topic.
+- Rule 4 catches a missing **derivation step** — the solution skipping from
+  question to answer.
+- Rule 1b catches something neither of those will: the on-screen **question
+  text itself** — the prompt, a shared premise across sub-parts, a
+  condition, a unit — silently missing a piece the real textbook question
+  has, even though the citation is real, the numbers are correct, and the
+  derivation is fully shown. A word problem missing one clause of its setup,
+  or a multi-part question whose shared stem got dropped when only the
+  sub-part-specific text was carried over, are both this bug, not rule 4's.
+
+Before marking a Practice problem done, re-read its exact question in the
+source PDF fresh and diff it word-for-word against the on-screen prompt —
+not just the numbers used in the derivation. Same two-category test as rule
+1a: a dropped clause/condition/shared premise is required; the book's own
+scaffolding language around the question (e.g. "Let us consider some
+examples" before it) is not.
 
 ## 2. Topic categorization: Explain vs Practice vs Both
 
@@ -309,6 +461,11 @@ Once a chapter's Explain + Practice is built, do one full pass:
 - Every trap passes the "#1 likely mistake" test, not a rationalized one
   (rule 6), and its wrong answer actually follows from the mistake (rule 7)?
 - Every computed number independently re-verified by hand (rule 1)?
+- Every Explain concept re-checked against a *fresh* read of its source PDF
+  section for completeness, not just accuracy (rule 1a) — don't rely on
+  memory of the earlier build.
+- Every Practice problem's on-screen question text diffed word-for-word
+  against its real source question, not just its numbers (rule 1b).
 - No redundant copy, consistent sibling strings (rules 8–9)?
 
 Report what was checked, not just what was built — the audit is part of the

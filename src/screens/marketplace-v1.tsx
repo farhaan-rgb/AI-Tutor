@@ -21,7 +21,7 @@ import { useNavigate, useLocation } from "react-router";
 import { OlympiadEntryBanner } from "./classes";
 import { useScrollRestoration } from "../shared/use-scroll-restoration";
 import { motion } from "motion/react";
-import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles, Microscope } from "lucide-react";
+import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles, Microscope, Landmark } from "lucide-react";
 import { StatusBar } from "../shared/premium-ui";
 import { useTheme } from "../app/contexts/theme-context";
 import {
@@ -1208,6 +1208,17 @@ export function Component() {
         image: "/ncert-10-science-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Science textbook",
       },
+      {
+        sku: "ncert-10-history",
+        // Same accent again — third subject, same product family. No real
+        // photo supplied for this one yet, so it falls back to the
+        // gradient + icon treatment below (Landmark, not Microscope).
+        accent: "#597ef7",
+        title: "Class 10 NCERT History",
+        subtitle: "History · Full NCERT Syllabus",
+        image: null as string | null,
+        imageAlt: "",
+      },
     ];
     return (
       <div style={{ fontFamily: "var(--font-family-inter)", backgroundColor: "var(--background)", height: "100vh", overflowY: "auto" }}>
@@ -1243,7 +1254,11 @@ export function Component() {
                         className="flex items-center justify-center"
                         style={{ width: "100%", height: 110, background: `linear-gradient(135deg, color-mix(in srgb, ${course.accent} 22%, #0a0612) 0%, color-mix(in srgb, ${course.accent} 45%, #0a0612) 100%)` }}
                       >
-                        <Microscope style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
+                        {course.sku === "ncert-10-history" ? (
+                          <Landmark style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
+                        ) : (
+                          <Microscope style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
+                        )}
                       </div>
                     )}
                     {isEnrolledInDemoCourse && (

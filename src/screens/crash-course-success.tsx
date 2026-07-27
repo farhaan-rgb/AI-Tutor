@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { motion } from "motion/react";
-import { Check, BookOpen, FlaskConical, Atom, FlaskRound, Sigma, Leaf, Microscope } from "lucide-react";
+import { Check, BookOpen, FlaskConical, Atom, FlaskRound, Sigma, Leaf, Microscope, Landmark } from "lucide-react";
 import {
   DUMMY_CRASH_COURSE_INFO,
   getCrash1112Info,
@@ -16,6 +16,7 @@ const SUBJ_ICON_1112: Record<CrashCourse1112SubjectId, typeof Atom> = {
   maths:     Sigma,
   biology:   Leaf,
   science:   Microscope,
+  history:   Landmark,
 };
 
 export function Component() {

@@ -2015,6 +2015,12 @@ const BANNER_COURSES = [
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-science-listing.jpg",
   },
+  {
+    sku: "ncert-10-history",
+    title: "Class 10 NCERT History",
+    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    image: null as string | null,
+  },
 ] as const;
 const BANNER_ROTATE_MS = 3500;
 
