@@ -1985,16 +1985,17 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   const [analyticalFeedback, setAnalyticalFeedback] = useState<string | null>(null);
   const [analyticalSubmitting, setAnalyticalSubmitting] = useState(false);
   const [analyticalError, setAnalyticalError] = useState<string | null>(null);
-  // "Ask AI for a model answer" and "write your own answer" are both always
-  // reachable and expand inline, same pattern as procedural's "Ask AI to
-  // solve it"/"Upload your answer" — this was missing entirely on the first
-  // analytical build, which jumped straight to a blank textarea with no
-  // model-answer option at all.
-  const [modelAnswerOpen, setModelAnswerOpen] = useState(false);
+  // "Ask AI for a model answer" and "write your own answer" are separate
+  // stages, not inline-expanding toggles — the first version stacked the
+  // chooser, the (long) model answer, AND the write-your-own form all in
+  // one scroll, which pushed the actual answer input off-screen entirely.
+  // Choosing either option now switches the view, with a back button to
+  // return to "choose" — same shape as a lightweight wizard, not an
+  // accordion.
+  const [analyticalStage, setAnalyticalStage] = useState<"choose" | "model" | "answer">("choose");
   const [modelAnswer, setModelAnswer] = useState<{ framing: string; answer: string } | null>(null);
   const [modelAnswerLoading, setModelAnswerLoading] = useState(false);
   const [modelAnswerError, setModelAnswerError] = useState<string | null>(null);
-  const [writeAnswerOpen, setWriteAnswerOpen] = useState(false);
   // Three ways to actually give the answer — typing was the only option
   // before. Record and Upload both end up producing text (a transcript, or
   // a photo graded directly), submitted through the same grade-text call.
@@ -2045,10 +2046,9 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setAnalyticalAnswer("");
     setAnalyticalFeedback(null);
     setAnalyticalError(null);
-    setModelAnswerOpen(false);
+    setAnalyticalStage("choose");
     setModelAnswer(null);
     setModelAnswerError(null);
-    setWriteAnswerOpen(false);
     setAnswerInputMode("text");
     setRecordingState("idle");
     setRecordingError(null);
@@ -2103,7 +2103,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   // once per problem and cached in state, not re-fetched on every re-open.
   async function fetchModelAnswer() {
     if (!problem.analytical) return;
-    setModelAnswerOpen(true);
+    setAnalyticalStage("model");
     if (modelAnswer) return;
     setModelAnswerLoading(true);
     setModelAnswerError(null);
@@ -2344,17 +2344,18 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             )}
           </div>
 
-          {/* Both paths stay visible and tappable at all times, same pattern
-              as the procedural select screen's "Ask AI to solve it" /
-              "Upload your answer" — a real model answer was missing
-              entirely before, which meant the only option was writing your
-              own answer cold. */}
-          {!analyticalFeedback && (
+          {/* Three distinct stages, not an accordion — the first version
+              stacked the chooser, the (often long) model answer, AND the
+              write-your-own form all in one scroll, which pushed the actual
+              answer input off-screen entirely once a model answer loaded.
+              Each stage now gets the full screen to itself, with a back
+              button returning to "choose". */}
+          {!analyticalFeedback && analyticalStage === "choose" && (
             <div className="flex flex-col" style={{ gap: 10, marginBottom: 14 }}>
               <button
                 onClick={fetchModelAnswer}
                 className="flex items-center gap-3"
-                style={{ padding: "14px 16px", borderRadius: 12, border: modelAnswerOpen ? "1.5px solid var(--primary)" : "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
+                style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
               >
                 <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--warning-950)" }}>
                   <Sparkles style={{ width: 18, height: 18, color: "var(--warning)" }} />
@@ -2365,28 +2366,10 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                 </div>
               </button>
 
-              {modelAnswerOpen && (
-                <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
-                  {modelAnswerLoading && <p style={typo.metaStyle}>Writing a model answer…</p>}
-                  {modelAnswerError && (
-                    <div className="flex items-start gap-2">
-                      <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
-                      <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{modelAnswerError}</p>
-                    </div>
-                  )}
-                  {modelAnswer && (
-                    <>
-                      <p style={{ ...typo.metaStyle, marginBottom: 8 }}>{modelAnswer.framing}</p>
-                      <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{modelAnswer.answer}</p>
-                    </>
-                  )}
-                </div>
-              )}
-
               <button
-                onClick={() => setWriteAnswerOpen(!writeAnswerOpen)}
+                onClick={() => setAnalyticalStage("answer")}
                 className="flex items-center gap-3"
-                style={{ padding: "14px 16px", borderRadius: 12, border: writeAnswerOpen ? "1.5px solid var(--primary)" : "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
+                style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
               >
                 <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--primary-950)" }}>
                   <PenLine style={{ width: 18, height: 18, color: "var(--primary)" }} />
@@ -2399,132 +2382,178 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             </div>
           )}
 
-          {writeAnswerOpen && !analyticalFeedback && (
-            <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", marginBottom: 14 }}>
-              {/* Input-method tabs — text/record/upload all end up producing
-                  the same thing (a string of answer text, or a photo graded
-                  directly), submitted through the one grading call. */}
-              <div className="flex" style={{ gap: 6, marginBottom: 12 }}>
-                {([
-                  { key: "text" as const, label: "Type", icon: Type },
-                  { key: "record" as const, label: "Record", icon: Mic },
-                  { key: "upload" as const, label: "Upload", icon: Camera },
-                ]).map(({ key, label, icon: Icon }) => (
-                  <button
-                    key={key}
-                    onClick={() => setAnswerInputMode(key)}
-                    className="flex-1 flex items-center justify-center"
-                    style={{
-                      gap: 6, height: 36, borderRadius: 9, cursor: "pointer",
-                      border: answerInputMode === key ? "1.5px solid var(--primary)" : "1px solid var(--border)",
-                      background: answerInputMode === key ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--background)",
-                      color: answerInputMode === key ? "var(--primary)" : "var(--foreground)",
-                    }}
-                  >
-                    <Icon style={{ width: 14, height: 14 }} />
-                    <span style={{ fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700 }}>{label}</span>
-                  </button>
-                ))}
+          {!analyticalFeedback && analyticalStage === "model" && (
+            <div className="flex flex-col" style={{ gap: 12, marginBottom: 14 }}>
+              <button
+                onClick={() => setAnalyticalStage("choose")}
+                className="flex items-center gap-1.5"
+                style={{ background: "none", border: "none", cursor: "pointer", alignSelf: "flex-start", padding: 0 }}
+              >
+                <ArrowLeft style={{ width: 15, height: 15, color: "var(--muted-foreground)" }} />
+                <span style={{ ...typo.metaStyle }}>Back</span>
+              </button>
+
+              <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
+                {modelAnswerLoading && <p style={typo.metaStyle}>Writing a model answer…</p>}
+                {modelAnswerError && (
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
+                    <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{modelAnswerError}</p>
+                  </div>
+                )}
+                {modelAnswer && (
+                  <>
+                    <p style={{ ...typo.metaStyle, marginBottom: 8 }}>{modelAnswer.framing}</p>
+                    <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{modelAnswer.answer}</p>
+                  </>
+                )}
               </div>
 
-              {answerInputMode === "text" && (
-                <textarea
-                  value={analyticalAnswer}
-                  onChange={(e) => setAnalyticalAnswer(e.target.value)}
-                  disabled={analyticalSubmitting || !!analyticalFeedback}
-                  placeholder="Write your answer here..."
-                  style={{
-                    width: "100%", minHeight: 140, borderRadius: 12, padding: "12px 14px", resize: "vertical",
-                    border: "1px solid var(--border)", background: "var(--background)", color: "var(--foreground)",
-                    fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", lineHeight: 1.5,
-                  }}
-                />
-              )}
-
-              {answerInputMode === "record" && (
-                <div className="flex flex-col items-center" style={{ gap: 10, padding: "20px 0" }}>
-                  {recordingState === "idle" && (
-                    <button
-                      onClick={startRecording}
-                      className="flex items-center justify-center"
-                      style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--primary)", border: "none", cursor: "pointer" }}
-                    >
-                      <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
-                    </button>
-                  )}
-                  {recordingState === "recording" && (
-                    <button
-                      onClick={stopRecording}
-                      className="flex items-center justify-center"
-                      style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--error)", border: "none", cursor: "pointer" }}
-                    >
-                      <Square style={{ width: 20, height: 20, color: "var(--white)" }} fill="var(--white)" />
-                    </button>
-                  )}
-                  {recordingState === "transcribing" && (
-                    <div className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--muted-foreground)" }}>
-                      <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
-                    </div>
-                  )}
-                  <p style={typo.metaStyle}>
-                    {recordingState === "idle" && (analyticalAnswer.trim() ? "Tap to add more" : "Tap to start recording")}
-                    {recordingState === "recording" && "Recording — tap to stop"}
-                    {recordingState === "transcribing" && "Transcribing…"}
-                  </p>
-                  {recordingError && (
-                    <div className="flex items-start gap-2">
-                      <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
-                      <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{recordingError}</p>
-                    </div>
-                  )}
-                  {analyticalAnswer.trim() && recordingState === "idle" && (
-                    <div style={{ width: "100%", padding: "10px 12px", borderRadius: 10, background: "var(--background)", border: "1px solid var(--border)" }}>
-                      <p style={{ ...typo.metaStyle, marginBottom: 4 }}>Transcript so far</p>
-                      <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{analyticalAnswer}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {answerInputMode === "upload" && (
-                <div className="flex flex-col items-center" style={{ gap: 10, padding: analyticalPhotoDataUrl ? 0 : "20px 0" }}>
-                  {analyticalPhotoDataUrl ? (
-                    <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", border: "1px solid var(--border)" }}>
-                      <img src={analyticalPhotoDataUrl} alt="Uploaded answer" style={{ width: "100%", display: "block" }} />
-                    </div>
-                  ) : (
-                    <>
-                      <Camera style={{ width: 28, height: 28, color: "var(--muted-foreground)" }} />
-                      <p style={typo.metaStyle}>Upload a photo of your handwritten answer</p>
-                    </>
-                  )}
-                  <input ref={analyticalFileInputRef} type="file" accept="image/*" capture="environment" onChange={handleAnalyticalFileChange} style={{ display: "none" }} />
-                  <button
-                    onClick={() => analyticalFileInputRef.current?.click()}
-                    style={{ padding: "8px 14px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--background)", cursor: "pointer", fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700, color: "var(--foreground)" }}
-                  >
-                    {analyticalPhotoDataUrl ? "Retake photo" : "Take / choose photo"}
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={() => setAnalyticalStage("answer")}
+                className="flex items-center justify-center"
+                style={{ height: 44, borderRadius: 12, border: "1px solid var(--primary)", background: "color-mix(in srgb, var(--primary) 12%, var(--card))", cursor: "pointer" }}
+              >
+                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--primary)" }}>Write your own answer now →</span>
+              </button>
             </div>
           )}
 
-          {writeAnswerOpen && !analyticalFeedback && (
-            <button
-              onClick={submitAnalytical}
-              disabled={!hasDraftAnswer || analyticalSubmitting}
-              className="flex items-center justify-center"
-              style={{
-                width: "100%", height: 44, borderRadius: 12, border: "none", marginBottom: 12,
-                background: !hasDraftAnswer || analyticalSubmitting ? "var(--muted-foreground)" : "var(--primary)",
-                cursor: !hasDraftAnswer || analyticalSubmitting ? "default" : "pointer",
-              }}
-            >
-              <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>
-                {analyticalSubmitting ? "Getting feedback…" : "Submit for feedback"}
-              </span>
-            </button>
+          {!analyticalFeedback && analyticalStage === "answer" && (
+            <div className="flex flex-col" style={{ gap: 12, marginBottom: 14 }}>
+              <button
+                onClick={() => setAnalyticalStage("choose")}
+                className="flex items-center gap-1.5"
+                style={{ background: "none", border: "none", cursor: "pointer", alignSelf: "flex-start", padding: 0 }}
+              >
+                <ArrowLeft style={{ width: 15, height: 15, color: "var(--muted-foreground)" }} />
+                <span style={{ ...typo.metaStyle }}>Back</span>
+              </button>
+
+              <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
+                {/* Input-method tabs — text/record/upload all end up producing
+                    the same thing (a string of answer text, or a photo graded
+                    directly), submitted through the one grading call. */}
+                <div className="flex" style={{ gap: 6, marginBottom: 12 }}>
+                  {([
+                    { key: "text" as const, label: "Type", icon: Type },
+                    { key: "record" as const, label: "Record", icon: Mic },
+                    { key: "upload" as const, label: "Upload", icon: Camera },
+                  ]).map(({ key, label, icon: Icon }) => (
+                    <button
+                      key={key}
+                      onClick={() => setAnswerInputMode(key)}
+                      className="flex-1 flex items-center justify-center"
+                      style={{
+                        gap: 6, height: 36, borderRadius: 9, cursor: "pointer",
+                        border: answerInputMode === key ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                        background: answerInputMode === key ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--background)",
+                        color: answerInputMode === key ? "var(--primary)" : "var(--foreground)",
+                      }}
+                    >
+                      <Icon style={{ width: 14, height: 14 }} />
+                      <span style={{ fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700 }}>{label}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {answerInputMode === "text" && (
+                  <textarea
+                    value={analyticalAnswer}
+                    onChange={(e) => setAnalyticalAnswer(e.target.value)}
+                    disabled={analyticalSubmitting}
+                    placeholder="Write your answer here..."
+                    style={{
+                      width: "100%", minHeight: 140, borderRadius: 12, padding: "12px 14px", resize: "vertical",
+                      border: "1px solid var(--border)", background: "var(--background)", color: "var(--foreground)",
+                      fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", lineHeight: 1.5,
+                    }}
+                  />
+                )}
+
+                {answerInputMode === "record" && (
+                  <div className="flex flex-col items-center" style={{ gap: 10, padding: "20px 0" }}>
+                    {recordingState === "idle" && (
+                      <button
+                        onClick={startRecording}
+                        className="flex items-center justify-center"
+                        style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--primary)", border: "none", cursor: "pointer" }}
+                      >
+                        <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
+                      </button>
+                    )}
+                    {recordingState === "recording" && (
+                      <button
+                        onClick={stopRecording}
+                        className="flex items-center justify-center"
+                        style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--error)", border: "none", cursor: "pointer" }}
+                      >
+                        <Square style={{ width: 20, height: 20, color: "var(--white)" }} fill="var(--white)" />
+                      </button>
+                    )}
+                    {recordingState === "transcribing" && (
+                      <div className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--muted-foreground)" }}>
+                        <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
+                      </div>
+                    )}
+                    <p style={typo.metaStyle}>
+                      {recordingState === "idle" && (analyticalAnswer.trim() ? "Tap to add more" : "Tap to start recording")}
+                      {recordingState === "recording" && "Recording — tap to stop"}
+                      {recordingState === "transcribing" && "Transcribing…"}
+                    </p>
+                    {recordingError && (
+                      <div className="flex items-start gap-2">
+                        <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
+                        <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{recordingError}</p>
+                      </div>
+                    )}
+                    {analyticalAnswer.trim() && recordingState === "idle" && (
+                      <div style={{ width: "100%", padding: "10px 12px", borderRadius: 10, background: "var(--background)", border: "1px solid var(--border)" }}>
+                        <p style={{ ...typo.metaStyle, marginBottom: 4 }}>Transcript so far</p>
+                        <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{analyticalAnswer}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {answerInputMode === "upload" && (
+                  <div className="flex flex-col items-center" style={{ gap: 10, padding: analyticalPhotoDataUrl ? 0 : "20px 0" }}>
+                    {analyticalPhotoDataUrl ? (
+                      <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", border: "1px solid var(--border)" }}>
+                        <img src={analyticalPhotoDataUrl} alt="Uploaded answer" style={{ width: "100%", display: "block" }} />
+                      </div>
+                    ) : (
+                      <>
+                        <Camera style={{ width: 28, height: 28, color: "var(--muted-foreground)" }} />
+                        <p style={typo.metaStyle}>Upload a photo of your handwritten answer</p>
+                      </>
+                    )}
+                    <input ref={analyticalFileInputRef} type="file" accept="image/*" capture="environment" onChange={handleAnalyticalFileChange} style={{ display: "none" }} />
+                    <button
+                      onClick={() => analyticalFileInputRef.current?.click()}
+                      style={{ padding: "8px 14px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--background)", cursor: "pointer", fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700, color: "var(--foreground)" }}
+                    >
+                      {analyticalPhotoDataUrl ? "Retake photo" : "Take / choose photo"}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={submitAnalytical}
+                disabled={!hasDraftAnswer || analyticalSubmitting}
+                className="flex items-center justify-center"
+                style={{
+                  width: "100%", height: 44, borderRadius: 12, border: "none",
+                  background: !hasDraftAnswer || analyticalSubmitting ? "var(--muted-foreground)" : "var(--primary)",
+                  cursor: !hasDraftAnswer || analyticalSubmitting ? "default" : "pointer",
+                }}
+              >
+                <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>
+                  {analyticalSubmitting ? "Getting feedback…" : "Submit for feedback"}
+                </span>
+              </button>
+            </div>
           )}
 
           {analyticalError && (

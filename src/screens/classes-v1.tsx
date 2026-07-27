@@ -2005,19 +2005,21 @@ function ClassroomSubRail({ label, children }: { label?: string; children: React
 const BANNER_COURSES = [
   {
     sku: "ncert-10-maths",
-    title: "Class 10 NCERT Maths",
+    // Class, subject, NCERT — matches the reordered marketplace listing
+    // titles (marketplace-v1.tsx), subject before NCERT so it's not buried.
+    title: "Class 10 Maths NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-maths-listing.jpg",
   },
   {
     sku: "ncert-10-science",
-    title: "Class 10 NCERT Science",
+    title: "Class 10 Science NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-science-listing.jpg",
   },
   {
     sku: "ncert-10-history",
-    title: "Class 10 NCERT History",
+    title: "Class 10 History NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-history-listing.jpg",
   },
