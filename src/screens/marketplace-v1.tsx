@@ -1196,8 +1196,10 @@ export function Component() {
         // actually scanning for, so it comes right after the class number
         // instead of getting buried after "NCERT" (which, combined with
         // "Class 10," was eating most of the card's title line before the
-        // subject even appeared).
-        title: "Class 10 Maths NCERT",
+        // subject even appeared). "X" (roman numeral 10, the real NCERT/
+        // CBSE convention — "Class X") instead of "Class 10" — shorter, and
+        // matches how these boards actually label the grade themselves.
+        title: "X Maths NCERT",
         subtitle: "Mathematics · Full NCERT Syllabus",
         image: "/ncert-10-maths-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Maths textbook",
@@ -1208,7 +1210,7 @@ export function Component() {
         // different subject, and having Science suddenly switch to purple
         // read as two different products rather than one course catalog.
         accent: "#597ef7",
-        title: "Class 10 Science NCERT",
+        title: "X Science NCERT",
         subtitle: "Science · Full NCERT Syllabus",
         image: "/ncert-10-science-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Science textbook",
@@ -1217,7 +1219,7 @@ export function Component() {
         sku: "ncert-10-history",
         // Same accent again — third subject, same product family.
         accent: "#597ef7",
-        title: "Class 10 History NCERT",
+        title: "X History NCERT",
         subtitle: "History · Full NCERT Syllabus",
         image: "/ncert-10-history-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Social Science textbook",

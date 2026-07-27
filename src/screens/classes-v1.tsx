@@ -2007,19 +2007,21 @@ const BANNER_COURSES = [
     sku: "ncert-10-maths",
     // Class, subject, NCERT — matches the reordered marketplace listing
     // titles (marketplace-v1.tsx), subject before NCERT so it's not buried.
-    title: "Class 10 Maths NCERT",
+    // "X" (roman numeral 10 — real NCERT/CBSE "Class X" convention) instead
+    // of "Class 10" — shorter, matches how the boards label the grade.
+    title: "X Maths NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-maths-listing.jpg",
   },
   {
     sku: "ncert-10-science",
-    title: "Class 10 Science NCERT",
+    title: "X Science NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-science-listing.jpg",
   },
   {
     sku: "ncert-10-history",
-    title: "Class 10 History NCERT",
+    title: "X History NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-history-listing.jpg",
   },
