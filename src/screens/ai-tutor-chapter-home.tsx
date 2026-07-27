@@ -417,6 +417,22 @@ const CH1_ENGLISH_SECTIONS: Section[] = [
   },
 ];
 
+// Hindi Chapter 1 — Kshitij Bhag-2, "सूरदास" (4 पद, jhks101.pdf, read in
+// full: 9 pages). Second subject built with real Language/composition
+// content — real practice splits into the book's own two labelled blocks
+// (प्रश्न-अभ्यास, रचना और अभिव्यक्ति), see ai-tutor-solve.tsx for the full
+// rule-3b inventory and the excluded पाठेतर सक्रियता activities.
+const CH1_HINDI_SECTIONS: Section[] = [
+  {
+    label: "सूरदास — भ्रमरगीत के पद",
+    topics: [
+      { id: "surdas-bhramar-geet", title: "सूरदास — भ्रमरगीत के चार पद", meta: "Not started · Concept", status: "not-started", explainQuery: "surdas-bhramar-geet", kind: "concept" },
+      { id: "hindi-surdas-prashn-abhyas", title: "प्रश्न-अभ्यास — Practice", meta: "Not started · 12 questions", status: "not-started" },
+      { id: "hindi-surdas-rachna-abhivyakti", title: "रचना और अभिव्यक्ति — Practice", meta: "Not started · 3 questions", status: "not-started" },
+    ],
+  },
+];
+
 // Science chapters 2-13 have no built Explain/Solve content yet, and unlike
 // Maths chapters 3-14, their real sub-topic bullets haven't been researched
 // from jesc102-113.pdf yet either (only Ch.1 has) — so this is an honest
@@ -542,6 +558,9 @@ function sectionsForChapter(sku: string, chapterIdx: number): Section[] {
   }
   if (sku === "ncert-10-english") {
     return chapterIdx === 0 ? CH1_ENGLISH_SECTIONS : genericLockedSections("eng", chapterIdx);
+  }
+  if (sku === "ncert-10-hindi") {
+    return chapterIdx === 0 ? CH1_HINDI_SECTIONS : genericLockedSections("hindi", chapterIdx);
   }
   return chapterIdx === 0 ? CH1_SECTIONS : chapterIdx === 1 ? CH2_SECTIONS : mathsLockedSectionsFor(chapterIdx);
 }

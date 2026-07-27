@@ -21,7 +21,7 @@ import { useNavigate, useLocation } from "react-router";
 import { OlympiadEntryBanner } from "./classes";
 import { useScrollRestoration } from "../shared/use-scroll-restoration";
 import { motion } from "motion/react";
-import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles, Microscope, Landmark, BookText } from "lucide-react";
+import { Search, ShoppingCart, Package, GraduationCap, LayoutGrid, Cpu, Sparkles, Microscope, Landmark, BookText, Languages } from "lucide-react";
 import { StatusBar } from "../shared/premium-ui";
 import { useTheme } from "../app/contexts/theme-context";
 import {
@@ -1224,6 +1224,13 @@ export function Component() {
         imageAlt: "Open book — Class 10 NCERT English textbooks",
       },
       {
+        sku: "ncert-10-hindi",
+        accent: "#597ef7",
+        title: "X Hindi NCERT",
+        subtitle: "क्षितिज + कृतिका",
+        imageAlt: "Open book — Class 10 NCERT Hindi textbooks",
+      },
+      {
         // Not a real sku itself — "Class X Social" groups the four real
         // Social Science books (History, Geography, Political Science,
         // Economics) behind one Discover card, since Social Science isn't
@@ -1259,6 +1266,7 @@ export function Component() {
               // Maths/Science there's no single "continue" destination).
               const isSocial = course.sku === "social";
               const isEnglish = course.sku === "ncert-10-english";
+              const isHindi = course.sku === "ncert-10-hindi";
               const isEnrolledInDemoCourse = isSocial
                 ? SOCIAL_SCIENCE_SKUS.some((sku) => localStorage.getItem(`cc_enrolled_${sku}`) === "1")
                 : localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
@@ -1285,6 +1293,8 @@ export function Component() {
                           <Landmark style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
                         ) : isEnglish ? (
                           <BookText style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
+                        ) : isHindi ? (
+                          <Languages style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
                         ) : (
                           <Microscope style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
                         )}

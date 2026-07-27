@@ -147,7 +147,7 @@ export const DUMMY_CRASH_COURSE_PROGRESS: Record<number, Record<CrashCourseSubje
 
 export type CrashStreamId = "pcm" | "pcb" | "maths";
 export type CrashClassLevel = 10 | 11 | 12;
-export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history" | "geography" | "political-science" | "economics" | "english";
+export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history" | "geography" | "political-science" | "economics" | "english" | "hindi";
 
 export interface CrashCourse1112Subject {
   id: CrashCourse1112SubjectId;
@@ -189,6 +189,7 @@ const SUBJ_ACCENT = {
   "political-science": { accent: "#fa541c", gradientBg: "linear-gradient(135deg, #1f0b02 0%, #3d1505 55%, #6d240a 100%)" }, // AntD volcano-6
   economics: { accent: "#eb2f96", gradientBg: "linear-gradient(135deg, #1f0517 0%, #3d0a2c 55%, #6d134e 100%)" }, // AntD magenta-6
   english: { accent: "#1890ff", gradientBg: "linear-gradient(135deg, #02101f 0%, #05203d 55%, #0a3d6d 100%)" }, // AntD blue-6
+  hindi: { accent: "#f5222d", gradientBg: "linear-gradient(135deg, #1f0304 0%, #3d0708 55%, #6d0d10 100%)" }, // AntD red-6
 } as const;
 
 // NCERT chapter lists — current syllabus, post-2024 rationalization.
@@ -352,6 +353,33 @@ const CHAPTERS_10_ENGLISH = [
   "The Necklace",
   "Bholi",
   "The Book That Saved the Earth",
+];
+// NCERT Class 10 Hindi — Course A, two real, separate prescribed books:
+// "Kshitij Bhag-2" (main reader, 12 real chapters — 6 poetry, 6 prose) and
+// "Kritika Bhag-2" (supplementary reader, 3 real chapters). Verified against
+// jhks101-112.pdf and jhkr101-103.pdf (downloaded and checked directly).
+// Course A (Kshitij/Kritika) assumed over Course B (Sparsh/Sanchayan) — a
+// documented assumption, not a silent default; most CBSE schools teach
+// Course A, but this should be confirmed against the specific school's
+// syllabus before treating this as definitive. Chapter 1 here means
+// Kshitij's Chapter 1 ("सूरदास"); Kritika's 3 chapters are appended after
+// Kshitij's 12, matching how the two books are physically separate.
+const CHAPTERS_10_HINDI = [
+  "सूरदास",
+  "तुलसीदास",
+  "जयशंकर प्रसाद",
+  "सूर्यकांत त्रिपाठी 'निराला'",
+  "नागार्जुन",
+  "मंगलेश डबराल",
+  "नेताजी का चश्मा",
+  "बालगोबिन भगत",
+  "लखनवी अंदाज़",
+  "एक कहानी यह भी",
+  "नौबतखाने में इबादत",
+  "संस्कृति",
+  "माता का अँचल",
+  "साना-साना हाथ जोड़ि...",
+  "मैं क्यों लिखता हूँ?",
 ];
 const CHAPTERS_11_MATH = [
   "Sets",
@@ -583,6 +611,28 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
       mkSubject("english", "English", "ENG", CHAPTERS_10_ENGLISH),
     ],
   },
+  // Eighth AI-tutor demo course — second subject with real Language/
+  // composition content, and the first with real content in a script other
+  // than English (Devanagari). Two real prescribed books (Kshitij + Kritika,
+  // Course A) studied as one "Hindi" subject, same pairing pattern as
+  // English's First Flight + Footprints without Feet.
+  "ncert-10-hindi": {
+    sku: "ncert-10-hindi",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Hindi",
+    examTarget: "CBSE Class 10 Boards",
+    title: "X Hindi NCERT",
+    subtitleShort: "हिंदी · क्षितिज + कृतिका",
+    description: "Class 10 NCERT Hindi (Course A) — Kshitij (काव्य एवं गद्य) and Kritika (पूरक पाठ्यपुस्तक) — chapter by chapter, with an AI tutor that explains any concept on request, discusses comprehension and language questions with real feedback, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("hindi", "Hindi", "HIN", CHAPTERS_10_HINDI),
+    ],
+  },
   "crash-11-pcm": {
     sku: "crash-11-pcm",
     classLevel: 11,
@@ -661,7 +711,7 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
   },
 };
 
-export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
+export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english", "ncert-10-hindi", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
 export type Crash1112Sku = (typeof CRASH_1112_SKUS)[number];
 
 export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112Sku {
@@ -676,7 +726,7 @@ export function getCrash1112Info(sku: string | null | undefined): CrashCourse111
 // Which 11-12/crash skus have the real /ai-tutor/* experience built (vs. the
 // generic crash-course-hub placeholder the other skus still use). Update this
 // alongside chapter-home's per-sku chapter data whenever a new course is added.
-export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english"] as const;
+export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english", "ncert-10-hindi"] as const;
 
 // The four real Social Science books, grouped as one "Class X Social" entry
 // point on Discover (see marketplace-v1.tsx) even though each is its own

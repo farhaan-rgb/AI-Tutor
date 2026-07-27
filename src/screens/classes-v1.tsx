@@ -2035,6 +2035,12 @@ const BANNER_COURSES = [
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: undefined as string | undefined,
   },
+  {
+    sku: "ncert-10-hindi",
+    title: "X Hindi NCERT",
+    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    image: undefined as string | undefined,
+  },
 ] as const;
 const BANNER_ROTATE_MS = 3500;
 
