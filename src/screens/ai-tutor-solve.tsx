@@ -1292,8 +1292,13 @@ function ProblemIndex({ problems, problemIdx, isProblemDone, onSelect }: {
             style={{ gap: 6, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
           >
             {isProblemDone(current) && <Check style={{ width: 13, height: 13, color: "var(--success)" }} strokeWidth={3} />}
+            {/* Just the real label (e.g. "Q20") — no separate array-position
+                counter alongside it. A problem's label and its position in
+                the array don't line up (Q1-Q2 share one array entry), so
+                "Q20 · 19 of 19" showed two numbers that looked like they
+                should match and didn't — confusing, and misaligned besides.
+                The sheet this opens already shows position visually. */}
             <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)" }}>{current.label}</span>
-            <span style={typo.metaStyle}>· {problemIdx + 1} of {problems.length}</span>
             <ChevronDown style={{ width: 15, height: 15, color: "var(--muted-foreground)" }} />
           </button>
           <button
@@ -1683,6 +1688,16 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
               questions too — shown as soon as the problem is chosen, not
               hidden until "Ask AI tutor" is tapped. Selecting one here just
               sets which sub-part Ask AI tutor / the question card focuses on. */}
+          {/* Question comes before the sub-part picker — you read what's
+              being asked before choosing which sub-part to work on, not
+              the other way around. */}
+          <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "14px 15px", marginBottom: 20 }}>
+            <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 6 }}>
+              Question
+            </span>
+            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", lineHeight: 1.6 }}>{problem.questionText}</p>
+          </div>
+
           {problem.parts && (
             <>
               <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a sub-part</p>
@@ -1711,13 +1726,6 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
               </div>
             </>
           )}
-
-          <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "14px 15px", marginBottom: 20 }}>
-            <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 6 }}>
-              Question
-            </span>
-            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", lineHeight: 1.6 }}>{problem.questionText}</p>
-          </div>
 
           {/* Both paths stay visible and tappable at all times — uploading
               expands inline below rather than navigating away, so switching
