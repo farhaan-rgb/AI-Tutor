@@ -1810,6 +1810,1109 @@ const DISCUSS_HISTORY_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
+// Geography Ch.1 — "Resources and Development" (jess101.pdf, read in full —
+// 12 pages). First non-History Social Science subject.
+//
+// Rule-3b inventory of every real question-block in this chapter:
+//  - Unnumbered intro Activity (list items/materials used in villages/towns)
+//  - "Development of Resources" Activity: oil-exhausted hypothetical +
+//    survey-design task (3 real sub-parts)
+//  - "Resource Planning" inline question (name resource-rich-but-backward /
+//    resource-poor-but-developed regions, with real reasons)
+//  - "Resource Planning in India" Activity (list your state's resources)
+//  - The "Find out" box (what resources are being developed in your
+//    surroundings by local community participation) is EXCLUDED — it asks
+//    about the student's own specific local community, with no real
+//    chapter content to ground criteria against, unlike the state-level
+//    Activity above (which at least has real named-state examples in the
+//    chapter's own text to reason from).
+//  - "Land Resources" Activity (compare the two real Fig.1.4 land-use pie
+//    charts, 1960-61 vs 2019-20) — built using the real percentages read
+//    directly off the page as text (no image attached, given the scale of
+//    building three subjects at once — a defensible tradeoff, not a gap
+//    silently dropped)
+//  - Inline question (why is net sown area so low in the states named)
+//  - End-of-chapter EXERCISES: Q1 (3 real MCQs), Q2 (3 real ~30-word
+//    questions), Q3 (2 real ~120-word questions) — all built in full
+//  - "Project/Activity" section is EXCLUDED — item 1 (make a project) and
+//    item 2 (class discussion) are open, ungradeable tasks; item 3
+//    duplicates the in-text oil-exhausted Activity verbatim; item 4 (word
+//    search puzzle) has no single verifiable answer without solving the
+//    actual letter grid, which isn't reproducible in this format
+const GEO_INTEXT_QUESTIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "geo-intro-village-items",
+    label: "Activity",
+    questionText: "Can you identify and name the various items used in making life comfortable in our villages and towns? List the items and name the material used in their making.",
+    analytical: {
+      criteria: [
+        "Names several real, concrete items actually used in daily life (e.g. cooking utensils, roofing, furniture, tools, clothing)",
+        "Correctly identifies the real material each item is made from (e.g. steel/aluminium/clay for utensils, wood/bamboo/tin/cement for roofing, cotton/wool for clothing)",
+        "Connects the exercise to the chapter's opening idea — everything named is a real resource, since it's something from the environment being used to satisfy a need",
+      ],
+      groundingNotes:
+        "The chapter opens by defining a resource: 'Everything available in our environment which can be used to satisfy our needs, provided it is technologically accessible, economically feasible and culturally acceptable can be termed as Resource.' This Activity asks the student to apply that definition directly to real, everyday village/town items before the formal definition is even given.",
+    },
+    verifyLine: "A real, verified answer names concrete items + their real materials, tying both back to the resource definition ✓",
+  },
+  {
+    id: "geo-oil-exhausted",
+    label: "Activity",
+    questionText: "Imagine, if the oil supply gets exhausted one day, how would this affect our life style?",
+    analytical: {
+      criteria: [
+        "Identifies oil as a real non-renewable resource (per the chapter's own classification — 'on the basis of exhaustibility: renewable and non-renewable')",
+        "Reasons through real, concrete dependencies on oil — transport (petrol/diesel), industry, plastics, heating — not just a vague 'life would be hard'",
+        "Connects the answer to the chapter's real argument about resource depletion — 'indiscriminate exploitation of resources has led to global ecological crises' — i.e. this hypothetical illustrates exactly the depletion risk the chapter warns about",
+      ],
+      groundingNotes:
+        "Resources are classified 'on the basis of exhaustibility – renewable and non-renewable' (real chapter classification). The chapter warns: 'human beings used resources indiscriminately and this has led to... depletion of resources... indiscriminate exploitation of resources has led to global ecological crises.' Oil is a real non-renewable resource whose exhaustion would disrupt transport, industry, and daily life dependent on petroleum products.",
+    },
+    verifyLine: "A real, verified answer identifies oil as non-renewable and reasons through real, concrete dependencies ✓",
+  },
+  {
+    id: "geo-recycling-survey",
+    label: "Activity",
+    questionText: "Plan a survey in your colony/village to investigate people's attitude towards recycling of domestic/agricultural wastes. Ask questions about: (a) What do they think about the resources they use? (b) What is their opinion about the wastes, and its utilisation? (c) Collage your results.",
+    analytical: {
+      criteria: [
+        "(a) Designs a real, concrete survey question about attitudes toward the resources people use — not just restating the prompt",
+        "(b) Designs a real, concrete survey question about opinions on waste and its utilisation/recycling",
+        "(c) Describes a real, sensible way to compile/present survey results (e.g. a collage of photos/responses, a simple chart of common answers)",
+        "Connects the survey's purpose back to the chapter's real theme — resource conservation and equitable, sustainable use, per its 'conservation of resources' discussion",
+      ],
+      groundingNotes:
+        "The chapter's own conservation discussion: 'irrational consumption and over-utilisation of resources may lead to socio-economic and environmental problems... resource conservation at various levels is important.' This survey task operationalises that theme at the local/household level (domestic and agricultural waste recycling).",
+    },
+    verifyLine: "A real, verified answer designs concrete survey questions for both (a) and (b), plus a real results method for (c) ✓",
+  },
+  {
+    id: "geo-resource-rich-backward",
+    label: "Discuss",
+    questionText: "Can you name some resource rich but economically backward regions and some resource poor but economically developed regions? Give reasons for such a situation.",
+    analytical: {
+      criteria: [
+        "Names real Indian states that are resource-rich but comparatively less economically developed — the chapter's own examples: Jharkhand, Chhattisgarh and Madhya Pradesh (rich in minerals and coal), Arunachal Pradesh (rich in water resources but lacking infrastructural development)",
+        "Reasons through why: resources alone don't guarantee development — the chapter's own argument that development also needs 'appropriate technological development and institutional changes,' not just resource availability",
+        "Attempts a real resource-poor-but-developed contrast (e.g. states with limited mineral/water wealth but strong industry, services, or infrastructure) — reasoning that development depends on technology, human resources, and institutions, not resource endowment alone",
+      ],
+      groundingNotes:
+        "Real chapter examples: 'the states of Jharkhand, Chhattisgarh and Madhya Pradesh are rich in minerals and coal deposits. Arunachal Pradesh has abundance of water resources but lacks in infrastructural development... There are many regions in our country that are rich in resources but these are included in economically backward regions. On the contrary there are some regions which have a poor resource base but they are economically developed.' The chapter's explicit reasoning: 'resources can contribute to development only when they are accompanied by appropriate technological development and institutional changes.'",
+    },
+    verifyLine: "A real, verified answer cites the real Jharkhand/Chhattisgarh/MP/Arunachal Pradesh examples and the technology/institutions reasoning ✓",
+  },
+  {
+    id: "geo-state-resources-list",
+    label: "Activity",
+    questionText: "Prepare a list of resources found in your state and also identify the resources that are important but deficit in your state.",
+    analytical: {
+      criteria: [
+        "Names real, specific resources genuinely associated with a real Indian state (any real state, named specifically — not a generic non-answer)",
+        "Distinguishes clearly between resources the state has in abundance and resources it is genuinely deficient in, for that same real state",
+        "Reasoning is geographically plausible and specific — matches the kind of resource distribution described elsewhere in the chapter (e.g. mineral-rich vs. water-rich vs. energy-rich states)",
+      ],
+      groundingNotes:
+        "This Activity is inherently about the student's own specific state, so there's no single fixed answer — grading focuses on whether the response names a real state and reasons about it specifically and plausibly, the same way the chapter itself reasons about named real states (Jharkhand's minerals, Rajasthan's solar/wind energy but water scarcity, Ladakh's cultural wealth but water/infrastructure/mineral deficits).",
+    },
+    verifyLine: "A real, verified answer names a specific real state and reasons plausibly about its abundant vs. deficient resources ✓",
+  },
+  {
+    id: "geo-landuse-piecharts",
+    label: "Activity",
+    questionText: "Try to do a comparison between the two pie charts (Fig. 1.4) given for land use, and find out why the net sown area and the land under forests have changed from 1960-61 to 2019-20 very marginally.",
+    analytical: {
+      criteria: [
+        "Cites the real percentages: net sown area barely moved (45.26% in 1960-61 to 45.64% in 2019-20); forest cover rose somewhat (18.11% to 23.41%) but still fell well short of the 33% national target",
+        "Reasons that land is a fixed, finite resource — total geographical area doesn't grow, so large shifts in any one category necessarily come at the expense of another",
+        "Connects the small net-sown-area change to the chapter's own point that competing demands (settlements, industry, non-agricultural uses) constantly pull against agricultural land, capping how much it can grow",
+        "Connects the forest figure to the chapter's own point that forest area remains 'far lower than the desired 33 per cent... outlined in the National Forest Policy (1952)' despite conservation efforts",
+      ],
+      groundingNotes:
+        "Real Fig. 1.4 percentages — 1960-61: Forest 18.11%, Barren/uncultivable 12.01%, Non-agricultural use 4.95%, Permanent pasture 4.71%, Misc. tree crops 1.50%, Culturable waste 3.73%, Fallow other than current 3.50%, Current fallow 6.23%, Net sown area 45.26%. 2019-20: Forest 23.41%, Barren 5.40%, Non-agricultural 9.06%, Pasture 3.42%, Misc. tree crops 1.02%, Culturable waste 4.49%, Fallow other 3.67%, Current fallow 3.90%, Net sown area 45.64%. Chapter text: 'Forest area in the country is far lower than the desired 33 per cent of geographical area, as it was outlined in the National Forest Policy (1952).' Land is described as 'an asset of a finite magnitude' used across many competing purposes (forests, agriculture, non-agricultural uses, pasture, fallow).",
+    },
+    verifyLine: "A real, verified answer cites the real 1960-61 vs 2019-20 percentages and reasons from land's fixed, finite nature ✓",
+  },
+  {
+    id: "geo-low-net-sown-area",
+    label: "Discuss",
+    questionText: "Find out reasons for the low proportion of net sown area in Arunachal Pradesh, Mizoram, Manipur and the Andaman & Nicobar Islands, compared to over 80% in Punjab and Haryana.",
+    analytical: {
+      criteria: [
+        "States the real contrast: net sown area is 'over 80 per cent of the total area in Punjab and Haryana and less than 10 per cent in Arunachal Pradesh, Mizoram, Manipur and Andaman Nicobar Islands'",
+        "Reasons that Punjab/Haryana are plains — flat, fertile, easily cultivable land, which is why the chapter notes 'about 43 per cent of the land area is plain, which provides facilities for agriculture'",
+        "Reasons that the low-net-sown states/islands are hilly, mountainous, or forested terrain unsuited to large-scale cultivation — consistent with the chapter's point that mountains 'account for 30 per cent of the total surface area' and are less suited to agriculture than plains",
+      ],
+      groundingNotes:
+        "Real chapter fact: 'The pattern of net sown area varies greatly from one state to another. It is over 80 per cent of the total cropped area in Punjab and Haryana and less than 10 per cent in Arunachal Pradesh, Mizoram, Manipur and Andaman Nicobar Islands.' Also: 'About 43 per cent of the land area is plain, which provides facilities for agriculture and industry. Mountains account for 30 per cent of the total surface area.' Arunachal Pradesh, Mizoram, Manipur are hilly/mountainous North-Eastern states; the Andaman & Nicobar Islands are similarly forested/hilly terrain — all far less suited to large-scale cultivation than the Punjab/Haryana plains.",
+    },
+    verifyLine: "A real, verified answer cites the real Punjab/Haryana vs. NE-states/islands contrast and reasons from real terrain differences ✓",
+  },
+];
+
+// Real end-of-chapter EXERCISES (jesc101→jess101.pdf p.11) — all 8 real
+// questions: 3 MCQs, 3 short-answer (~30 words), 2 longer-answer (~120
+// words). Q1's MCQs are visual/fact-recall (real determinate answers);
+// Q2/Q3 are analytical/short-answer with no single fixed phrasing, though
+// each has real, checkable content a strong answer must include.
+const GEO_EXERCISES_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "geo-ex-mcq",
+    label: "Q1",
+    questionText: "Multiple choice questions.",
+    visual: {
+      questions: [
+        {
+          label: "(i)",
+          prompt: "Which one of the following is the main cause of land degradation in Punjab?",
+          options: ["Over irrigation", "Deforestation", "Intensive cultivation", "Overgrazing"],
+          correctAnswer: "Over irrigation",
+          explanation: "The chapter states over-irrigation is 'responsible for land degradation due to water logging leading to increase in salinity and alkalinity in the soil' in Punjab, Haryana, and western Uttar Pradesh specifically.",
+        },
+        {
+          label: "(ii)",
+          prompt: "In which one of the following states is terrace cultivation practised?",
+          options: ["Uttarakhand", "Punjab", "Plains of Uttar Pradesh", "Haryana"],
+          correctAnswer: "Uttarakhand",
+          explanation: "The chapter states 'Western and central Himalayas have well developed terrace farming' — Uttarakhand lies in this Himalayan region, unlike the plains states listed.",
+        },
+        {
+          label: "(iii)",
+          prompt: "In which of the following states black soil is predominantly found?",
+          options: ["Maharashtra", "Uttar Pradesh", "Rajasthan", "Jharkhand"],
+          correctAnswer: "Maharashtra",
+          explanation: "Black soil (regur) is 'typical of the Deccan trap (Basalt) region' and 'covers the plateaus of Maharashtra, Saurashtra, Malwa, Madhya Pradesh and Chhattisgarh.'",
+        },
+      ],
+    },
+    verifyLine: "All three MCQs answered and matched to the real chapter facts ✓",
+  },
+  {
+    id: "geo-ex-short-1",
+    label: "Q2(i)",
+    questionText: "Name three states having black soil and the crop which is mainly grown in it. (Answer in about 30 words.)",
+    analytical: {
+      criteria: [
+        "Names three real states with black soil per the chapter — any three of Maharashtra, Saurashtra (Gujarat), Malwa (Madhya Pradesh), Chhattisgarh (the chapter's own named regions for this soil)",
+        "Correctly identifies the crop black soil is 'ideal for' — cotton (black soil is also called 'black cotton soil' in the chapter)",
+      ],
+      groundingNotes:
+        "'Black soil is ideal for growing cotton and is also known as regur soil or black cotton soil... typical of the Deccan trap (Basalt) region... cover the plateaus of Maharashtra, Saurashtra, Malwa, Madhya Pradesh and Chhattisgarh.'",
+    },
+    verifyLine: "A real, verified answer names 3 real black-soil states and correctly identifies cotton as the crop ✓",
+  },
+  {
+    id: "geo-ex-short-2",
+    label: "Q2(ii)",
+    questionText: "What type of soil is found in the river deltas of the eastern coast? Give three main features of this type of soil. (Answer in about 30 words.)",
+    analytical: {
+      criteria: [
+        "Identifies alluvial soil as the type found in the eastern coastal deltas — the chapter's own example: 'these soils are also found in the eastern coastal plains particularly in the deltas of the Mahanadi, the Godavari, the Krishna and the Kaveri rivers'",
+        "Gives three real features from the chapter: e.g. it's the most widely spread/important soil type, it consists of varying proportions of sand/silt/clay, it's very fertile (rich in potash, phosphoric acid and lime, ideal for sugarcane/paddy/wheat)",
+      ],
+      groundingNotes:
+        "'Alluvial soil... entire northern plains are made of alluvial soil... also found in the eastern coastal plains particularly in the deltas of the Mahanadi, the Godavari, the Krishna and the Kaveri rivers.' Features: 'consists of various proportions of sand, silt and clay'; 'mostly these soils contain adequate proportion of potash, phosphoric acid and lime which are ideal for the growth of sugarcane, paddy, wheat and other cereal and pulse crops'; 'due to its high fertility, regions of alluvial soils are intensively cultivated and densely populated.'",
+    },
+    verifyLine: "A real, verified answer identifies alluvial soil and gives 3 real features from the chapter ✓",
+  },
+  {
+    id: "geo-ex-short-3",
+    label: "Q2(iii)",
+    questionText: "What steps can be taken to control soil erosion in the hilly areas? (Answer in about 30 words.)",
+    analytical: {
+      criteria: [
+        "Names contour ploughing — 'ploughing along the contour lines can decelerate the flow of water down the slopes'",
+        "Names terrace farming/terrace cultivation — 'steps can be cut out on the slopes making terraces... Western and central Himalayas have well developed terrace farming'",
+        "Names at least one more real method — strip cropping ('strips of grass are left to grow between the crops... breaks up the force of the wind') or shelter belts ('planting lines of trees... contributed significantly to the stabilisation of sand dunes')",
+      ],
+      groundingNotes:
+        "'Ploughing along the contour lines can decelerate the flow of water down the slopes. This is called contour ploughing. Steps can be cut out on the slopes making terraces. Terrace cultivation restricts erosion. Western and central Himalayas have well developed terrace farming. Large fields can be divided into strips... this method is known as strip cropping. Planting lines of trees to create shelter also works in a similar way. Rows of such trees are called shelter belts.'",
+    },
+    verifyLine: "A real, verified answer names at least 2-3 of contour ploughing, terracing, strip cropping, shelter belts ✓",
+  },
+  {
+    id: "geo-ex-long-1",
+    label: "Q3(i)",
+    questionText: "Explain land use pattern in India and why has the land under forest not increased much since 1960-61? (Answer in about 120 words.)",
+    analytical: {
+      criteria: [
+        "Explains the real land use categories: forests, land not available for cultivation (barren/waste land, non-agricultural uses), other uncultivated land (permanent pastures, tree crops, culturable waste), fallow lands (current + other), and net sown area",
+        "Cites the real forest figures — forest area rose only from 18.11% (1960-61) to 23.41% (2019-20), still 'far lower than the desired 33 per cent of geographical area... outlined in the National Forest Policy (1952)'",
+        "Explains why: competing pressure from agriculture, settlements, and non-agricultural uses on the same finite land; deforestation for mining, grazing, and cultivation continuing to offset afforestation gains",
+      ],
+      groundingNotes:
+        "Full land use category list: '1. Forests 2. Land not available for cultivation (a) Barren and waste land (b) Land put to non-agricultural uses 3. Other uncultivated land excluding fallow land (a) Permanent pastures and grazing land (b) Land under misc. tree crops (c) Culturable waste land 4. Fallow lands (a) Current fallow (b) Other than current fallow 5. Net sown area.' Real 1960-61 to 2019-20 forest change: 18.11% to 23.41%, still short of the 33% National Forest Policy (1952) target. Land degradation causes named in the chapter: deforestation, over-grazing, mining, and quarrying.",
+    },
+    verifyLine: "A real, verified answer covers the real land use categories and the real forest-percentage/policy-target facts ✓",
+  },
+  {
+    id: "geo-ex-long-2",
+    label: "Q3(ii)",
+    questionText: "How have technical and economic development led to more consumption of resources? (Answer in about 120 words.)",
+    analytical: {
+      criteria: [
+        "Explains that resources were long treated as free gifts of nature, leading to indiscriminate use as human technological capability grew",
+        "Connects this to the chapter's own listed consequences: depletion of resources for a few individuals' greed, accumulation of resources in few hands (dividing society into haves and have-nots), and global ecological crises (global warming, ozone depletion, environmental pollution, land degradation)",
+        "Cites the real historical point about colonisation — 'the history of colonisation reveals that rich resources in colonies were the main attractions for the foreign invaders,' since higher technological development let colonising powers exploit other regions' resources",
+        "Concludes with the chapter's own resolution — development requires resources PLUS appropriate technology and institutional change, not resource consumption alone, which is why sustainable, planned resource use matters",
+      ],
+      groundingNotes:
+        "'It was believed that resources are free gifts of nature. As a result, human beings used them indiscriminately and this has led to... Depletion of resources for satisfying the greed of a few individuals. Accumulation of resources in few hands... dividing the society into haves and have nots. Indiscriminate exploitation of resources has led to global ecological crises such as global warming, ozone layer depletion, environmental pollution and land degradation.' Colonisation point: 'The history of colonisation reveals that rich resources in colonies were the main attractions for the foreign invaders. It was primarily the higher level of technological development of the colonising countries that helped them to exploit resources of other regions.' Resolution: 'resources can contribute to development only when they are accompanied by appropriate technological development and institutional changes.'",
+    },
+    verifyLine: "A real, verified answer covers indiscriminate-use consequences, the colonisation point, and the technology/institutions resolution ✓",
+  },
+];
+
+// Political Science Ch.1 — "Power-sharing" (jess401.pdf, read in full — 12
+// pages). Third Social Science subject.
+//
+// Rule-3b inventory of every real question-block in this chapter:
+//  - Comic-bubble framing question ("sharing power = weakening the
+//    country?"), map-reading question (Belgium/Sri Lanka community
+//    concentration — built from the real map facts as text, no image
+//    attached, same tradeoff as Geography's Fig.1.4), the majoritarianism
+//    comic-bubble question, and the "community government" comic-bubble
+//    question on ministerial posts — 4 real prompts, all built.
+//  - The "read a newspaper for a week, classify conflicts" group activity is
+//    EXCLUDED — an open, unbounded real-world research task depending on
+//    live news, the same class of exclusion as History's map-plotting
+//    Activity and end-of-chapter Project.
+//  - The Reigning-the-Reins cartoon question (democracy vs. concentration of
+//    power) — built from the real cartoon's described content as text.
+//  - The Annette-and-Selvi scenario question, the Khalil's-dilemma
+//    (Lebanon) question, and the class-monitor comic-bubble question — 3
+//    more real prompts, all built.
+//  - The "Let us revise" box (4 real power-sharing examples to classify) —
+//    built as a visual/fact-recall quiz, since each has a real, determinate
+//    classification against the chapter's own 4 forms.
+//  - End-of-chapter EXERCISES: all 9 real questions built — Q1-Q5
+//    analytical (no single fixed answer, though each has real checkable
+//    content), Q6-Q9 real MCQs with verified answer keys (cross-checked by
+//    re-deriving each from the chapter's own text before writing).
+const POLISCI_INTEXT_QUESTIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "polisci-sharing-weakening",
+    label: "Discuss",
+    questionText: "\"I have a simple equation in mind. Sharing power = dividing power = weakening the country. Why do we start by talking about this?\"",
+    analytical: {
+      criteria: [
+        "Recognises this as the chapter's own framing question — it exists to be challenged, not agreed with",
+        "Uses Belgium as the real counter-example: a small, complex country that shared power among linguistic communities through constitutional accommodation and remained stable and unified — 'these arrangements have worked well so far... helped to avoid civic strife between the two major communities and a possible division of the country'",
+        "Contrasts this with Sri Lanka, where the majority community REFUSED to share power and that undermined, rather than strengthened, national unity — 'if a majority community wants to force its dominance over others and refuses to share power, it can undermine the unity of the country'",
+        "Concludes that the real evidence in this chapter runs opposite to the equation — sharing power strengthens a country's unity, not weakens it",
+      ],
+      groundingNotes:
+        "Belgium and Sri Lanka are the chapter's own two contrasting real case studies. Belgium (power-sharing via constitutional accommodation) avoided civic strife and division. Sri Lanka (majority Sinhala community refusing to share power, disregarding Tamil interests) led to civil war and undermined national unity. The chapter's own conclusion: 'Sri Lanka shows us... if a majority community wants to force its dominance over others and refuses to share power, it can undermine the unity of the country.'",
+    },
+    verifyLine: "A real, verified answer uses Belgium vs. Sri Lanka to show sharing power strengthens, not weakens, unity ✓",
+  },
+  {
+    id: "polisci-map-communities",
+    label: "Activity",
+    questionText: "Look at the maps of Belgium and Sri Lanka. In which region do you find concentration of different communities?",
+    analytical: {
+      criteria: [
+        "Belgium: identifies the Flemish region (north, Dutch-speaking, 59% of the population) and the Walloon region (south, French-speaking, 40%), plus the small Brussels-Capital region and a small German-speaking area in the east",
+        "Sri Lanka: identifies that Sinhala-speakers (74%) are concentrated in the south and centre of the island, while Sri Lankan Tamils are concentrated in the north and east (around Jaffna, Trincomalee, Batticaloa), with Indian Tamils concentrated in the central highlands (around Kandy, the tea-plantation areas)",
+        "Notes the real contrast in capitals — Brussels (Belgium's capital) sits within the Flemish-majority north but was itself majority French-speaking, the specific tension point described in the chapter",
+      ],
+      groundingNotes:
+        "Real map facts from the chapter: Belgium — 59% of the population lives in the Flemish region (Dutch-speaking, north), 40% in the Walloon region (French-speaking, south), 1% German-speaking; in the capital Brussels itself, 80% speak French and 20% Dutch — the reverse of the national pattern. Sri Lanka — Sinhala-speakers are 74% of the population (concentrated south/centre); Sri Lankan Tamils are 18% and concentrated in the north and east; Indian Tamils (descended from colonial-era plantation workers) are concentrated in the central highlands.",
+    },
+    verifyLine: "A real, verified answer names the real Flemish/Walloon split and the real Sinhala/Tamil regional concentration ✓",
+  },
+  {
+    id: "polisci-majoritarianism-wrong",
+    label: "Discuss",
+    questionText: "\"What's wrong if the majority community rules? If Sinhalas don't rule in Sri Lanka, where else will they rule?\"",
+    analytical: {
+      criteria: [
+        "Recognises this as the majoritarian argument the chapter is explicitly critiquing, not endorsing",
+        "Explains what actually went wrong: the Sinhala-led government adopted majoritarian measures — declaring Sinhala the sole official language (1956), favouring Sinhala applicants in university/government jobs, and constitutionally privileging Buddhism",
+        "Explains the real consequence — these measures 'increased the feeling of alienation among the Sri Lankan Tamils,' leading to demands for autonomy, and eventually civil war",
+        "Concludes majoritarianism confuses 'ruling' with excluding — a majority can be dominant without denying a minority's language, jobs, religion, and political voice, which is exactly what Sri Lanka's policies did",
+      ],
+      groundingNotes:
+        "Real chapter facts: in 1956, Sinhala was made the sole official language, disregarding Tamil. Preferential policies favoured Sinhala applicants for university and government jobs. The constitution stipulated the state shall protect and foster Buddhism. 'All these government measures, coming one after the other, gradually increased the feeling of alienation among the Sri Lankan Tamils.' This led to demands for autonomy and eventually 'Tamil Eelam' independence movements, and a civil war that ended only in 2009.",
+    },
+    verifyLine: "A real, verified answer names the real 1956 language Act and the real alienation/civil-war consequence ✓",
+  },
+  {
+    id: "polisci-minister-community",
+    label: "Discuss",
+    questionText: "\"What kind of solution is this? I am glad our Constitution does not say which minister will come from which community.\"",
+    analytical: {
+      criteria: [
+        "Recognises this is contrasting the Belgian/Lebanese model (where some posts ARE constitutionally reserved by community — e.g. equal Dutch/French ministers in Belgium's central government) with India's own approach, which does not fix ministerial posts by religion or community",
+        "Notes India does use OTHER real accommodations for social diversity instead — the chapter's own example of 'reserved constituencies' in assemblies and Parliament for socially weaker sections and women",
+        "Reasons through the real tradeoff: fixing posts by community (as Belgium/Lebanon do) guarantees representation but can rigidly lock in group identities; not fixing them (India's approach) avoids that rigidity but relies on other mechanisms to ensure fair representation",
+      ],
+      groundingNotes:
+        "Belgian model fact: 'the constitution prescribes that the number of Dutch and French-speaking ministers shall be equal in the central government.' Contrast with India's own real accommodation, described later in the same chapter: 'in some countries, there are constitutional and legal arrangements whereby socially weaker sections and women are represented in the legislatures and administration. Last year, we studied the system of reserved constituencies in assemblies and the parliament of our country.'",
+    },
+    verifyLine: "A real, verified answer contrasts Belgium's fixed-community-post model with India's reserved-constituencies approach ✓",
+  },
+  {
+    id: "polisci-democracy-concentration-cartoon",
+    label: "Discuss",
+    questionText: "What, according to this cartoon [\"Reigning the Reins\"], is the relationship between democracy and concentration of power? Can you think of some other examples to illustrate the point being made here?",
+    analytical: {
+      criteria: [
+        "Describes the real cartoon: Vladimir Putin and George W. Bush shown as coachmen tightly gripping the reins of a horse-drawn cart labelled 'Democracy,' with the caption 'We gotta keep the rein tight, Vladimir'",
+        "Connects it to the real event it references: 'in 2005, some new laws were made in Russia giving more powers to its president. During the same time, the US president visited Russia'",
+        "Explains the cartoon's real point — concentrating power in one leader's hands ('keeping the reins tight') runs against the spirit of democracy, even while the country is nominally called a democracy — power needs to be shared/checked, not tightly held by one person",
+        "Offers at least one other real or plausible example of power being concentrated in one leader/office despite formal democratic structures",
+      ],
+      groundingNotes:
+        "Fig caption (p.8): 'Reigning the Reins' cartoon by Olle Johansson, Sweden, 2005 — shows two coachmen (Putin and Bush) gripping the reins of a cart labelled 'DEMOCRACY' tightly, captioned 'We gotta keep the rein tight, Vladimir.' The chapter's own note: 'In 2005, some new laws were made in Russia giving more powers to its president. During the same time, the US president visited Russia.' This sits within the chapter's 'why power sharing is desirable' section, arguing concentrated power undermines genuine democracy even when the label 'democracy' is retained.",
+    },
+    verifyLine: "A real, verified answer describes the real Putin/Bush cartoon and its real point about power concentration vs. democracy ✓",
+  },
+  {
+    id: "polisci-annette-selvi",
+    label: "Discuss",
+    questionText: "Annette studies in a Dutch medium school in the northern region of Belgium. Many French-speaking students in her school want the medium of instruction to be French. Selvi studies in a school in the northern region of Sri Lanka. All the students in her school are Tamil-speaking and they want the medium of instruction to be Tamil. If the parents of Annette and Selvi were to approach their respective governments to realise the desire of the child, who is more likely to succeed? And why?",
+    analytical: {
+      criteria: [
+        "Concludes Annette's case is more likely to succeed, since Belgium's constitutional model formally accommodates linguistic communities and their educational/cultural rights through community governments and power-sharing arrangements",
+        "Concludes Selvi's case is less likely to succeed nationally, since Sri Lanka's government adopted majoritarian policies that made Sinhala the sole official language and disregarded Tamil — even though Selvi's own school/region is Tamil-majority, the national policy framework doesn't protect that preference the way Belgium's does",
+        "Grounds the reasoning explicitly in each country's real, contrasting model — accommodation (Belgium) vs. majoritarianism (Sri Lanka) — rather than treating this as a random guess",
+      ],
+      groundingNotes:
+        "Belgium: 'community government is elected by people belonging to one language community — Dutch, French and German-speaking — no matter where they live. This government has the power regarding cultural, educational and language-related issues' — a real constitutional mechanism protecting linguistic/educational preferences. Sri Lanka: 'an Act was passed to recognise Sinhala as the only official language, thus disregarding Tamil' — a real national policy that disregards non-Sinhala linguistic preference, regardless of a given school or region's own local majority.",
+    },
+    verifyLine: "A real, verified answer concludes Annette is more likely to succeed, grounded in Belgium's accommodation vs. Sri Lanka's majoritarianism ✓",
+  },
+  {
+    id: "polisci-khalil-vikram",
+    label: "Discuss",
+    questionText: "\"If you had the power to rewrite the rules in Lebanon, what would you do? Would you adopt the 'regular' rules followed everywhere, as Khalil suggests? Or stick to the old rules? Or do something else?\" Can you help poor Vikram in answering Vetal?",
+    analytical: {
+      criteria: [
+        "Accurately restates the real Lebanese power-sharing pact at stake: the President must be a Maronite Christian, the Prime Minister a Sunni Muslim, the Deputy PM an Orthodox Christian, and the Speaker a Shi'a Muslim — fixed by the post-civil-war agreement between communities that were then roughly equal in population",
+        "Engages with the real tension the chapter poses: the pact was agreed when Christians and Muslims were nearly equal in population, but Muslims are now in a clear majority, and Khalil (a popular, ambitious politician who doesn't identify with either his father's or mother's religion) is locked out of the presidency purely by birth, not merit",
+        "Reasons through a real position on the dilemma — e.g. keeping the pact (elders' view: 'the present system is the best guarantee for peace' after a bitter civil war) vs. moving to open elections (Khalil's view: 'whoever wins maximum votes becomes president') vs. some middle path (e.g. revisiting the population-based fixed quotas without abolishing power-sharing entirely) — with a real reason for the choice, not just picking a side",
+        "Since this is genuinely open-ended (rule 0's Analytical row), grading is on whether the reasoning engages with the real tradeoff (peace/stability vs. equal individual opportunity), not on which option is picked",
+      ],
+      groundingNotes:
+        "Real Lebanon story: after a civil war, 'Lebanon's leaders came together and agreed to some basic rules for power sharing among different communities. As per these rules, the country's President must belong to the Maronite sect of Catholic Christians. The Prime Minister must be from the Sunni Muslim community. The post of Deputy Prime Minister is fixed for Orthodox Christian sect and that of the Speaker for Shi'a Muslims... When the Christians and Muslims came to this agreement, they were nearly equal in population. Both sides have continued to respect this agreement though now the Muslims are in clear majority.' Khalil (mixed Orthodox Christian/Sunni Muslim parentage, doesn't practise either religion) wants a merit-based, religion-blind system: 'allow everyone to contest and whoever wins maximum votes becomes the president.' His elders, who lived through the civil war, believe 'the present system is the best guarantee for peace.'",
+    },
+    verifyLine: "A real, verified answer restates the real Lebanese pact accurately and reasons through the real peace-vs-equality tradeoff ✓",
+  },
+  {
+    id: "polisci-class-monitor",
+    label: "Discuss",
+    questionText: "\"In my school, the class monitor changes every month. Is that what you call a power sharing arrangement?\"",
+    analytical: {
+      criteria: [
+        "Correctly reasons that monthly monitor rotation, by itself, is NOT one of the chapter's own four real forms of power-sharing (among organs of government, among levels of government, among social groups, or among parties/pressure groups) — it's simply turnover of one single role, not power distributed among different institutions or groups at the same time",
+        "Notes what would make it closer to real power-sharing — e.g. if the role were rotated specifically to ensure different groups (not just different individuals) got a turn, that would resemble the chapter's 'community government'/reserved-representation idea rather than plain rotation",
+        "Uses the chapter's own definitions precisely rather than agreeing or disagreeing without reasoning",
+      ],
+      groundingNotes:
+        "The chapter's four real forms of power-sharing are power shared: (1) among different organs of government (horizontal, checks and balances), (2) among governments at different levels (federal/vertical), (3) among different social groups (e.g. Belgium's community government, or India's reserved constituencies for weaker sections and women), (4) among political parties, pressure groups and movements. Simple monthly rotation of one role among individuals doesn't match any of these four — none of them are simply about turnover of a single position.",
+    },
+    verifyLine: "A real, verified answer correctly reasons that plain rotation isn't one of the chapter's real four forms ✓",
+  },
+];
+
+// The real "Let us revise" box (jess401.pdf p.9-10) — 4 real power-sharing
+// examples, each with a real, determinate classification against the
+// chapter's own 4 forms. Built as a visual/fact-recall quiz rather than
+// analytical, since these DO have single correct classifications.
+const POLISCI_LET_US_REVISE_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "polisci-revise-examples",
+    label: "Let us revise",
+    questionText: "Here are some examples of power sharing. Which of the four types of power sharing do these represent? Who is sharing power with whom?",
+    visual: {
+      questions: [
+        {
+          label: "(1)",
+          prompt: "The Bombay High Court ordered the Maharashtra State Government to immediately take action and improve living conditions for children's homes in Mumbai. What form of power-sharing is this?",
+          options: [
+            "Among different organs of government (judiciary checking the executive)",
+            "Among governments at different levels (federal)",
+            "Among different social groups (community government)",
+            "Among political parties and pressure groups",
+          ],
+          correctAnswer: "Among different organs of government (judiciary checking the executive)",
+          explanation: "A court (judiciary) ordering a state government (executive) to act is the judiciary checking the executive — the horizontal 'checks and balances' form of power-sharing among organs of government.",
+        },
+        {
+          label: "(2)",
+          prompt: "The government of Ontario, Canada, agreed to a land claim settlement with the aboriginal community, promising to work with them in a spirit of mutual respect. What form of power-sharing is this?",
+          options: [
+            "Among different social groups",
+            "Among different organs of government",
+            "Among governments at different levels",
+            "Among political parties",
+          ],
+          correctAnswer: "Among different social groups",
+          explanation: "This shares power between the government and a specific social/ethnic group (the aboriginal community) — power shared among different social groups, like Belgium's community government or India's reserved constituencies.",
+        },
+        {
+          label: "(3)",
+          prompt: "Russia's two influential political parties agreed to unite their organisations into a strong right-wing coalition with a common list of candidates. What form of power-sharing is this?",
+          options: [
+            "Among political parties, pressure groups and movements",
+            "Among different organs of government",
+            "Among governments at different levels",
+            "Among different social groups",
+          ],
+          correctAnswer: "Among political parties, pressure groups and movements",
+          explanation: "Two political parties forming an alliance/coalition is exactly the chapter's fourth form — power shared among political parties competing for and forming government together.",
+        },
+        {
+          label: "(4)",
+          prompt: "Finance ministers of various states in Nigeria demanded that the federal government declare its sources of income and the revenue-sharing formula with states. What form of power-sharing is this?",
+          options: [
+            "Among governments at different levels (federal)",
+            "Among different organs of government",
+            "Among different social groups",
+            "Among political parties",
+          ],
+          correctAnswer: "Among governments at different levels (federal)",
+          explanation: "State governments negotiating revenue-sharing with the federal (central) government is the vertical division of power between different levels of government — the federal form of power-sharing.",
+        },
+      ],
+    },
+    verifyLine: "All four real examples correctly classified against the chapter's own 4 forms of power-sharing ✓",
+  },
+];
+
+// Real end-of-chapter EXERCISES (jess401.pdf pp.10-12) — all 9 real
+// questions. Q1-Q5 are analytical (no single fixed answer, though each has
+// real checkable content); Q6-Q9 are real MCQs — every answer key
+// independently re-derived from the chapter's own text before writing, not
+// assumed.
+const POLISCI_EXERCISES_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "polisci-ex-q1-forms",
+    label: "Q1",
+    questionText: "What are the different forms of power sharing in modern democracies? Give an example of each of these.",
+    analytical: {
+      criteria: [
+        "Names all four real forms: (1) among different organs of government (horizontal, checks and balances), (2) among governments at different levels (federal/vertical), (3) among different social groups, (4) among political parties, pressure groups and movements",
+        "Gives a real example for each — e.g. (1) legislature/executive/judiciary checking each other, (2) Central/Union Government and State Governments in India, (3) Belgium's community government or India's reserved constituencies, (4) a coalition government formed by allied parties",
+      ],
+      groundingNotes:
+        "The chapter's own four numbered forms, each with its own real example already given in the text: horizontal separation of powers (ministers responsible to Parliament, judges checking the executive/legislature); federal division (Central/Union Government and State Governments in India); social-group sharing (Belgium's community government, India's reserved constituencies for weaker sections/women); party/pressure-group sharing (coalition governments formed by allied parties, interest groups like traders/businessmen/farmers influencing decisions).",
+    },
+    verifyLine: "A real, verified answer names all 4 real forms with a real example for each ✓",
+  },
+  {
+    id: "polisci-ex-q2-prudential-moral",
+    label: "Q2",
+    questionText: "State one prudential reason and one moral reason for power sharing with an example from the Indian context.",
+    analytical: {
+      criteria: [
+        "States a real prudential reason — power sharing reduces the possibility of conflict between social groups, since imposing majority will risks instability and violence in the long run",
+        "States a real moral reason — power sharing is the very spirit of democracy itself, since people have a right to be consulted on how they are governed, regardless of whether it prevents conflict",
+        "Gives a real, plausible Indian example for at least one — e.g. India's federal Centre-State structure, or reserved constituencies for weaker sections and women, illustrating either reasoning",
+      ],
+      groundingNotes:
+        "'Firstly, power sharing is good because it helps to reduce the possibility of conflict between social groups... power sharing is a good way to ensure the stability of political order' (prudential). 'There is a second, deeper reason why power sharing is good for democracies. Power sharing is the very spirit of democracy... People have a right to be consulted on how they are to be governed' (moral). The chapter labels these explicitly: 'Let us call the first set of reasons prudential and the second moral.'",
+    },
+    verifyLine: "A real, verified answer states the real prudential (conflict-reduction) and moral (democratic spirit) reasons distinctly ✓",
+  },
+  {
+    id: "polisci-ex-q3-three-students",
+    label: "Q3",
+    questionText: "After reading this chapter, three students drew different conclusions. Thomman: Power sharing is necessary only in societies which have religious, linguistic or ethnic divisions. Mathayi: Power sharing is suitable only for big countries that have regional divisions. Ouseph: Every society needs some form of power sharing even if it is small or does not have social divisions. Which of these do you agree with and why? Give your reasons in about 50 words.",
+    analytical: {
+      criteria: [
+        "Takes a real position (any of the three, or a nuanced blend) and defends it with reasoning grounded in the chapter, not just asserting agreement",
+        "If agreeing with Ouseph (the position the chapter's own argument leans toward): cites the 'moral' reason — power sharing is 'the very spirit of democracy' regardless of whether a society has social divisions, since it's fundamentally about the right to be consulted, not just conflict management",
+        "If agreeing with Thomman or Mathayi instead: engages with why the 'prudential' (conflict-reduction) reason alone might seem to limit power-sharing's necessity to divided or large societies — while still showing awareness that the chapter offers a second, broader argument (Ouseph's) as a counterpoint",
+        "Stays within roughly 50 words while still making a real, specific argument, per the question's own instruction",
+      ],
+      groundingNotes:
+        "The chapter gives two distinct arguments for power sharing: prudential (reduces conflict — more relevant to societies with real divisions, supporting Thomman/Mathayi's narrower reading) and moral (power sharing is 'the very spirit of democracy,' a universal claim not limited to divided or large societies — supporting Ouseph's broader reading). The chapter presents both as valid, so a strong answer engages with this real tension rather than picking one side by assertion alone.",
+    },
+    verifyLine: "A real, verified answer takes a real position and defends it using the chapter's own prudential/moral distinction ✓",
+  },
+  {
+    id: "polisci-ex-q4-merchtem-mayor",
+    label: "Q4",
+    questionText: "The Mayor of Merchtem, a town near Brussels in Belgium, has defended a ban on speaking French in the town's schools. He said that the ban would help all non-Dutch speakers integrate in this Flemish town. Do you think that this measure is in keeping with the spirit of Belgium's power sharing arrangements? Give your reasons in about 50 words.",
+    analytical: {
+      criteria: [
+        "Concludes NO — this contradicts Belgium's real power-sharing spirit",
+        "Reasons that Belgium's actual model is built on recognising and accommodating linguistic diversity — 'the Belgian leaders... recognised the existence of regional differences and cultural diversities' — not suppressing a minority language to force assimilation",
+        "Notes the real irony: Belgium's own community government system exists precisely so that Dutch, French and German-speaking communities each retain control over their own cultural, educational and language-related issues — banning French contradicts that same principle applied to non-Dutch speakers in a Flemish town",
+      ],
+      groundingNotes:
+        "'The Belgian leaders took a different path. They recognised the existence of regional differences and cultural diversities... [to] work out an arrangement that would enable everyone to live together within the same country.' Community government: 'elected by people belonging to one language community — Dutch, French and German-speaking — no matter where they live. This government has the power regarding cultural, educational and language-related issues.' A ban on speaking French to force integration runs against this accommodation principle, applying to a minority within Merchtem the same majoritarian logic the chapter criticises in Sri Lanka.",
+    },
+    verifyLine: "A real, verified answer concludes the ban contradicts Belgium's real accommodation-based power-sharing spirit ✓",
+  },
+  {
+    id: "polisci-ex-q5-panchayati-passage",
+    label: "Q5",
+    questionText: "Read the following passage and pick out any one of the prudential reasons for power sharing offered in this: \"We need to give more power to the panchayats to realise the dream of Mahatma Gandhi and the hopes of the makers of our Constitution. Panchayati Raj establishes true democracy. It restores power to the only place where power belongs in a democracy — in the hands of the people. Giving power to Panchayats is also a way to reduce corruption and increase administrative efficiency. When people participate in the planning and implementation of developmental schemes, they would naturally exercise greater control over these schemes. This would eliminate the corrupt middlemen. Thus, Panchayati Raj will strengthen the foundations of our democracy.\"",
+    analytical: {
+      criteria: [
+        "Correctly identifies a real prudential (practical/outcome-based) reason from the passage — 'reduce corruption and increase administrative efficiency' or 'eliminate the corrupt middlemen' — rather than the moral reason",
+        "Correctly distinguishes this from the passage's moral reasoning ('restores power to the only place where power belongs in a democracy — in the hands of the people'), which is about democracy's inherent principle, not a practical outcome",
+        "Explains briefly why the chosen reason counts as prudential — it's about a concrete, practical benefit (less corruption, more efficiency), matching the chapter's own definition: 'prudential: based on prudence, or on careful calculation of gains and losses'",
+      ],
+      groundingNotes:
+        "Chapter's own glossary definition: 'Prudential: Based on prudence, or on careful calculation of gains and losses. Prudential decisions are usually contrasted with decisions based purely on moral considerations.' The passage's practical/prudential claims: giving power to panchayats 'is also a way to reduce corruption and increase administrative efficiency,' and greater local control 'would eliminate the corrupt middlemen' — these are outcome-based (prudential), distinct from the passage's opening moral claim about democracy restoring power to the people.",
+    },
+    verifyLine: "A real, verified answer correctly picks the corruption-reduction/efficiency claim as the real prudential reason ✓",
+  },
+  {
+    id: "polisci-ex-q6-favour-codes",
+    label: "Q6",
+    questionText: "Different arguments are usually put forth in favour of and against power sharing. Identify those which are in favour of power sharing and select the answer using the codes given below. Power sharing: A. reduces conflict among different communities B. decreases the possibility of arbitrariness C. delays decision making process D. accommodates diversities E. increases instability and divisiveness F. promotes people's participation in government G. undermines the unity of a country",
+    visual: {
+      questions: [
+        {
+          label: "Q6",
+          prompt: "Which combination lists only the arguments IN FAVOUR of power sharing?",
+          options: ["A, B, D and F", "A, C, E and F", "A, B, D and G", "B, C, D and G"],
+          correctAnswer: "A, B, D and F",
+          explanation: "Power sharing reduces conflict (A), decreases arbitrariness (B), accommodates diversities (D), and promotes participation (F) — all real, positive arguments from the chapter. C (delays decisions), E (increases instability) and G (undermines unity) are arguments AGAINST power sharing, not for it.",
+        },
+      ],
+    },
+    verifyLine: "A, B, D, F correctly identified as the arguments in favour ✓",
+  },
+  {
+    id: "polisci-ex-q7-belgium-srilanka-statements",
+    label: "Q7",
+    questionText: "Consider the following statements about power sharing arrangements in Belgium and Sri Lanka. A. In Belgium, the Dutch-speaking majority people tried to impose their domination on the minority French-speaking community. B. In Sri Lanka, the policies of the government sought to ensure the dominance of the Sinhala-speaking majority. C. The Tamils in Sri Lanka demanded a federal arrangement of power sharing to protect their culture, language and equality of opportunity in education and jobs. D. The transformation of Belgium from unitary government to a federal one prevented a possible division of the country on linguistic lines. Which of the statements given above are correct?",
+    visual: {
+      questions: [
+        {
+          label: "Q7",
+          prompt: "Which statements are correct?",
+          options: ["A, B, C and D", "A, B and D", "C and D", "B, C and D"],
+          correctAnswer: "B, C and D",
+          explanation: "A is false — historically it was the relatively richer, more powerful French-speaking MINORITY that Dutch-speakers resented, not a Dutch-majority domination of the French minority. B, C and D all match the chapter's real content: Sri Lanka's government did favour Sinhala dominance; Tamils did demand federal arrangements for cultural/linguistic/job equality; and Belgium's shift to federalism did help prevent linguistic division.",
+        },
+      ],
+    },
+    verifyLine: "B, C and D correctly identified as true; A correctly identified as false ✓",
+  },
+  {
+    id: "polisci-ex-q8-match-lists",
+    label: "Q8",
+    questionText: "Match List I (forms of power sharing) with List II (forms of government). List I: 1. Power shared among different organs of government 2. Power shared among governments at different levels 3. Power shared by different social groups 4. Power shared by two or more political parties. List II: A. Community government B. Separation of powers C. Coalition government D. Federal government",
+    visual: {
+      questions: [
+        {
+          label: "Q8",
+          prompt: "Which option correctly matches 1-2-3-4 to their forms of government?",
+          options: ["1-D, 2-A, 3-B, 4-C", "1-B, 2-C, 3-D, 4-A", "1-B, 2-D, 3-A, 4-C", "1-C, 2-D, 3-A, 4-B"],
+          correctAnswer: "1-B, 2-D, 3-A, 4-C",
+          explanation: "1 (different organs) matches B (separation of powers) — the horizontal checks-and-balances form. 2 (different levels) matches D (federal government) — the vertical form. 3 (different social groups) matches A (community government) — Belgium's own real example. 4 (two or more parties) matches C (coalition government) — parties sharing power by governing together.",
+        },
+      ],
+    },
+    verifyLine: "1-B, 2-D, 3-A, 4-C correctly matched ✓",
+  },
+  {
+    id: "polisci-ex-q9-true-false",
+    label: "Q9",
+    questionText: "Consider the following two statements on power sharing. A. Power sharing is good for democracy. B. It helps to reduce the possibility of conflict between social groups. Which of these statements are true and which are false?",
+    visual: {
+      questions: [
+        {
+          label: "Q9",
+          prompt: "Are statements A and B true or false?",
+          options: ["Both A and B are true", "A is true but B is false", "A is false but B is true", "Both A and B are false"],
+          correctAnswer: "Both A and B are true",
+          explanation: "Both are real, direct claims from the chapter: power sharing is 'the very spirit of democracy' (A, the moral reason), and it 'helps to reduce the possibility of conflict between social groups' (B, the prudential reason) — the chapter's own two central arguments, both true.",
+        },
+      ],
+    },
+    verifyLine: "Both A and B correctly identified as true ✓",
+  },
+];
+
+// Economics Ch.1 — "Development" (jess201.pdf, read in full — 16 pages).
+// Fifth and final Social Science subject for this pass. The richest chapter
+// yet in real data tables (1.1-1.7) — several real in-text questions have
+// genuinely computable numeric answers, verified programmatically before
+// writing (Table 1.2's two-country average, Table 1.5's fill-in-the-blank
+// percentages, Table 1.6's per-column top/bottom, Q3's fourth-family income).
+//
+// Rule-3b inventory: this chapter has an unusually large real volume of
+// in-text "Let's Work These Out" questions (4 + 3 + 6 + 4 = 17 across four
+// boxes) plus 3 Activities plus 4 more questions inside the two
+// Sustainability examples — around 28 real prompts in total, well beyond
+// what earlier chapters had. Rather than silently building a partial set,
+// the scope decision is explicit: the most substantive and best-grounded
+// ~18 are built below; the rest are DELIBERATELY EXCLUDED and named here,
+// same as rule 3's "no silent caps" — not a gap that went unnoticed:
+//  - The picture-based "developmental goals for this area" question (needs
+//    a specific real image not cropped in this pass)
+//  - Activity 1 (find any real development controversy by asking around) —
+//    open, unbounded real-world research, same exclusion class as History's
+//    Project and Political Science's newspaper-clippings activity
+//  - "Let's Work These Out" (Average Income box) Qs 1, 3, 5, 6 — the box's
+//    Q2 and Q4 are built; these four are skipped for scope
+//  - "Let's Work These Out" (Public Facilities box) Qs 2, 3 — Q1 and Q4 are
+//    built
+//  - Activity 3's personalized "measure your own BMI" instruction — the
+//    real worked examples the book gives ARE built, as a fact-recall
+//    interpretation question
+//  - The end-of-chapter "Additional Project/Activity" (invite 3 speakers,
+//    discuss) — open, unbounded, same exclusion class as above
+const ECON_INTEXT_QUESTIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "econ-different-goals",
+    label: "Let's Work These Out",
+    questionText: "Why do different persons have different notions of development? Which of the following explanations is more important — (a) because people are different, or (b) because life situations of persons are different?",
+    analytical: {
+      criteria: [
+        "Chooses (b) — life situations, not innate personal difference, is the real reason",
+        "Grounds the answer in the chapter's own real examples from Table 1.1 — a landless rural labourer wants more days of work and better wages; a prosperous Punjab farmer wants higher support prices and cheap labour; a rich urban girl wants freedom to pursue studies abroad — each goal follows directly from that person's real circumstances, not some innate personality difference",
+        "States the chapter's own conclusion directly: 'different persons can have different developmental goals' and 'what may be development for one may not be development for the other — it may even be destructive for the other'",
+      ],
+      groundingNotes:
+        "Table 1.1 gives real, contrasting goals: landless rural labourers want 'more days of work and better wages'; prosperous Punjab farmers want 'assured high family income through higher support prices... and cheap labourers'; a girl from a rich urban family wants to 'pursue her studies abroad.' The chapter's own conclusion: 'two things are quite clear: one, different persons can have different developmental goals and two, what may be development for one may not be development for the other. It may even be destructive for the other.'",
+    },
+    verifyLine: "A real, verified answer picks (b) and grounds it in Table 1.1's real, contrasting goals ✓",
+  },
+  {
+    id: "econ-goals-same-or-different",
+    label: "Let's Work These Out",
+    questionText: "Do the following two statements mean the same? Justify your answer. (a) People have different developmental goals. (b) People have conflicting developmental goals.",
+    analytical: {
+      criteria: [
+        "Correctly distinguishes the two — 'different' just means goals vary from person to person; 'conflicting' means one person's goal actively works against another's",
+        "Uses a real chapter example of conflict, not just difference — industrialists wanting more dams for electricity directly disrupts the lives of displaced tribals who'd prefer small check dams; a girl wanting equal freedom as her brother may be resisted by the brother",
+        "Concludes: all conflicting goals are different, but not all different goals are conflicting — some people's goals simply don't intersect at all",
+      ],
+      groundingNotes:
+        "Real chapter example of actual conflict: 'to get more electricity, industrialists may want more dams. But this may submerge the land and disrupt the lives of people who are displaced — such as tribals. They might resent this and may prefer small check dams or tanks to irrigate their land.' Also: 'A girl expects as much freedom and opportunity as her brother... Her brother may not like this.' These are conflicting, not just different.",
+    },
+    verifyLine: "A real, verified answer distinguishes 'different' from 'conflicting' using a real chapter example of actual conflict ✓",
+  },
+  {
+    id: "econ-non-income-factors",
+    label: "Let's Work These Out",
+    questionText: "Give some examples where factors other than income are important aspects of our lives.",
+    analytical: {
+      criteria: [
+        "Names real non-income goals the chapter itself lists — equal treatment, freedom, security, respect from others, and resentment of discrimination",
+        "Uses at least one of the chapter's own concrete illustrations — e.g. choosing a lower-paying job for better job security or a better working atmosphere, or valuing friendship even though it 'cannot be bought' with income",
+        "Concludes that money 'is one factor on which our life depends' but quality of life also depends on things that aren't easily measured in money terms",
+      ],
+      groundingNotes:
+        "'Besides seeking more income, one way or the other, people also seek things like equal treatment, freedom, security, and respect of others. They resent discrimination.' 'A job may give you less pay but may offer regular employment that enhances your sense of security... Another job, however, may offer high pay but no job security and also leave no time for your family.' 'Just think of the role of your friends in your life' as an example of something valuable that isn't measured by money.",
+    },
+    verifyLine: "A real, verified answer names real non-income goals (security, respect, freedom, friendship) from the chapter ✓",
+  },
+  {
+    id: "econ-own-words-summary",
+    label: "Let's Work These Out",
+    questionText: "Explain some of the important ideas of the above section in your own words.",
+    analytical: {
+      criteria: [
+        "Covers the section's real core claims: people seek a mix of goals, not just income — better wages/prices, but also security, freedom, dignity and respect",
+        "Notes the real example that paid work for women increases household dignity, but that also depends on other conditions — 'if there is respect for women there would be more sharing of housework and a greater acceptance of women working outside'",
+        "States the section's real conclusion in their own words — developmental goals are about 'not only... better income but also... other important things in life'",
+      ],
+      groundingNotes:
+        "'It is true that if women are engaged in paid work, their dignity in the household and society increases. However, it is also the case that if there is respect for women there would be more sharing of housework and a greater acceptance of women working outside... Hence, the developmental goals that people have are not only about better income but also about other important things in life.'",
+    },
+    verifyLine: "A real, verified summary covers the mix-of-goals point and the paid-work/dignity example ✓",
+  },
+  {
+    id: "econ-ivory-coast",
+    label: "Let's Work These Out",
+    questionText: "Read this real newspaper report and answer the questions that follow: \"A vessel dumped 500 tonnes of liquid toxic wastes into open-air dumps in a city and in the surrounding sea. This happened in a city called Abidjan in Ivory Coast, a country in Africa. The fumes from the highly toxic waste caused nausea, skin rashes, fainting, diarrhoea etc. After a month seven persons were dead, twenty in hospital and twenty six thousand treated for symptoms of poisoning. A multinational company dealing in petroleum and metals had contracted a local company of the Ivory Coast to dispose the toxic waste from its ship.\" (i) Who are the people who benefited and who did not? (ii) What should be the developmental goal for this country?",
+    analytical: {
+      criteria: [
+        "(i) Identifies who benefited: the multinational company (avoided proper, costly disposal) and the local contracted company (was paid for the job) — and who didn't: the Abidjan residents (seven dead, twenty hospitalised, 26,000 treated for poisoning symptoms) and the local environment",
+        "(ii) Proposes a real developmental goal for Ivory Coast responsive to this event — e.g. environmental safety/regulation of toxic waste disposal, public health protection, and holding companies (foreign and local) accountable — not just economic growth in isolation",
+        "Connects the reasoning back to the chapter's own theme — this is a real case of one party's 'development' (profit) directly harming others, echoing the tribal-displacement/dam example earlier in the chapter",
+      ],
+      groundingNotes:
+        "Real reported event (Ivory Coast, toxic waste dumping): a multinational petroleum/metals company contracted a local Ivory Coast company to dispose toxic waste from its ship; 500 tonnes were dumped in open-air dumps in Abidjan and the surrounding sea; results were 7 deaths, 20 hospitalised, 26,000 treated for poisoning symptoms. This directly illustrates the chapter's own point that 'what may be development for one may not be development for the other. It may even be destructive for the other.'",
+    },
+    verifyLine: "A real, verified answer names the real beneficiaries/victims and proposes a grounded developmental goal ✓",
+  },
+  {
+    id: "econ-locality-goals",
+    label: "Let's Work These Out",
+    questionText: "What can be some of the developmental goals for your village, town or locality?",
+    analytical: {
+      criteria: [
+        "Names real, plausible local developmental goals — e.g. better roads, reliable water/electricity supply, schools, healthcare access, employment opportunities, safety",
+        "Reasons about tradeoffs the way the chapter does — e.g. a goal that benefits one group locally (like industrial development) might conflict with another's (like farmers or residents displaced or affected by pollution)",
+        "Connects the answer back to the chapter's real definition of national development — deciding 'whether the idea would benefit a large number of people or only a small group'",
+      ],
+      groundingNotes:
+        "This question is inherently about the student's own specific locality, so there's no single fixed answer — grading focuses on whether the response names real, plausible local goals and reasons about them the way the chapter does elsewhere (weighing whose goals are being served), per the chapter's own closing question: 'Would the idea benefit a large number of people or only a small group?'",
+    },
+    verifyLine: "A real, verified answer names plausible local goals and reasons about who they'd actually benefit ✓",
+  },
+  {
+    id: "econ-avg-income-table",
+    label: "Average Income",
+    questionText: "Based on the data given in Table 1.2, calculate the average income for both countries A and B. Will you be equally happy to live in both these countries? Are both equally developed?",
+    analytical: {
+      criteria: [
+        "Correctly calculates both averages: Country A (9500+10500+9800+10000+10200)/5 = Rs 10,000; Country B (500+500+500+500+48000)/5 = Rs 10,000 — identical averages",
+        "Recognises that despite identical average income, the countries are NOT equally developed — Country A has a fairly equal distribution (all five citizens earn roughly similar amounts), while Country B is extremely unequal (four citizens earn very little, one earns Rs 48,000)",
+        "Concludes that most people would prefer living in Country A, since in Country B 'most citizens... are poor and one person is extremely rich' — average income alone hides this real disparity",
+      ],
+      groundingNotes:
+        "Table 1.2 real data — Country A: 9500, 10500, 9800, 10000, 10200 (average = 10,000). Country B: 500, 500, 500, 500, 48000 (average = 10,000). Chapter's own conclusion: 'Even though both the countries have identical average income, country A is preferred because it has more equitable distribution. In this country people are neither very rich nor extremely poor. On the other hand most citizens in country B are poor and one person is extremely rich. Hence, while average income is useful for comparison it does not tell us how this income is distributed among people.'",
+    },
+    verifyLine: "Both averages correctly calculated as Rs 10,000 each; Country A correctly identified as more equitably distributed and preferable ✓",
+  },
+  {
+    id: "econ-avg-improvement",
+    label: "Let's Work These Out",
+    questionText: "Suppose records show that the average income in a country has been increasing over a period of time. From this, can we conclude that all sections of the economy have become better off? Illustrate your answer with an example.",
+    analytical: {
+      criteria: [
+        "Answers NO — a rising average doesn't mean every section improved",
+        "Uses the chapter's own Country A/B logic as the illustrating example — a rising average could come entirely from the richest person's income growing even faster, while poorer citizens' incomes stay flat or fall, just as Country B's average was pulled up entirely by one very rich citizen",
+        "States the general principle directly: an average, by definition, can rise even while most individual values are unchanged or falling, as long as a few values rise enough to offset them",
+      ],
+      groundingNotes:
+        "Directly extends the chapter's own Table 1.2 lesson: 'while average income is useful for comparison it does not tell us how this income is distributed among people' — the same logic applies over time, not just across countries at a point in time. A rising average is consistent with rising inequality if gains are concentrated among a few.",
+    },
+    verifyLine: "A real, verified answer says no, reuses the Country A/B distribution logic to illustrate why ✓",
+  },
+  {
+    id: "econ-haryana-kerala-bihar",
+    label: "Income and Other Criteria",
+    questionText: "Look at the data in Tables 1.3 and 1.4. Is Haryana ahead of Kerala in literacy rate, infant mortality rate, and school attendance, even though it has a higher per capita income?",
+    visual: {
+      questions: [
+        {
+          label: "IMR",
+          prompt: "Which state has the lower (better) Infant Mortality Rate — Haryana or Kerala?",
+          options: ["Kerala (6 per 1,000)", "Haryana (28 per 1,000)", "Both are equal", "Cannot be determined"],
+          correctAnswer: "Kerala (6 per 1,000)",
+          explanation: "Table 1.4: Kerala's IMR is 6 per 1,000 live births, versus Haryana's 28 — nearly five times higher — despite Haryana having a much higher per capita income (Rs 3,25,759 vs Rs 2,81,001).",
+        },
+        {
+          label: "Literacy",
+          prompt: "Which state has the higher literacy rate — Haryana or Kerala?",
+          options: ["Kerala (94%)", "Haryana (82%)", "Both are equal", "Cannot be determined"],
+          correctAnswer: "Kerala (94%)",
+          explanation: "Table 1.4: Kerala's literacy rate is 94%, versus Haryana's 82% — despite Haryana's higher per capita income.",
+        },
+        {
+          label: "Attendance",
+          prompt: "Which state has the higher secondary-stage net attendance ratio — Haryana or Kerala?",
+          options: ["Kerala (94)", "Haryana (73)", "Both are equal", "Cannot be determined"],
+          correctAnswer: "Kerala (94)",
+          explanation: "Table 1.4: Kerala's net attendance ratio at the secondary stage is 94 (per 100 persons aged 15-17), versus Haryana's 73 — again despite Haryana's higher income.",
+        },
+      ],
+    },
+    verifyLine: "Kerala is ahead of Haryana on all three real indicators, despite Haryana's higher per capita income ✓",
+  },
+  {
+    id: "econ-tn-wb-pds",
+    label: "Let's Work These Out",
+    questionText: "In a study, it was found that in Tamil Nadu 90 per cent of the people living in rural areas used a ration shop, whereas in West Bengal only 35 per cent of rural people did so. Where would people be better off and why?",
+    analytical: {
+      criteria: [
+        "Concludes people in Tamil Nadu's rural areas would generally be better off in terms of food security, given the much higher ration shop (Public Distribution System) usage",
+        "Reasons using the chapter's own logic about public facilities — 'health and nutritional status of people... is certainly likely to be better' where the Public Distribution System functions well",
+        "Connects this to the chapter's broader theme — collective provision of essential goods/services (like subsidised food via ration shops) matters for real quality of life, beyond what individual income alone can buy",
+      ],
+      groundingNotes:
+        "'Similarly, in some states, the Public Distribution System (PDS) functions well. Health and nutritional status of people of such states is certainly likely to be better.' A 90% vs 35% gap in rural ration shop usage is real evidence that Tamil Nadu's PDS reaches far more of the rural population than West Bengal's, in this study.",
+    },
+    verifyLine: "A real, verified answer concludes Tamil Nadu is better off, grounded in the chapter's own PDS/public-facilities reasoning ✓",
+  },
+  {
+    id: "econ-up-literacy-blanks",
+    label: "Activity 2",
+    questionText: "Study Table 1.5 (Educational Achievement of Rural Population of Uttar Pradesh) and fill in the blanks: (a) The literacy rate for all age groups is ___% for rural males and ___% for rural females. (b) ___% of rural girls and ___% of rural boys (aged 10-14) are not attending school. Illiteracy among children aged 10-14 is as high as ___% for rural females and ___% for rural males.",
+    analytical: {
+      criteria: [
+        "(a) Correctly reads the literacy rate for all age groups directly from the table: 76% for rural males, 54% for rural females",
+        "(b) Correctly calculates rural girls not attending school: 100% − 82% = 18%; rural boys not attending: 100% − 85% = 15%",
+        "Correctly calculates illiteracy among the 10-14 age group: females 100% − 87% = 13%; males 100% − 90% = 10%",
+        "Notes the real, striking pattern the table reveals — literacy among 10-14-year-olds (87-90%) is much higher than literacy for all rural age groups combined (54-76%), showing real generational improvement, while a meaningful share of even this younger cohort (10-18%) still isn't attending school",
+      ],
+      groundingNotes:
+        "Real Table 1.5 data: Literacy rate for rural population (all ages) — Male 76%, Female 54%. Literacy rate for rural children aged 10-14 — Male 90%, Female 87%. Percentage of rural children aged 10-14 attending school — Male 85%, Female 82%. Derived: not attending = 100 − attending (15% male, 18% female); illiteracy among 10-14 = 100 − child literacy (10% male, 13% female).",
+    },
+    verifyLine: "76%/54% literacy read directly; 15%/18% not-attending and 10%/13% illiteracy correctly derived by subtraction ✓",
+  },
+  {
+    id: "econ-bmi-examples",
+    label: "Activity 3",
+    questionText: "A girl student is 14 years and 8 months old with a BMI of 15.2 — is she undernourished, normal, or overweight (obese)? A boy student is 15 years and 6 months old with a BMI of 28 — is he undernourished, normal, or overweight (obese)?",
+    analytical: {
+      criteria: [
+        "Correctly identifies the 14-year-8-month-old girl with BMI 15.2 as undernourished — the chapter's own worked example states this directly",
+        "Correctly identifies the 15-year-6-month-old boy with BMI 28 as overweight/obese — the chapter's own worked example states this directly",
+        "Explains BMI's real formula in their own words: weight in kilograms divided by the square of height in metres",
+        "Does NOT body-shame either example — the chapter's own instruction explicitly warns against this when discussing BMI results",
+      ],
+      groundingNotes:
+        "'Body Mass Index (BMI)... Divide the weight in kg by the square of the height... For example, if a girl student is 14 years and 8 months old and the BMI is 15.2, then she is undernourished. Similarly, if the BMI of a boy aged 15 years and 6 months, then he is overweight... Discuss the life situation, food and exercise habits of students, in general, without body shaming anyone.'",
+    },
+    verifyLine: "Girl (BMI 15.2) correctly identified as undernourished; boy (BMI 28) correctly identified as overweight, per the book's own examples ✓",
+  },
+  {
+    id: "econ-hdi-other-aspects",
+    label: "Discuss",
+    questionText: "Do you think there are certain other aspects that should be considered in measuring human development, beyond income, health and education?",
+    analytical: {
+      criteria: [
+        "Proposes at least one real, plausible additional aspect — e.g. environmental quality, personal safety/freedom from violence, political freedom/civil liberties, gender equality, mental health, access to clean water and sanitation",
+        "Reasons about why the aspect matters using the chapter's own logic — that development should ultimately be about 'what is happening to citizens of a country... their health, their well-being'",
+        "Recognises the real tension the chapter itself notes — HDI already tries to keep the list of criteria small and 'the most important,' so any addition should be weighed against that same discipline, not just added freely",
+      ],
+      groundingNotes:
+        "'There could be a long list of such criterion but then it would not be so useful. What we need is a small number of the most important things.' The Human Development Report's own approach — comparing 'educational levels of the people, their health status and per capita income' — is explicitly presented as a deliberately narrow, practical selection, inviting the question of whether other real aspects deserve similar priority.",
+    },
+    verifyLine: "A real, verified answer proposes a plausible additional aspect and reasons about it using the chapter's own HDI logic ✓",
+  },
+  {
+    id: "econ-groundwater-overuse",
+    label: "Example 1: Groundwater in India",
+    questionText: "(a) Why is groundwater overused? (b) Can there be development without overuse?",
+    analytical: {
+      criteria: [
+        "(a) Explains overuse using the real chapter facts — about 300 districts have seen groundwater levels decline over 4 metres in 20 years, particularly in agriculturally prosperous regions (Punjab, western UP), hard-rock plateau areas, coastal areas, and fast-growing urban settlements, driven by extraction outpacing natural replenishment",
+        "(b) Reasons through the real renewable-resource logic — groundwater is renewable (replenished by rain), so development without overuse is possible IF extraction is kept within the rate of natural replenishment; overuse only happens when extraction exceeds that rate",
+        "Connects the answer to the chapter's broader sustainability argument — that current patterns, if continued, would put 60% of the country in the same overused state within 25 years",
+      ],
+      groundingNotes:
+        "'About 300 districts have reported a water level decline of over 4 metres during the past 20 years. Nearly one-third of the country is overusing its groundwater reserves. In another 25 years, 60 per cent of the country would be doing the same if the present way of using this resource continues. Groundwater overuse is particularly found in the agriculturally prosperous regions of Punjab and Western U.P., hard rock plateau areas of central and south India, some coastal areas and the rapidly growing urban settlements.' 'Groundwater is an example of renewable resources. These resources are replenished by nature... However, even these resources may be overused... if we use more than what is being replenished by rain then we would be overusing this resource.'",
+    },
+    verifyLine: "A real, verified answer names the real overuse regions/statistics and reasons through the renewable-resource replenishment logic ✓",
+  },
+  {
+    id: "econ-crude-oil-exhaustion",
+    label: "Example 2: Exhaustion of Natural Resources",
+    questionText: "(a) Is crude oil essential for the development process in a country? Discuss. (b) India has to import crude oil. What problems do you anticipate for the country looking at the above situation?",
+    analytical: {
+      criteria: [
+        "(a) Reasons through crude oil's real role while noting its finite, non-renewable nature — 'the world's reserves would last only 50 years more' at current extraction rates per Table 1.7, so heavy dependence raises a genuine long-term sustainability question",
+        "(b) Identifies real problems for an oil-importing country like India: burden of rising prices ('if prices of oil increase this becomes a burden for everyone'), and countries with low reserves sometimes 'want to secure oil through military or economic power' — a geopolitical risk, not just an economic one",
+        "Uses the real Table 1.7 figures to ground the answer — Middle East reserves would last 70 years, USA only 10.5 years, world overall 47 years",
+      ],
+      groundingNotes:
+        "Table 1.7 real data: Middle East reserves 836 thousand million barrels (70 years remaining), USA 69 (10.5 years), World 1732 (47 years). Chapter text: 'the reserves would last only 50 years more... Countries like India depend on importing oil from abroad because they do not have enough stocks of their own. If prices of oil increase this becomes a burden for everyone. There are countries like USA which have low reserves and hence want to secure oil through military or economic power. The question of sustainability of development raises many fundamentally new issues about the nature and process of development.'",
+    },
+    verifyLine: "A real, verified answer uses the real Table 1.7 figures and names both the price-burden and geopolitical-security problems ✓",
+  },
+];
+
+// Real end-of-chapter EXERCISES (jess201.pdf pp.16-17) — all 13 real
+// questions. Q1-3 are MCQs with verified answer keys (re-derived from the
+// chapter's own real data, not assumed); Q4-13 are analytical/short-answer.
+const ECON_EXERCISES_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "econ-ex-q1-mcq",
+    label: "Q1",
+    questionText: "Development of a country can generally be determined by (i) its per capita income (ii) its average literacy level (iii) health status of its people (iv) all the above.",
+    visual: {
+      questions: [
+        {
+          label: "Q1",
+          prompt: "Which option correctly answers the question?",
+          options: ["All the above", "Its per capita income only", "Its average literacy level only", "Health status of its people only"],
+          correctAnswer: "All the above",
+          explanation: "The chapter's own argument is that no single indicator is sufficient — per capita income, literacy, and health status together (as in HDI-style measures) give a fuller picture of development than any one alone.",
+        },
+      ],
+    },
+    verifyLine: "'All the above' correctly identified as the answer ✓",
+  },
+  {
+    id: "econ-ex-q2-mcq",
+    label: "Q2",
+    questionText: "Which of the following neighbouring countries has better performance in terms of human development than India, per Table 1.6? (i) Bangladesh (ii) Sri Lanka (iii) Nepal (iv) Pakistan.",
+    visual: {
+      questions: [
+        {
+          label: "Q2",
+          prompt: "Which option correctly answers the question?",
+          options: ["Sri Lanka", "Bangladesh", "Nepal", "Pakistan"],
+          correctAnswer: "Sri Lanka",
+          explanation: "Table 1.6's real HDI ranks (lower number = better): Sri Lanka 89, India 130, Bangladesh 130 (tied with India, not better), Nepal 145, Pakistan 168. Only Sri Lanka's rank is genuinely better than India's.",
+        },
+      ],
+    },
+    verifyLine: "Sri Lanka correctly identified as the only neighbour with a genuinely better HDI rank than India (89 vs. 130) ✓",
+  },
+  {
+    id: "econ-ex-q3-mcq",
+    label: "Q3",
+    questionText: "Assume there are four families in a country. The average per capita income of these families is Rs 5000. If the income of three families is Rs 4000, Rs 7000 and Rs 3000 respectively, what is the income of the fourth family?",
+    visual: {
+      questions: [
+        {
+          label: "Q3",
+          prompt: "What is the fourth family's income?",
+          options: ["Rs 6000", "Rs 7500", "Rs 3000", "Rs 2000"],
+          correctAnswer: "Rs 6000",
+          explanation: "Total income needed for an average of Rs 5000 across 4 families = 4 × 5000 = Rs 20,000. The three known incomes sum to 4000+7000+3000 = Rs 14,000. The fourth family's income = 20,000 − 14,000 = Rs 6,000.",
+        },
+      ],
+    },
+    verifyLine: "Rs 6,000 correctly calculated as the fourth family's income ✓",
+  },
+  {
+    id: "econ-ex-q4-world-bank",
+    label: "Q4",
+    questionText: "What is the main criterion used by the World Bank in classifying different countries? What are the limitations of this criterion, if any?",
+    analytical: {
+      criteria: [
+        "Names the real criterion — per capita income (average income), used to classify countries as high-income/rich or low-income based on real income thresholds",
+        "States the real limitation the chapter gives — average income doesn't show how income is distributed; two countries with identical average income can have very different levels of actual inequality (per the real Table 1.2 example)",
+      ],
+      groundingNotes:
+        "'For comparing countries, their income is considered to be one of the most important attributes... In World Development Reports, brought out by the World Bank, this criterion is used in classifying countries.' Limitation, from the Average Income box: 'while average income is useful for comparison it does not tell us how this income is distributed among people.'",
+    },
+    verifyLine: "A real, verified answer names per capita income as the World Bank criterion and its real distribution limitation ✓",
+  },
+  {
+    id: "econ-ex-q5-undp-vs-worldbank",
+    label: "Q5",
+    questionText: "In what respects is the criterion used by the UNDP for measuring development different from the one used by the World Bank?",
+    analytical: {
+      criteria: [
+        "States the World Bank's criterion — per capita/average income alone",
+        "States the UNDP's criterion — the Human Development Report compares countries using multiple real indicators together: educational levels, health status, AND per capita income — not income alone",
+        "Notes the real motivation for the difference — 'even though the level of income is important, yet it is an inadequate measure of the level of development'",
+      ],
+      groundingNotes:
+        "'Human Development Report published by UNDP compares countries based on the educational levels of the people, their health status and per capita income.' 'Once it is realised that even though the level of income is important, yet it is an inadequate measure of the level of development, we begin to think of other criterion.'",
+    },
+    verifyLine: "A real, verified answer correctly contrasts World Bank's income-only criterion with UNDP's multi-indicator HDI ✓",
+  },
+  {
+    id: "econ-ex-q6-why-averages",
+    label: "Q6",
+    questionText: "Why do we use averages? Are there any limitations to their use? Illustrate with your own examples related to development.",
+    analytical: {
+      criteria: [
+        "Explains why averages are used — they let us compare different-sized groups/populations on a common basis, since raw totals aren't comparable across countries with different populations",
+        "States the real limitation the chapter demonstrates — averages hide how a value is distributed; the real Table 1.2 example shows two countries with identical average income (Rs 10,000) but very different actual distributions (fairly equal vs. one very rich, four very poor)",
+        "Attempts a real or plausible own example beyond the book's (e.g. two classrooms with the same average test score but very different spreads of individual scores)",
+      ],
+      groundingNotes:
+        "'Since countries have different populations, comparing total income will not tell us what an average person is likely to earn. Are people in one country better off than others in a different country? Hence, we compare the average income.' Limitation: Table 1.2's real example, where identical average income (Rs 10,000) hides that Country A is equitable while Country B has four poor citizens and one extremely rich one.",
+    },
+    verifyLine: "A real, verified answer explains averages' comparative purpose and their real distribution-hiding limitation via Table 1.2 ✓",
+  },
+  {
+    id: "econ-ex-q7-kerala-haryana-agree",
+    label: "Q7",
+    questionText: "Kerala, with lower per capita income, has a better human development ranking than Haryana. Hence, per capita income is not a useful criterion at all and should not be used to compare states. Do you agree? Discuss.",
+    analytical: {
+      criteria: [
+        "Disagrees with the strong claim ('not a useful criterion AT ALL') — per capita income is still a real, useful piece of information, just not a SUFFICIENT one on its own",
+        "Uses the real Haryana/Kerala data to support a more measured conclusion — Haryana genuinely does have higher income (Rs 3,25,759 vs Rs 2,81,001), which is real and relevant information, even though Kerala does better on IMR, literacy and school attendance",
+        "Concludes the real chapter position — income matters, but 'money in your pocket cannot buy all the goods and services that you may need to live well,' so income should be used ALONGSIDE health/education indicators, not instead of them or dismissed entirely",
+      ],
+      groundingNotes:
+        "Real chapter data (Tables 1.3/1.4): Haryana's per capita income (Rs 3,25,759) is higher than Kerala's (Rs 2,81,001), but Kerala leads on IMR (6 vs 28), literacy (94% vs 82%) and attendance (94 vs 73). The chapter's own position is nuanced, not dismissive of income: 'money in your pocket cannot buy all the goods and services that you may need to live well. So, income by itself is not a completely adequate indicator of material goods and services that citizens are able to use' — income is incomplete, not useless.",
+    },
+    verifyLine: "A real, verified answer disagrees with the 'not useful at all' framing while still using the real Haryana/Kerala data accurately ✓",
+  },
+  {
+    id: "econ-ex-q8-energy-sources",
+    label: "Q8",
+    questionText: "Find out the present sources of energy that are used by the people in India. What could be the other possibilities fifty years from now?",
+    analytical: {
+      criteria: [
+        "Names real, current major energy sources used in India — e.g. coal, crude oil/petroleum, natural gas, hydroelectricity, nuclear power, and growing renewable sources like solar and wind",
+        "Notes the real chapter context — crude oil is a real non-renewable resource with limited world reserves ('the reserves would last only 50 years more' at current rates, per Table 1.7), motivating the question about future alternatives",
+        "Proposes real, plausible future possibilities — expanded solar, wind, and other renewable sources, given their real advantage of not facing the same finite-reserve exhaustion problem as crude oil",
+      ],
+      groundingNotes:
+        "The chapter's real point about crude oil directly motivates this question: 'the reserves would last only 50 years more. This is for the world as a whole.' Non-renewable resources (like crude oil) 'will get exhausted after a few years of use... we have a fixed stock on earth which cannot be replenished,' in contrast to renewable resources like groundwater or, by extension, solar/wind energy.",
+    },
+    verifyLine: "A real, verified answer names real current energy sources and connects future possibilities to the chapter's own non-renewable-resource argument ✓",
+  },
+  {
+    id: "econ-ex-q9-why-sustainability",
+    label: "Q9",
+    questionText: "Why is the issue of sustainability important for development?",
+    analytical: {
+      criteria: [
+        "States the real chapter reasoning — a country that develops today would want that development to continue or at least be maintained for future generations, but current levels and patterns of development may not be sustainable",
+        "Cites at least one of the chapter's own real examples — groundwater overuse (300 districts with declining water tables) or crude oil's finite reserves (50 years remaining worldwide) — as concrete evidence of unsustainability",
+        "Notes the real global/generational dimension — 'consequences of environmental degradation do not respect national or state boundaries... our future is linked together'",
+      ],
+      groundingNotes:
+        "'We would certainly like this level of development to go up further or at least be maintained for future generations. This is obviously desirable. However, since the second half of the twentieth century, a number of scientists have been warning that the present type, and levels, of development are not sustainable.' Real examples: groundwater decline in 300 districts; crude oil's 50-year global reserve horizon. 'Consequences of environmental degradation do not respect national or state boundaries; this issue is no longer region or nation specific. Our future is linked together.'",
+    },
+    verifyLine: "A real, verified answer states the real sustainability rationale and cites at least one real chapter example ✓",
+  },
+  {
+    id: "econ-ex-q10-greed-quote",
+    label: "Q10",
+    questionText: "\"The Earth has enough resources to meet the needs of all but not enough to satisfy the greed of even one person.\" How is this statement relevant to the discussion of development?",
+    analytical: {
+      criteria: [
+        "Connects the quote to the chapter's real sustainability argument — resources like groundwater and crude oil are finite or only renewable up to a natural replenishment rate, so unchecked, greed-driven overuse by even a few can exhaust what would otherwise meet everyone's real needs",
+        "Uses a real chapter example to ground this — groundwater overuse concentrated in specific prosperous/urban regions, or countries with low oil reserves seeking to 'secure oil through military or economic power'",
+        "Notes the real distinction the quote draws — between meeting genuine needs (sustainable, shareable) and satisfying greed (unsustainable, exhausting) — which is exactly the sustainability-of-development question the chapter raises",
+      ],
+      groundingNotes:
+        "This quote parallels the chapter's own sustainability argument directly: development that overuses renewable resources beyond their replenishment rate (groundwater) or rapidly depletes finite non-renewable ones (crude oil, 50 years of reserves left) reflects exactly this tension between meeting real needs and satisfying excess/greed-driven consumption.",
+    },
+    verifyLine: "A real, verified answer connects the quote to the chapter's real groundwater/crude-oil sustainability examples ✓",
+  },
+  {
+    id: "econ-ex-q11-environmental-degradation",
+    label: "Q11",
+    questionText: "List a few examples of environmental degradation that you may have observed around you.",
+    analytical: {
+      criteria: [
+        "Names real, plausible, locally observable examples of environmental degradation — e.g. groundwater depletion, air/water pollution, deforestation, waste dumping, declining green cover",
+        "Where possible, connects an example to a real mechanism named in the chapter — e.g. groundwater overuse for agriculture/urban use, similar to the real 300-districts statistic",
+        "Is specific and concrete rather than vague — names an actual type of degradation, not just 'pollution' in the abstract",
+      ],
+      groundingNotes:
+        "This question is inherently about the student's own observed surroundings, so there's no single fixed answer — grading focuses on real specificity and plausibility, informed by the chapter's own real examples (groundwater decline, industrial toxic waste as in the Ivory Coast case, crude oil dependency's environmental costs).",
+    },
+    verifyLine: "A real, verified answer names specific, plausible, locally observable degradation examples ✓",
+  },
+  {
+    id: "econ-ex-q12-table16-topbottom",
+    label: "Q12",
+    questionText: "For each of the items given in Table 1.6, find out which country is at the top and which is at the bottom.",
+    analytical: {
+      criteria: [
+        "GNI per capita: top = Sri Lanka (12,616), bottom = Nepal (4,726)",
+        "Life expectancy at birth: top = Sri Lanka (77.5), bottom = Myanmar (66.9)",
+        "Mean years of schooling: top = Sri Lanka (10.8), bottom = Pakistan (4.3)",
+        "HDI rank: best (lowest rank number) = Sri Lanka (89), worst (highest rank number) = Pakistan (168)",
+      ],
+      groundingNotes:
+        "Real Table 1.6 data (2023/2025): Sri Lanka 12,616 GNI / 77.5 life exp. / 10.8 yrs schooling / rank 89. India 9,047 / 72 / 6.9 / 130. Myanmar 4,919 / 66.9 / 6.4 / 150. Pakistan 5,501 / 67.6 / 4.3 / 168. Nepal 4,726 / 70.4 / 4.5 / 145. Bangladesh 8,498 / 74.7 / 6.8 / 130. Independently re-sorted column by column to verify: Sri Lanka tops every single column; the bottom differs per column (Nepal for GNI, Myanmar for life expectancy, Pakistan for schooling and HDI rank).",
+    },
+    verifyLine: "Top/bottom correctly identified per column by independently re-sorting the real Table 1.6 data — Sri Lanka tops all four; bottom varies by column ✓",
+  },
+  {
+    id: "econ-ex-q13-bmi-table",
+    label: "Q13",
+    questionText: "The following table shows the proportion of adults (aged 15-49 years) whose BMI is below normal (BMI <18.5 kg/m²) in India, for the year 2019-21: Kerala (Male 8.5%, Female 10%), Karnataka (Male 17%, Female 21%), Madhya Pradesh (Male 28%, Female 28%), All States (Male 20%, Female 23%). (i) Compare the nutritional level of people in Kerala and Madhya Pradesh. (ii) Can you guess why around one-fifth of people in the country are undernourished even though it is argued that there is enough food in the country? Describe in your own words.",
+    analytical: {
+      criteria: [
+        "(i) Correctly compares the real figures — Kerala has much lower rates of below-normal BMI (8.5% male, 10% female) than Madhya Pradesh (28% male, 28% female), meaning Kerala's population is real better nourished than Madhya Pradesh's, and also better than the all-India average (20%/23%)",
+        "(ii) Reasons through the real chapter logic on why aggregate food availability doesn't guarantee individual nutrition — echoes the average-income lesson: enough food existing NATIONALLY doesn't mean it's accessible or affordable to everyone individually, since distribution, poverty, and access (not just total production) determine who actually gets fed",
+        "Connects part (ii) back to the chapter's own broader theme — the same distributional-inequality logic already seen in Table 1.2 (average income hiding disparity) and public facilities (money alone doesn't guarantee access) applies to food and nutrition too",
+      ],
+      groundingNotes:
+        "Real table data: Kerala's below-normal BMI rates (8.5% male, 10% female) are far lower than Madhya Pradesh's (28% male, 28% female) and below the All-States average (20% male, 23% female) — meaning Kerala's population has much better nutritional status. This mirrors the chapter's repeated real argument that aggregate/average measures (whether income, or in this case, national food availability) can mask serious unequal distribution — the same logic as Table 1.2's two-country income example and the Haryana/Kerala health-vs-income contrast.",
+    },
+    verifyLine: "A real, verified answer correctly compares Kerala vs. MP's real BMI figures and reasons through the distribution/access argument ✓",
+  },
+];
+
 const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
@@ -1836,6 +2939,13 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "hist-sec5-questions": SECTION_5_HISTORY_PROBLEMS,
   "hist-write-in-brief": WRITE_IN_BRIEF_HISTORY_PROBLEMS,
   "hist-discuss": DISCUSS_HISTORY_PROBLEMS,
+  "geo-intext-questions": GEO_INTEXT_QUESTIONS_PROBLEMS,
+  "geo-exercises": GEO_EXERCISES_PROBLEMS,
+  "polisci-intext-questions": POLISCI_INTEXT_QUESTIONS_PROBLEMS,
+  "polisci-let-us-revise": POLISCI_LET_US_REVISE_PROBLEMS,
+  "polisci-exercises": POLISCI_EXERCISES_PROBLEMS,
+  "econ-intext-questions": ECON_INTEXT_QUESTIONS_PROBLEMS,
+  "econ-exercises": ECON_EXERCISES_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -3240,6 +4350,13 @@ const TOPIC_TITLES: Record<string, string> = {
   "hist-sec5-questions": "In-text Questions — Section 5",
   "hist-write-in-brief": "Write in Brief",
   "hist-discuss": "Discuss",
+  "geo-intext-questions": "In-text Questions",
+  "geo-exercises": "Chapter Exercises",
+  "polisci-intext-questions": "In-text Questions",
+  "polisci-let-us-revise": "Let Us Revise",
+  "polisci-exercises": "Chapter Exercises",
+  "econ-intext-questions": "In-text Questions",
+  "econ-exercises": "Chapter Exercises",
 };
 
 export function Component() {

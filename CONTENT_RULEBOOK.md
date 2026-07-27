@@ -231,6 +231,33 @@ it's a distinct part — check where a numbered section actually *starts*
 (not just what topic its early paragraphs seem to be about) before
 building anything under its name.
 
+## 0c. Skipping a real figure crop is a genuine tradeoff — document it every time, don't let it become silent default
+
+History Ch.1 (28 pages, one subject) got real image extraction for every
+figure a question referenced — `pdftoppm` + Python/Pillow cropping, 9 real
+figures wired in. Building Geography, Political Science and Economics in
+the same pass (3 subjects, ~40 pages of real content, in the time budget
+that previously went to one subject) meant that same per-figure crop-and-
+wire treatment wasn't repeated for every image-referencing question —
+Geography's Fig. 1.4 land-use pie charts and Political Science's map/
+cartoon questions instead ground the question in the real underlying data
+as text (the actual percentages, the actual descriptive facts a caption
+would give) inside `groundingNotes`, with no `imageSrc` at all.
+
+This is a legitimate scope decision under real time constraints, not
+silently reduced rigor — the content is still real and still verified
+against the source PDF, just delivered as text instead of a cropped image.
+But it must be **named as a tradeoff at the point it's made**, in a code
+comment next to the affected topic/problem, exactly the way rule 0b
+requires naming an excluded activity. The test before shipping a chapter:
+does every question that literally says "look at this figure/map/cartoon
+and..." either (a) have a real `imageSrc`, or (b) have an explicit comment
+saying the image was skipped and the real data was grounded as text
+instead? Silently dropping the image with no note reads, on a later audit,
+identically to "forgot the image existed" — which is exactly what rule 0b
+already exists to prevent for whole activities, not just this one for
+individual figures.
+
 ## 1. Content must be real, not invented
 
 - Every Explain concept and every Practice problem traces back to an actual
@@ -608,3 +635,31 @@ Once a chapter's Explain + Practice is built, do one full pass:
 
 Report what was checked, not just what was built — the audit is part of the
 deliverable, the same way it was for Chapter 1's 17-problem arithmetic pass.
+
+## 13. Grouping multiple real courses behind one Discover-page entry point
+
+Class 10 Social Science is four separate real NCERT books (History,
+Geography, Political Science, Economics) sold/enrolled as four separate
+`sku`s in `classroom-catalog.ts` — but a Discover/Marketplace listing that
+shows all four as separate cards, alongside Maths and Science, both
+crowds the screen and misrepresents how a student actually thinks about
+"Social Science" as one subject with parts, not four unrelated subjects.
+
+The fix used here: one pseudo-entry ("Class X Social") sits in the
+Discover-page listing and banner in place of the four real skus, and
+tapping it routes to a dedicated subject-picker screen
+(`ai-tutor-social-subjects.tsx`) that lists the four real subjects —
+tapping one of those goes into that subject's own real, unmodified
+enrollment/curriculum-preview/chapter-home flow. `SOCIAL_SCIENCE_SKUS` in
+`classroom-catalog.ts` is the single source of truth for which real skus
+this pseudo-entry expands to — grouping is purely a presentation-layer
+reroute, not a change to the underlying per-subject data or enrollment
+logic.
+
+**When this pattern applies again:** any time a Discover-page listing
+would otherwise show more real, separately-enrollable courses under one
+conceptual subject than a single screen should reasonably hold (the same
+crowding problem this fixed), group them behind one entry point + a
+picker screen, rather than either (a) showing every real course as its own
+top-level card, or (b) collapsing them into one course that loses the
+real per-subject enrollment/progress boundaries.

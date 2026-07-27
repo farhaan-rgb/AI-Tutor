@@ -218,6 +218,163 @@ const CH1_HISTORY_SECTIONS: Section[] = [
   },
 ];
 
+// Geography Chapter 1 — "Resources and Development" (jess101.pdf, read in
+// full: 12 pages). Same kind:"concept" treatment as History — real practice
+// is the chapter's own in-text questions and end-of-chapter Exercises (see
+// ai-tutor-solve.tsx for the full rule-3b inventory, including two real
+// exclusions: the "Find out" box and the Project/Activity section).
+const CH1_GEOGRAPHY_SECTIONS: Section[] = [
+  {
+    label: "What is a Resource?",
+    topics: [
+      { id: "what-is-a-resource", title: "What is a resource?", meta: "Not started · Concept", status: "not-started", explainQuery: "what-is-a-resource", kind: "concept" },
+    ],
+  },
+  {
+    label: "Development of Resources",
+    topics: [
+      { id: "development-of-resources", title: "Development of resources", meta: "Not started · Concept", status: "not-started", explainQuery: "development-of-resources", kind: "concept" },
+    ],
+  },
+  {
+    label: "Resource Planning",
+    topics: [
+      { id: "resource-planning", title: "Resource planning", meta: "Not started · Concept", status: "not-started", explainQuery: "resource-planning", kind: "concept" },
+    ],
+  },
+  {
+    label: "Land Resources and Land Use",
+    topics: [
+      { id: "land-resources-and-use", title: "Land resources and land use", meta: "Not started · Concept", status: "not-started", explainQuery: "land-resources-and-use", kind: "concept" },
+    ],
+  },
+  {
+    label: "In-text Questions",
+    topics: [
+      { id: "geo-intext-questions", title: "In-text Questions — Practice", meta: "Not started · 7 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "Soil as a Resource",
+    topics: [
+      { id: "soil-as-a-resource", title: "Soil as a resource", meta: "Not started · Concept", status: "not-started", explainQuery: "soil-as-a-resource", kind: "concept" },
+    ],
+  },
+  {
+    label: "Soil Erosion and Conservation",
+    topics: [
+      { id: "soil-erosion-and-conservation", title: "Soil erosion and conservation", meta: "Not started · Concept", status: "not-started", explainQuery: "soil-erosion-and-conservation", kind: "concept" },
+    ],
+  },
+  {
+    label: "End-of-chapter Exercises",
+    topics: [
+      { id: "geo-exercises", title: "Chapter Exercises — Practice", meta: "Not started · All 8 questions", status: "not-started" },
+    ],
+  },
+];
+
+// Political Science Chapter 1 — "Power-sharing" (jess401.pdf, read in full:
+// 12 pages). Same kind:"concept" treatment as History/Geography — real
+// practice is the chapter's own in-text questions, "Let us revise" quiz, and
+// end-of-chapter Exercises (see ai-tutor-solve.tsx for the full rule-3b
+// inventory, including the excluded newspaper-clipping group activity).
+const CH1_POLITICAL_SCIENCE_SECTIONS: Section[] = [
+  {
+    label: "Belgium and Sri Lanka",
+    topics: [
+      { id: "what-is-power-sharing", title: "What is power-sharing? Belgium and Sri Lanka", meta: "Not started · Concept", status: "not-started", explainQuery: "what-is-power-sharing", kind: "concept" },
+    ],
+  },
+  {
+    label: "Accommodation in Belgium",
+    topics: [
+      { id: "accommodation-in-belgium", title: "Accommodation in Belgium, and Lebanon's dilemma", meta: "Not started · Concept", status: "not-started", explainQuery: "accommodation-in-belgium", kind: "concept" },
+    ],
+  },
+  {
+    label: "In-text Questions",
+    topics: [
+      { id: "polisci-intext-questions", title: "In-text Questions — Practice", meta: "Not started · 8 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "Why Power-sharing is Desirable",
+    topics: [
+      { id: "why-power-sharing-is-desirable", title: "Why power-sharing is desirable", meta: "Not started · Concept", status: "not-started", explainQuery: "why-power-sharing-is-desirable", kind: "concept" },
+    ],
+  },
+  {
+    label: "Forms of Power-sharing",
+    topics: [
+      { id: "forms-of-power-sharing", title: "Forms of power-sharing", meta: "Not started · Concept", status: "not-started", explainQuery: "forms-of-power-sharing", kind: "concept" },
+    ],
+  },
+  {
+    label: "Let Us Revise",
+    topics: [
+      { id: "polisci-let-us-revise", title: "Let Us Revise — Practice", meta: "Not started · 4 examples to classify", status: "not-started" },
+    ],
+  },
+  {
+    label: "End-of-chapter Exercises",
+    topics: [
+      { id: "polisci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · All 9 questions", status: "not-started" },
+    ],
+  },
+];
+
+// Economics Chapter 1 — "Development" (jess201.pdf, read in full: 16 pages).
+// Same kind:"concept" treatment as History/Geography/Political Science —
+// real practice is the chapter's own in-text "Let's Work These Out"
+// questions and end-of-chapter Exercises (see ai-tutor-solve.tsx for the
+// full rule-3b inventory, including the excluded Activity 1 and the
+// "Additional Project" group-discussion activity).
+const CH1_ECONOMICS_SECTIONS: Section[] = [
+  {
+    label: "What is Development?",
+    topics: [
+      { id: "what-is-development", title: "What is development?", meta: "Not started · Concept", status: "not-started", explainQuery: "what-is-development", kind: "concept" },
+    ],
+  },
+  {
+    label: "Income as a Measure of Development",
+    topics: [
+      { id: "income-as-a-measure", title: "Income as a measure of development", meta: "Not started · Concept", status: "not-started", explainQuery: "income-as-a-measure", kind: "concept" },
+    ],
+  },
+  {
+    label: "Beyond Income",
+    topics: [
+      { id: "beyond-income", title: "Beyond income — health, education and public facilities", meta: "Not started · Concept", status: "not-started", explainQuery: "beyond-income", kind: "concept" },
+    ],
+  },
+  {
+    label: "In-text Questions",
+    topics: [
+      { id: "econ-intext-questions", title: "In-text Questions — Practice", meta: "Not started · 15 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "The Human Development Index",
+    topics: [
+      { id: "human-development-index", title: "The Human Development Index (HDI)", meta: "Not started · Concept", status: "not-started", explainQuery: "human-development-index", kind: "concept" },
+    ],
+  },
+  {
+    label: "Sustainability of Development",
+    topics: [
+      { id: "sustainability-of-development", title: "Sustainability of development", meta: "Not started · Concept", status: "not-started", explainQuery: "sustainability-of-development", kind: "concept" },
+    ],
+  },
+  {
+    label: "End-of-chapter Exercises",
+    topics: [
+      { id: "econ-exercises", title: "Chapter Exercises — Practice", meta: "Not started · All 13 questions", status: "not-started" },
+    ],
+  },
+];
+
 // Science chapters 2-13 have no built Explain/Solve content yet, and unlike
 // Maths chapters 3-14, their real sub-topic bullets haven't been researched
 // from jesc102-113.pdf yet either (only Ch.1 has) — so this is an honest
@@ -315,12 +472,31 @@ function historyLockedSections(chapterIdx: number): Section[] {
   ];
 }
 
+// Shared by every later chapter-2+ locked placeholder (Geography, Political
+// Science, Economics) — same treatment as scienceLockedSections/
+// historyLockedSections above, just parameterised instead of copy-pasted a
+// third/fourth/fifth time.
+function genericLockedSections(prefix: string, chapterIdx: number): Section[] {
+  return [
+    { label: "Full chapter", topics: [{ id: `${prefix}-c${chapterIdx}-locked`, title: "Concepts & practice", meta: "", status: "locked" }] },
+  ];
+}
+
 function sectionsForChapter(sku: string, chapterIdx: number): Section[] {
   if (sku === "ncert-10-science") {
     return chapterIdx === 0 ? CH1_SCIENCE_SECTIONS : scienceLockedSections(chapterIdx);
   }
   if (sku === "ncert-10-history") {
     return chapterIdx === 0 ? CH1_HISTORY_SECTIONS : historyLockedSections(chapterIdx);
+  }
+  if (sku === "ncert-10-geography") {
+    return chapterIdx === 0 ? CH1_GEOGRAPHY_SECTIONS : genericLockedSections("geo", chapterIdx);
+  }
+  if (sku === "ncert-10-political-science") {
+    return chapterIdx === 0 ? CH1_POLITICAL_SCIENCE_SECTIONS : genericLockedSections("polisci", chapterIdx);
+  }
+  if (sku === "ncert-10-economics") {
+    return chapterIdx === 0 ? CH1_ECONOMICS_SECTIONS : genericLockedSections("econ", chapterIdx);
   }
   return chapterIdx === 0 ? CH1_SECTIONS : chapterIdx === 1 ? CH2_SECTIONS : mathsLockedSectionsFor(chapterIdx);
 }
