@@ -120,20 +120,38 @@ brief," and most in-text "Activity" questions in this chapter have no
 single determinate answer, so grading them right/wrong would misrepresent
 what's actually being assessed.
 
-**Shape:** `analytical: { criteria: string[]; groundingNotes: string }` on
-`PracticeProblem`. `criteria` are the real things a strong answer should
-cover — drawn from what the chapter itself actually says, never invented
-generically ("discusses the topic well" is not a real criterion; "cites
-Renan's 'daily plebiscite' phrase" is). `groundingNotes` are the real facts/
-quotes backing those criteria, sent to the grading model as context — never
-shown to the student before they answer, since that would hand them the
-answer instead of letting them attempt it.
+**Shape:** `analytical: { criteria: string[]; groundingNotes: string;
+imageSrc?: string; imageAlt?: string }` on `PracticeProblem`. `criteria` are
+the real things a strong answer should cover — drawn from what the chapter
+itself actually says, never invented generically ("discusses the topic
+well" is not a real criterion; "cites Renan's 'daily plebiscite' phrase"
+is). `groundingNotes` are the real facts/quotes backing those criteria, sent
+to the grading model as context — never shown to the student before they
+answer, since that would hand them the answer instead of letting them
+attempt it. `imageSrc` is a real cropped figure from the actual PDF — many
+History questions literally say "describe this caricature/painting," which
+is meaningless without the image on screen (missing entirely on the first
+pass — only `visual` had an image field; real bug, real screenshot, since
+a huge fraction of this chapter's Activities are "look at Fig. N and...").
 
-**Interaction:** student writes a real answer in a textarea, submits it to
-`/api/grade-text` (mirrors the existing `/api/grade-photo` pattern), and
-gets back qualitative feedback — never a correct/incorrect verdict, per the
-system prompt's explicit instruction to the grading model. Completion marks
-on a genuine attempt (a real answer was submitted and graded), not on
+**Interaction:** both "ask the AI tutor for a model answer" and "write your
+own answer" stay visible and tappable at once, same pattern as procedural's
+"Ask AI to solve it"/"Upload your answer" — an earlier build skipped
+straight to a blank textarea with no model-answer option at all, which was
+a real gap, not a deliberate simplification. The model answer
+(`/api/model-answer`) is a short framing of what the answer needs to cover
+plus the actual substantive answer — the answer itself is the main focus,
+the framing is a small supporting part, not the other way around. Writing
+your own answer supports three input methods that all funnel into the same
+grading call: typing, recording (mic → `/api/transcribe-audio` → fills the
+same textarea), or uploading a photo of handwritten work (sent directly as
+`imageDataUrl` to `/api/grade-text`, which reads it in the same model call
+rather than needing separate OCR). Feedback from `/api/grade-text` names
+the *specific* real content that's missing when something is — the actual
+fact or quote from `groundingNotes`, not a vague "add more detail" — while
+still never reducing to a correct/incorrect verdict, per the system
+prompt's explicit instruction to the grading model. Completion marks on a
+genuine attempt (a real answer was submitted and graded), not on
 "correctness" — there's nothing to gate that on. The real criteria are
 revealed *alongside* the feedback, after submission, as a self-check
 checklist — not shown upfront as an answer key.
@@ -194,6 +212,24 @@ right move is to build the question grounded in what the content clearly
 requires (both figures, and the real contrast between them) while noting
 the discrepancy explicitly in the grounding notes — so anyone auditing the
 content later can see the ambiguity was noticed, not missed.
+
+**A chapter's own unnumbered introduction is a real, separate section —
+don't fold it into "Section 1."** History Ch.1 opens with real content (the
+Sorrieu print, Renan's "What is a Nation?" essay) that sits *before* the
+numbered heading "1 The French Revolution and the Idea of the Nation"
+begins. An earlier build treated this intro material as if it belonged to
+Section 1 — real content, correctly cited, wrong placement — and as a
+direct result, real Section 1 itself (which has no in-text question of its
+own) never got properly inventoried on its own terms. This is the same
+root failure rule 3b already names (build against a written inventory, not
+memory/assumption) showing up one level higher: it's not just individual
+citations that need inventorying against their real section, the section
+boundaries themselves need verifying against exact page/line position
+before any content gets assigned to them. When a book's own layout puts
+real content before its first numbered heading, that's the book telling you
+it's a distinct part — check where a numbered section actually *starts*
+(not just what topic its early paragraphs seem to be about) before
+building anything under its name.
 
 ## 1. Content must be real, not invented
 
@@ -268,6 +304,66 @@ not just the numbers used in the derivation. Same two-category test as rule
 1a: a dropped clause/condition/shared premise is required; the book's own
 scaffolding language around the question (e.g. "Let us consider some
 examples" before it) is not.
+
+## 1c. Language must be plain, not idiomatic — the student is learning math in a second language
+
+Every topic here is written for a Class 10 Indian student — many of whom are
+confident in math but not fluent in English. Rules 1/1a/1b are about whether
+the *content* is real and complete; this rule is about whether the *English
+carrying that content* is actually accessible to this specific reader. Content
+can be perfectly accurate and complete and still fail the student if the
+sentence wrapped around it needs native-speaker fluency to parse.
+
+The failure mode isn't math vocabulary — "composite number," "prime
+factorisation," "exponent" are the curriculum's own required terms and stay
+exactly as they are; simplifying those away would be removing the actual
+lesson. The failure mode is figurative, native-speaker-idiomatic *connective*
+English wrapped around that vocabulary — phrases whose meaning isn't
+derivable from their individual words. Real examples caught in Chapter 1's
+"Unique prime factorisation" topic, in both `TOPIC_COPY` and its narration
+script:
+
+- "That's uniqueness **doing real work**" — a metaphor; "work" here means
+  nothing like its everyday sense. Fix: "that's what uniqueness actually
+  guarantees."
+- "you'd **land on** exactly the same primes" — spatial metaphor for
+  "arrive at." Fix: "you'd arrive at."
+- "which **works out to** 2²ⁿ" — idiomatic for "equals." Fix: "equals."
+- "five was never there **to begin with** / **to start with**" — idiomatic
+  for "from the start." Fix: "from the start."
+
+None of these are hard to fix — say the literal thing instead, even where it
+reads slightly less "natural" to a fluent English ear. Natural-sounding-to-a-
+native-speaker is not the goal here. The test: could a student who reads or
+hears every individual word correctly, but doesn't know English idiom, still
+get the sentence's actual meaning? If not, replace it with the literal
+phrasing.
+
+Not every multi-word phrase is a violation — extremely common, low-ambiguity
+ones that are already basic-English-education staples ("breaks down into,"
+"made up of") don't need hunting down. The bar is specifically figurative
+phrases where the individual words don't add up to the intended meaning
+without already knowing the idiom.
+
+**A second, related failure mode: sentence fragments that drop the subject
+or verb.** "Still one fact about the number." isn't idiomatic — every word
+is literal — but it's not a complete sentence either; it leans on the reader
+to silently supply "[This is] still one fact about the number." A fluent
+speaker does that automatically. A student still learning English grammar is
+more likely to be parsing for a subject and a verb and finds neither — a
+different barrier than idiom, but the same underlying problem: economy of
+language that assumes a fluency this reader may not have. Prefer a complete
+subject-verb sentence ("That's still one fact about the number.") even where
+the fragment reads punchier to a fluent ear — caught first in this same
+topic's narration script, where a comma-attached clause in `TOPIC_COPY` (
+"...is the same factorisation as 7×5×3×2, still one fact about the number,"
+grammatically complete as an attached clause) got split into its own
+sentence for spoken pacing and became a fragment in the process.
+
+This applies to every piece of Explain/Practice copy — `TOPIC_COPY`,
+narration scripts, video on-screen text, everything. Audio and video carry an
+even tighter bar than on-screen text: a student can re-read a confusing
+sentence in a chat bubble, but a narrated line is heard once and gone.
 
 ## 2. Topic categorization: Explain vs Practice vs Both
 
@@ -466,6 +562,9 @@ Once a chapter's Explain + Practice is built, do one full pass:
   memory of the earlier build.
 - Every Practice problem's on-screen question text diffed word-for-word
   against its real source question, not just its numbers (rule 1b).
+- Every sentence checked for native-speaker idiom that doesn't survive literal
+  reading — math vocabulary kept, figurative connective English replaced
+  with the literal phrasing (rule 1c).
 - No redundant copy, consistent sibling strings (rules 8–9)?
 
 Report what was checked, not just what was built — the audit is part of the

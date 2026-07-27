@@ -30,7 +30,7 @@
  */
 import { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, Mic, Square, Type, PenLine } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
 import { BottomSheet } from "../shared/bottom-sheet";
 
@@ -80,6 +80,14 @@ interface VisualQuestion {
 interface Analytical {
   criteria: string[];
   groundingNotes: string;
+  // Real cropped figures from the actual PDF (never described-but-unseen) —
+  // many History questions literally say "describe this caricature/painting,"
+  // which is meaningless without the image on screen. Was missing entirely
+  // on the first pass (only `visual` had imageSrc) — real bug, real
+  // screenshot: a question asking the student to describe a figure that
+  // was never actually shown.
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 interface PracticeProblem {
@@ -1216,8 +1224,14 @@ const SECTION_1_3_QUESTIONS_PROBLEMS: PracticeProblem[] = [
 // discuss/describe/compare," with no single determinate answer).
 //
 // Rule-3b inventory of every real question-block in this chapter, mapped to
-// its section, done BEFORE writing any of these:
-//  - Section 1 (French Revolution): 2 real prompts (Fig.1 Activity, Source A
+// its section, done BEFORE writing any of these. NOTE: an earlier pass had
+// mislabeled the first two of these as "Section 1" — the Fig.1 Activity and
+// Source A/Renan Discuss actually sit in the chapter's own unnumbered
+// INTRODUCTION (jess301.pdf pp.3-4), before "1 The French Revolution and the
+// Idea of the Nation" begins on p.5. Real Section 1 has no in-text question
+// of its own (confirmed by re-reading it directly) — it's covered instead by
+// Write in Brief Q2/Q5, which are directly about its content.
+//  - Introduction (before Section 1): 2 real prompts (Fig.1 Activity, Source A
 //    Renan Discuss) — both built below.
 //  - Section 2 (Making of Nationalism): 3 real prompts — Source B List
 //    Discuss and Fig.6 caricature Discuss are built; the "plot the Vienna
@@ -1254,7 +1268,7 @@ const SECTION_1_3_QUESTIONS_PROBLEMS: PracticeProblem[] = [
 // interaction (write freely, get qualitative AI feedback, never right/wrong)
 // is identical; only the criteria's emphasis differs (concrete real details
 // + adopted voice, vs. argument soundness).
-const SECTION_1_HISTORY_PROBLEMS: PracticeProblem[] = [
+const INTRO_HISTORY_PROBLEMS: PracticeProblem[] = [
   {
     id: "hist-fig1-utopian-vision",
     label: "Activity",
@@ -1268,6 +1282,8 @@ const SECTION_1_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 1 (Sorrieu, 1848) shows peoples of Europe and America marching in procession past the statue of Liberty, grouped as distinct nations by flag and costume — including the German peoples, who 'did not yet exist as a united nation' at the time; the flag they carry only expresses 'liberal hopes in 1848 to unify the numerous German-speaking principalities into a nation-state.' Christ, saints and angels gaze from the heavens, symbolising fraternity among nations. 'Utopian' is glossed in the chapter as 'a vision of a society that is so ideal that it is unlikely to actually exist.'",
+      imageSrc: "/history/fig1-sorrieu.jpg",
+      imageAlt: "Fig. 1 — The Dream of Worldwide Democratic and Social Republics, Frédéric Sorrieu, 1848",
     },
     verifyLine: "A real, verified answer covers the imagined unity, the not-yet-real nations, and the allegorical figures ✓",
   },
@@ -1318,6 +1334,8 @@ const SECTION_2_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 6, 'The Club of Thinkers,' anonymous caricature c.1820. The plaque reads: 'The most important question of today's meeting: How long will thinking be allowed to us?' The board lists rules including 'Silence is the first commandment of this learned society' and 'To avoid the eventuality whereby a member of this club may succumb to the temptation of speech, muzzles will be distributed to members upon entering.' Surrounding text: conservative regimes set up after 1815 were autocratic, did not tolerate criticism or dissent, and imposed censorship laws to control what was said in newspapers, books, plays and songs, reflecting ideas of liberty and freedom associated with the French Revolution.",
+      imageSrc: "/history/fig6-club-of-thinkers.jpg",
+      imageAlt: "Fig. 6 — The Club of Thinkers, anonymous caricature, c. 1820",
     },
     verifyLine: "A real, verified answer names the plaque/muzzle detail and connects it to real post-1815 censorship ✓",
   },
@@ -1403,6 +1421,8 @@ const SECTION_4_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 13: 'Caricature of Otto von Bismarck in the German reichstag (parliament), from Figaro, Vienna, 5 March 1870.' Body text (section 4.1): after 1848, nationalism moved away from democracy and revolution — Prussia's chief minister Otto von Bismarck led the unification 'with the help of the Prussian army and bureaucracy,' via three wars over seven years; 'the nation-building process in Germany had demonstrated the dominance of Prussian state power.' This followed the earlier 1848 Frankfurt Parliament, whose liberal initiative for an elected, constitutional nation was ultimately repressed (the assembly was forced to disband when troops were called in).",
+      imageSrc: "/history/fig13-bismarck-caricature.jpg",
+      imageAlt: "Fig. 13 — Caricature of Otto von Bismarck in the German reichstag, from Figaro, Vienna, 5 March 1870",
     },
     verifyLine: "A real, verified answer describes the whip/deputies caricature and ties it to Prussian state power overriding the parliamentary initiative ✓",
   },
@@ -1419,6 +1439,8 @@ const SECTION_4_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 15: 'Garibaldi helping King Victor Emmanuel II of Sardinia-Piedmont to pull on the boot named Italy. English caricature of 1859.' Body text: Giuseppe Garibaldi led armed volunteers ('Red Shirts,' growing to about 30,000) who in 1860 marched into South Italy and the Kingdom of the Two Sicilies and won local peasant support to drive out Spanish rulers; in 1861 Victor Emmanuel II — not Garibaldi, and not a republic — was proclaimed king of united Italy. Mazzini had earlier sought 'a unitary Italian Republic' through Young Italy; Cavour, who led the diplomatic side of unification, 'was neither a revolutionary nor a democrat.'",
+      imageSrc: "/history/fig15-garibaldi-caricature.jpg",
+      imageAlt: "Fig. 15 — Garibaldi helping King Victor Emmanuel II pull on the boot named Italy, English caricature of 1859",
     },
     verifyLine: "A real, verified answer names Garibaldi's real fighting, the King claiming the throne, and the republic-vs-monarchy tension ✓",
   },
@@ -1436,6 +1458,8 @@ const SECTION_4_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Body text (section 4.2, 'Italy Unified'): 'Italy was divided into seven states, of which only one, Sardinia-Piedmont, was ruled by an Italian princely house... Even the Italian language had not acquired one common form and still had many regional and local variations.' Chief Minister Cavour, who led unification diplomatically, 'spoke much better French than he did Italian.' 'Much of the Italian population, among whom rates of illiteracy were very high, remained blissfully unaware of liberal-nationalist ideology. The peasant masses who had supported Garibaldi in southern Italy had never heard of Italia, and believed that La Talia was Victor Emmanuel's wife!'",
+      imageSrc: "/history/fig14a-italy-before.jpg",
+      imageAlt: "Fig. 14(a) — Italian states before unification, 1858",
     },
     verifyLine: "A real, verified answer cites the fragmentation, the language variation, Cavour's French, and the 'La Talia' anecdote ✓",
   },
@@ -1444,36 +1468,38 @@ const SECTION_4_HISTORY_PROBLEMS: PracticeProblem[] = [
     label: "Activity",
     questionText: "Examine Fig. 14(b). Which was the first region to become part of unified Italy? Which was the last region to join? In which year did the largest number of states join?",
     visual: {
+      imageSrc: "/history/fig14b-italy-after.jpg",
+      imageAlt: "Fig. 14(b) — Italy after unification, showing the year each region joined",
       questions: [
         {
           label: "First",
-          prompt: "Reading Fig. 14(b)'s year-coded map, which region/group of states was the first to join Sardinia-Piedmont's original core?",
+          prompt: "Reading Fig. 14(b)'s year-coded map, which region was the first to join Sardinia-Piedmont's original core?",
           options: [
-            "Lombardy and the central Italian states (Parma, Modena, Tuscany) plus the Kingdom of the Two Sicilies, in 1859-60",
-            "Venetia, in 1866",
-            "Rome and the Papal States, in 1870",
-            "None joined — all of Italy was united from the start",
+            "Lombardy and the central Italian states (Parma, Modena, Tuscany), labelled 1858-60",
+            "The Kingdom of the Two Sicilies in the south, labelled 1860",
+            "Venetia, labelled 1866",
+            "Rome and the Papal States, labelled 1870",
           ],
-          correctAnswer: "Lombardy and the central Italian states (Parma, Modena, Tuscany) plus the Kingdom of the Two Sicilies, in 1859-60",
-          explanation: "Sardinia-Piedmont was the pre-existing core (1858 on the map). The first real wave of joining regions came via Cavour's 1859 war against Austria (winning Lombardy) and Garibaldi's 1860 campaign into central and southern Italy (Parma, Modena, Tuscany, and the Kingdom of the Two Sicilies) — all marked 1858-60 on the map.",
+          correctAnswer: "Lombardy and the central Italian states (Parma, Modena, Tuscany), labelled 1858-60",
+          explanation: "Sardinia-Piedmont itself was the pre-existing core (labelled 1858, not a 'join'). The map labels the central regions — Lombardy, Parma, Modena, Tuscany — as '1858-60', distinct from the South's own separate '1860' label; Cavour's 1859 war won Lombardy first, so this central group is the earliest real joining event.",
         },
         {
           label: "Last",
           prompt: "Which region joined last, per the map?",
-          options: ["Rome and the Papal States, in 1870", "Venetia, in 1866", "Lombardy, in 1859-60", "Sicily, in 1860"],
-          correctAnswer: "Rome and the Papal States, in 1870",
+          options: ["Rome and the Papal States, labelled 1870", "Venetia, labelled 1866", "The Kingdom of the Two Sicilies, labelled 1860", "Lombardy, labelled 1858-60"],
+          correctAnswer: "Rome and the Papal States, labelled 1870",
           explanation: "The Papal States, where a French garrison was stationed, held out until 1870 — France withdrew its troops (occupied by the war with Prussia) and Rome was finally joined to Italy that year, per Box 2's account of Garibaldi's 1867 attempt and the map's 1870 label.",
         },
         {
           label: "Most joined",
-          prompt: "In which year (or year-range) did the largest number of states join at once?",
-          options: ["1859-60", "1866", "1870", "1858"],
-          correctAnswer: "1859-60",
-          explanation: "The map shows several distinct regions — Lombardy, Parma, Modena, Tuscany, and the Kingdom of the Two Sicilies — all joining together in the 1859-60 window, versus just Venetia alone in 1866 and just Rome/the Papal States alone in 1870.",
+          prompt: "In which year (or year-range label) did the largest number of states join at once?",
+          options: ["1858-60", "1860", "1866", "1870"],
+          correctAnswer: "1858-60",
+          explanation: "The map's '1858-60' label covers multiple distinct regions at once — Lombardy, Parma, Modena and Tuscany — more than any other single label: '1860' (just the Two Sicilies), '1866' (just Venetia), and '1870' (just Rome) each cover one region.",
         },
       ],
     },
-    verifyLine: "1859-60 (Lombardy + central states + Two Sicilies) joined first and in the largest number; Rome joined last, in 1870 ✓",
+    verifyLine: "1858-60 (Lombardy + central states) joined first and in the largest number; Rome joined last, in 1870 ✓",
   },
 ];
 
@@ -1490,6 +1516,8 @@ const SECTION_5_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Box 3 ('Meanings of the symbols'): Broken chains = being freed; Breastplate with eagle = symbol of the German empire, strength; Crown of oak leaves = heroism; Sword = readiness to fight; Olive branch around the sword = willingness to make peace; Black, red and gold tricolour = flag of the liberal-nationalists in 1848, banned by the Dukes of the German states; Rays of the rising sun = beginning of a new era. Fig. 17 caption: Philip Veit's 1848 Germania painting was prepared to hang from the ceiling of the Frankfurt Church of St Paul when the parliament convened in March 1848. The Activity notes Veit's earlier 1836 rendering placed the Kaiser's crown where the broken chain now sits.",
+      imageSrc: "/history/fig17-germania-veit.jpg",
+      imageAlt: "Fig. 17 — Germania, Philip Veit, 1848",
     },
     verifyLine: "A real, verified answer names all of Box 3's real attributes and explains the crown→chain shift in symbolism ✓",
   },
@@ -1506,6 +1534,8 @@ const SECTION_5_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 18 caption: 'The fallen Germania, Julius Hübner, 1850' (the question as printed says 'Fig. 17,' which is Veit's standing 1848 Germania — the two images sit on consecutive pages and the intended contrast is clearly between them). Body text (section 3.3): the 1848 Frankfurt Parliament's liberal-nationalist initiative — an elected assembly that drafted a constitution for a German nation under a constitutional monarchy — collapsed when the offered king (Friedrich Wilhelm IV of Prussia) rejected the crown and joined other monarchs in opposing the assembly; 'in the end troops were called in and the assembly was forced to disband.'",
+      imageSrc: "/history/fig18-fallen-germania.jpg",
+      imageAlt: "Fig. 18 — The fallen Germania, Julius Hübner, 1850",
     },
     verifyLine: "A real, verified answer describes the fallen Germania and ties it to the real 1848-50 collapse of the Frankfurt Parliament ✓",
   },
@@ -1521,6 +1551,8 @@ const SECTION_5_HISTORY_PROBLEMS: PracticeProblem[] = [
       ],
       groundingNotes:
         "Fig. 10 caption: 'The Frankfurt parliament in the Church of St Paul... Notice the women in the upper left gallery.' Body text: when the Frankfurt parliament convened, 'women were admitted only as observers, to stand in the visitors' gallery,' despite large numbers of women having formed their own political associations, founded newspapers, and taken part in political meetings and demonstrations over the years — the same contradiction discussed via Source C's three writers on women's rights.",
+      imageSrc: "/history/fig10-frankfurt-parliament.jpg",
+      imageAlt: "Fig. 10 — The Frankfurt parliament in the Church of St Paul",
     },
     verifyLine: "A real, verified answer contrasts the deputy's real vote with the observer-only status of women in the gallery ✓",
   },
@@ -1795,7 +1827,7 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "sec-1-2-questions": SECTION_1_2_QUESTIONS_PROBLEMS,
   "sec-1-3-questions": SECTION_1_3_QUESTIONS_PROBLEMS,
   "ch1-sci-exercises": CHAPTER_1_EXERCISES_PROBLEMS,
-  "hist-sec1-questions": SECTION_1_HISTORY_PROBLEMS,
+  "hist-intro-questions": INTRO_HISTORY_PROBLEMS,
   "hist-sec2-questions": SECTION_2_HISTORY_PROBLEMS,
   "hist-sec3-questions": SECTION_3_HISTORY_PROBLEMS,
   "hist-sec4-questions": SECTION_4_HISTORY_PROBLEMS,
@@ -1953,6 +1985,26 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   const [analyticalFeedback, setAnalyticalFeedback] = useState<string | null>(null);
   const [analyticalSubmitting, setAnalyticalSubmitting] = useState(false);
   const [analyticalError, setAnalyticalError] = useState<string | null>(null);
+  // "Ask AI for a model answer" and "write your own answer" are both always
+  // reachable and expand inline, same pattern as procedural's "Ask AI to
+  // solve it"/"Upload your answer" — this was missing entirely on the first
+  // analytical build, which jumped straight to a blank textarea with no
+  // model-answer option at all.
+  const [modelAnswerOpen, setModelAnswerOpen] = useState(false);
+  const [modelAnswer, setModelAnswer] = useState<{ framing: string; answer: string } | null>(null);
+  const [modelAnswerLoading, setModelAnswerLoading] = useState(false);
+  const [modelAnswerError, setModelAnswerError] = useState<string | null>(null);
+  const [writeAnswerOpen, setWriteAnswerOpen] = useState(false);
+  // Three ways to actually give the answer — typing was the only option
+  // before. Record and Upload both end up producing text (a transcript, or
+  // a photo graded directly), submitted through the same grade-text call.
+  const [answerInputMode, setAnswerInputMode] = useState<"text" | "record" | "upload">("text");
+  const [recordingState, setRecordingState] = useState<"idle" | "recording" | "transcribing">("idle");
+  const [recordingError, setRecordingError] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const [analyticalPhotoDataUrl, setAnalyticalPhotoDataUrl] = useState<string | null>(null);
+  const analyticalFileInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const problem = problems[problemIdx];
@@ -1993,6 +2045,14 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setAnalyticalAnswer("");
     setAnalyticalFeedback(null);
     setAnalyticalError(null);
+    setModelAnswerOpen(false);
+    setModelAnswer(null);
+    setModelAnswerError(null);
+    setWriteAnswerOpen(false);
+    setAnswerInputMode("text");
+    setRecordingState("idle");
+    setRecordingError(null);
+    setAnalyticalPhotoDataUrl(null);
   }
 
   // Visual problems: jump to any sub-question at any time (same "always
@@ -2002,14 +2062,15 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
     setVisualAnswer(null);
   }
 
-  // Sends the student's written answer to ai-tutor-server for real
-  // qualitative grading (GPT-4o-mini) against this problem's own real
-  // evaluative criteria. Completion is marked on a genuine attempt, not on
-  // "correctness" — analytical questions have no fixed correct answer
-  // (rule 0), so there's nothing to gate completion on besides having
-  // actually written and submitted a real answer.
+  // Sends the student's answer — typed, transcribed from audio, or a photo
+  // of handwritten work — to ai-tutor-server for real qualitative grading
+  // (GPT-4o-mini) against this problem's own real evaluative criteria.
+  // Completion is marked on a genuine attempt, not on "correctness" —
+  // analytical questions have no fixed correct answer (rule 0), so there's
+  // nothing to gate completion on besides having actually submitted one.
   async function submitAnalytical() {
-    if (!problem.analytical || !analyticalAnswer.trim()) return;
+    if (!problem.analytical) return;
+    if (!analyticalAnswer.trim() && !analyticalPhotoDataUrl) return;
     setAnalyticalSubmitting(true);
     setAnalyticalError(null);
     try {
@@ -2018,7 +2079,8 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           questionText: problem.questionText,
-          studentAnswer: analyticalAnswer,
+          studentAnswer: analyticalPhotoDataUrl ? undefined : analyticalAnswer,
+          imageDataUrl: analyticalPhotoDataUrl ?? undefined,
           criteria: problem.analytical.criteria,
           groundingNotes: problem.analytical.groundingNotes,
         }),
@@ -2026,12 +2088,100 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
       if (!res.ok) throw new Error(`Grading request failed (${res.status})`);
       const data = await res.json();
       setAnalyticalFeedback(data.feedback || null);
+      if (data.transcribedAnswer) setAnalyticalAnswer(data.transcribedAnswer);
       markProblemComplete(problem);
     } catch {
       setAnalyticalError("Couldn't reach the grading service — make sure ai-tutor-server is running (npm run dev in /server).");
     } finally {
       setAnalyticalSubmitting(false);
     }
+  }
+
+  // Model answer: a short framing of what a strong answer needs to cover,
+  // then the actual substantive answer — the main focus, per the real ask
+  // ("major focus would be an actual answer for the question"). Fetched
+  // once per problem and cached in state, not re-fetched on every re-open.
+  async function fetchModelAnswer() {
+    if (!problem.analytical) return;
+    setModelAnswerOpen(true);
+    if (modelAnswer) return;
+    setModelAnswerLoading(true);
+    setModelAnswerError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/model-answer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionText: problem.questionText,
+          criteria: problem.analytical.criteria,
+          groundingNotes: problem.analytical.groundingNotes,
+        }),
+      });
+      if (!res.ok) throw new Error(`Model-answer request failed (${res.status})`);
+      const data = await res.json();
+      setModelAnswer({ framing: data.framing ?? "", answer: data.answer ?? "" });
+    } catch {
+      setModelAnswerError("Couldn't reach the AI tutor — make sure ai-tutor-server is running (npm run dev in /server).");
+    } finally {
+      setModelAnswerLoading(false);
+    }
+  }
+
+  // Voice input: record via the browser's mic, then transcribe through
+  // ai-tutor-server (Whisper) into the same textarea a typed answer would
+  // fill — the grading path downstream never knows the difference.
+  async function startRecording() {
+    setRecordingError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+      recorder.onstop = async () => {
+        stream.getTracks().forEach((track) => track.stop());
+        const blob = new Blob(audioChunksRef.current, { type: recorder.mimeType || "audio/webm" });
+        setRecordingState("transcribing");
+        try {
+          const audioDataUrl = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+          const res = await fetch(`${API_BASE}/api/transcribe-audio`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ audioDataUrl }),
+          });
+          if (!res.ok) throw new Error(`Transcription request failed (${res.status})`);
+          const data = await res.json();
+          setAnalyticalAnswer((prev) => (prev.trim() ? `${prev.trim()} ${data.transcript ?? ""}` : (data.transcript ?? "")));
+          setAnswerInputMode("text");
+        } catch {
+          setRecordingError("Couldn't transcribe that recording — make sure ai-tutor-server is running, or try typing instead.");
+        } finally {
+          setRecordingState("idle");
+        }
+      };
+      mediaRecorderRef.current = recorder;
+      recorder.start();
+      setRecordingState("recording");
+    } catch {
+      setRecordingError("Couldn't access the microphone — check your browser's permission for this site.");
+    }
+  }
+  function stopRecording() {
+    mediaRecorderRef.current?.stop();
+  }
+
+  function handleAnalyticalFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setAnalyticalPhotoDataUrl(reader.result as string);
+    reader.readAsDataURL(file);
   }
 
   function answerVisualQuestion(option: string) {
@@ -2174,6 +2324,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
   // a real answer, and qualitative AI feedback once submitted.
   if (problem.analytical) {
     const criteria = problem.analytical.criteria;
+    const hasDraftAnswer = !!analyticalAnswer.trim() || !!analyticalPhotoDataUrl;
     return (
       <div style={{ height: "100dvh", display: "flex", flexDirection: "column", backgroundColor: "var(--background)", overflow: "hidden" }}>
         <StatusBar />
@@ -2185,30 +2336,189 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
 
           <div style={{ background: "var(--card)", borderRadius: "var(--radius-card)", padding: "12px 15px", marginBottom: 14 }}>
             <span style={{ ...typo.badgeStyle, textTransform: "uppercase", color: "var(--muted-foreground)", display: "block", marginBottom: 5 }}>{problem.label}</span>
-            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{problem.questionText}</p>
+            <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", marginBottom: problem.analytical.imageSrc ? 10 : 0 }}>{problem.questionText}</p>
+            {problem.analytical.imageSrc && (
+              <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid var(--border)" }}>
+                <img src={problem.analytical.imageSrc} alt={problem.analytical.imageAlt} style={{ width: "100%", display: "block" }} />
+              </div>
+            )}
           </div>
 
-          <textarea
-            value={analyticalAnswer}
-            onChange={(e) => setAnalyticalAnswer(e.target.value)}
-            disabled={analyticalSubmitting || !!analyticalFeedback}
-            placeholder="Write your answer here..."
-            style={{
-              width: "100%", minHeight: 140, borderRadius: 12, padding: "12px 14px", marginBottom: 12, resize: "vertical",
-              border: "1px solid var(--border)", background: "var(--card)", color: "var(--foreground)",
-              fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", lineHeight: 1.5,
-            }}
-          />
-
+          {/* Both paths stay visible and tappable at all times, same pattern
+              as the procedural select screen's "Ask AI to solve it" /
+              "Upload your answer" — a real model answer was missing
+              entirely before, which meant the only option was writing your
+              own answer cold. */}
           {!analyticalFeedback && (
+            <div className="flex flex-col" style={{ gap: 10, marginBottom: 14 }}>
+              <button
+                onClick={fetchModelAnswer}
+                className="flex items-center gap-3"
+                style={{ padding: "14px 16px", borderRadius: 12, border: modelAnswerOpen ? "1.5px solid var(--primary)" : "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
+              >
+                <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--warning-950)" }}>
+                  <Sparkles style={{ width: 18, height: 18, color: "var(--warning)" }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Ask AI tutor for a model answer</p>
+                  <p style={typo.metaStyle}>See a real answer, then try your own</p>
+                </div>
+              </button>
+
+              {modelAnswerOpen && (
+                <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
+                  {modelAnswerLoading && <p style={typo.metaStyle}>Writing a model answer…</p>}
+                  {modelAnswerError && (
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
+                      <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{modelAnswerError}</p>
+                    </div>
+                  )}
+                  {modelAnswer && (
+                    <>
+                      <p style={{ ...typo.metaStyle, marginBottom: 8 }}>{modelAnswer.framing}</p>
+                      <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{modelAnswer.answer}</p>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <button
+                onClick={() => setWriteAnswerOpen(!writeAnswerOpen)}
+                className="flex items-center gap-3"
+                style={{ padding: "14px 16px", borderRadius: 12, border: writeAnswerOpen ? "1.5px solid var(--primary)" : "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
+              >
+                <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--primary-950)" }}>
+                  <PenLine style={{ width: 18, height: 18, color: "var(--primary)" }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Write your own answer</p>
+                  <p style={typo.metaStyle}>Type, record, or upload a photo</p>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {writeAnswerOpen && !analyticalFeedback && (
+            <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", marginBottom: 14 }}>
+              {/* Input-method tabs — text/record/upload all end up producing
+                  the same thing (a string of answer text, or a photo graded
+                  directly), submitted through the one grading call. */}
+              <div className="flex" style={{ gap: 6, marginBottom: 12 }}>
+                {([
+                  { key: "text" as const, label: "Type", icon: Type },
+                  { key: "record" as const, label: "Record", icon: Mic },
+                  { key: "upload" as const, label: "Upload", icon: Camera },
+                ]).map(({ key, label, icon: Icon }) => (
+                  <button
+                    key={key}
+                    onClick={() => setAnswerInputMode(key)}
+                    className="flex-1 flex items-center justify-center"
+                    style={{
+                      gap: 6, height: 36, borderRadius: 9, cursor: "pointer",
+                      border: answerInputMode === key ? "1.5px solid var(--primary)" : "1px solid var(--border)",
+                      background: answerInputMode === key ? "color-mix(in srgb, var(--primary) 14%, var(--card))" : "var(--background)",
+                      color: answerInputMode === key ? "var(--primary)" : "var(--foreground)",
+                    }}
+                  >
+                    <Icon style={{ width: 14, height: 14 }} />
+                    <span style={{ fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700 }}>{label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {answerInputMode === "text" && (
+                <textarea
+                  value={analyticalAnswer}
+                  onChange={(e) => setAnalyticalAnswer(e.target.value)}
+                  disabled={analyticalSubmitting || !!analyticalFeedback}
+                  placeholder="Write your answer here..."
+                  style={{
+                    width: "100%", minHeight: 140, borderRadius: 12, padding: "12px 14px", resize: "vertical",
+                    border: "1px solid var(--border)", background: "var(--background)", color: "var(--foreground)",
+                    fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", lineHeight: 1.5,
+                  }}
+                />
+              )}
+
+              {answerInputMode === "record" && (
+                <div className="flex flex-col items-center" style={{ gap: 10, padding: "20px 0" }}>
+                  {recordingState === "idle" && (
+                    <button
+                      onClick={startRecording}
+                      className="flex items-center justify-center"
+                      style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--primary)", border: "none", cursor: "pointer" }}
+                    >
+                      <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
+                    </button>
+                  )}
+                  {recordingState === "recording" && (
+                    <button
+                      onClick={stopRecording}
+                      className="flex items-center justify-center"
+                      style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--error)", border: "none", cursor: "pointer" }}
+                    >
+                      <Square style={{ width: 20, height: 20, color: "var(--white)" }} fill="var(--white)" />
+                    </button>
+                  )}
+                  {recordingState === "transcribing" && (
+                    <div className="flex items-center justify-center" style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--muted-foreground)" }}>
+                      <Mic style={{ width: 22, height: 22, color: "var(--white)" }} />
+                    </div>
+                  )}
+                  <p style={typo.metaStyle}>
+                    {recordingState === "idle" && (analyticalAnswer.trim() ? "Tap to add more" : "Tap to start recording")}
+                    {recordingState === "recording" && "Recording — tap to stop"}
+                    {recordingState === "transcribing" && "Transcribing…"}
+                  </p>
+                  {recordingError && (
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
+                      <p style={{ ...typo.cardBodyStyle, color: "var(--error)" }}>{recordingError}</p>
+                    </div>
+                  )}
+                  {analyticalAnswer.trim() && recordingState === "idle" && (
+                    <div style={{ width: "100%", padding: "10px 12px", borderRadius: 10, background: "var(--background)", border: "1px solid var(--border)" }}>
+                      <p style={{ ...typo.metaStyle, marginBottom: 4 }}>Transcript so far</p>
+                      <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)" }}>{analyticalAnswer}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {answerInputMode === "upload" && (
+                <div className="flex flex-col items-center" style={{ gap: 10, padding: analyticalPhotoDataUrl ? 0 : "20px 0" }}>
+                  {analyticalPhotoDataUrl ? (
+                    <div style={{ width: "100%", borderRadius: 10, overflow: "hidden", border: "1px solid var(--border)" }}>
+                      <img src={analyticalPhotoDataUrl} alt="Uploaded answer" style={{ width: "100%", display: "block" }} />
+                    </div>
+                  ) : (
+                    <>
+                      <Camera style={{ width: 28, height: 28, color: "var(--muted-foreground)" }} />
+                      <p style={typo.metaStyle}>Upload a photo of your handwritten answer</p>
+                    </>
+                  )}
+                  <input ref={analyticalFileInputRef} type="file" accept="image/*" capture="environment" onChange={handleAnalyticalFileChange} style={{ display: "none" }} />
+                  <button
+                    onClick={() => analyticalFileInputRef.current?.click()}
+                    style={{ padding: "8px 14px", borderRadius: 9, border: "1px solid var(--border)", background: "var(--background)", cursor: "pointer", fontFamily: "var(--font-family-inter)", fontSize: 12, fontWeight: 700, color: "var(--foreground)" }}
+                  >
+                    {analyticalPhotoDataUrl ? "Retake photo" : "Take / choose photo"}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {writeAnswerOpen && !analyticalFeedback && (
             <button
               onClick={submitAnalytical}
-              disabled={!analyticalAnswer.trim() || analyticalSubmitting}
+              disabled={!hasDraftAnswer || analyticalSubmitting}
               className="flex items-center justify-center"
               style={{
                 width: "100%", height: 44, borderRadius: 12, border: "none", marginBottom: 12,
-                background: !analyticalAnswer.trim() || analyticalSubmitting ? "var(--muted-foreground)" : "var(--primary)",
-                cursor: !analyticalAnswer.trim() || analyticalSubmitting ? "default" : "pointer",
+                background: !hasDraftAnswer || analyticalSubmitting ? "var(--muted-foreground)" : "var(--primary)",
+                cursor: !hasDraftAnswer || analyticalSubmitting ? "default" : "pointer",
               }}
             >
               <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>
@@ -2225,8 +2535,9 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
           )}
 
           {/* Never a right/wrong badge — qualitative feedback only, per
-              rule 0's Analytical row. Criteria are revealed alongside the
-              feedback (not before answering) as a self-check checklist,
+              rule 0's Analytical row. Feedback itself now names the specific
+              real content that's missing (not just "elaborate more") —
+              criteria are still shown alongside as a self-check checklist,
               not a pre-loaded answer key. */}
           {analyticalFeedback && (
             <div className="flex flex-col" style={{ gap: 12 }}>
@@ -2865,7 +3176,7 @@ const TOPIC_TITLES: Record<string, string> = {
   "sec-1-2-questions": "In-text Questions — 1.2",
   "sec-1-3-questions": "In-text Questions — 1.3",
   "ch1-sci-exercises": "Chapter Exercises",
-  "hist-sec1-questions": "In-text Questions — Section 1",
+  "hist-intro-questions": "In-text Questions — Introduction",
   "hist-sec2-questions": "In-text Questions — Section 2",
   "hist-sec3-questions": "In-text Questions — Section 3",
   "hist-sec4-questions": "In-text Questions — Section 4",

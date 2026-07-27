@@ -154,13 +154,25 @@ const CH1_SCIENCE_SECTIONS: Section[] = [
 // Brief/Discuss sections, each its own standalone topic per rule 3a.
 // Section 6 genuinely has no in-text question topic — confirmed by a direct
 // read of the real chapter, not an oversight (see rule 3b's inventory,
-// documented in ai-tutor-solve.tsx above SECTION_1_HISTORY_PROBLEMS).
+// documented in ai-tutor-solve.tsx above INTRO_HISTORY_PROBLEMS).
+//
+// "Introduction" is a real, separate, unnumbered part of the chapter (the
+// Sorrieu print + Renan's "What is a Nation?" essay), sitting BEFORE the
+// numbered "1 The French Revolution..." heading — an earlier build folded
+// it into Section 1 by mistake. Real Section 1 has no in-text question of
+// its own; it's covered by Write in Brief Q2/Q5 instead (see explain.tsx).
 const CH1_HISTORY_SECTIONS: Section[] = [
+  {
+    label: "Introduction — What Makes a Nation?",
+    topics: [
+      { id: "chapter-introduction", title: "Introduction — what makes a nation?", meta: "Not started · Concept", status: "not-started", explainQuery: "chapter-introduction", kind: "concept" },
+      { id: "hist-intro-questions", title: "In-text Questions — Practice", meta: "Not started · 2 questions", status: "not-started" },
+    ],
+  },
   {
     label: "1 — The French Revolution and the Idea of the Nation",
     topics: [
       { id: "french-revolution-idea-of-nation", title: "The French Revolution & the idea of the nation", meta: "Not started · Concept", status: "not-started", explainQuery: "french-revolution-idea-of-nation", kind: "concept" },
-      { id: "hist-sec1-questions", title: "In-text Questions — Practice", meta: "Not started · 2 questions", status: "not-started" },
     ],
   },
   {
