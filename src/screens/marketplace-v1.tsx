@@ -1202,7 +1202,10 @@ export function Component() {
       },
       {
         sku: "ncert-10-science",
-        accent: "#9254de",
+        // Same accent as Maths — both are the same AI Tutor product, just a
+        // different subject, and having Science suddenly switch to purple
+        // read as two different products rather than one course catalog.
+        accent: "#597ef7",
         title: "Class 10 NCERT Science",
         subtitle: "Science · Full NCERT Syllabus",
         image: null,

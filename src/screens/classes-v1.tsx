@@ -2252,7 +2252,7 @@ export function Component() {
                           ) : (
                             <div
                               className="flex items-center justify-center"
-                              style={{ width: 56, height: 56, borderRadius: 10, flexShrink: 0, background: "linear-gradient(135deg, color-mix(in srgb, #9254de 22%, #0a0612) 0%, color-mix(in srgb, #9254de 45%, #0a0612) 100%)" }}
+                              style={{ width: 56, height: 56, borderRadius: 10, flexShrink: 0, background: "linear-gradient(135deg, color-mix(in srgb, #597ef7 22%, #0a0612) 0%, color-mix(in srgb, #597ef7 45%, #0a0612) 100%)" }}
                             >
                               <Microscope style={{ width: 22, height: 22, color: "rgba(255,255,255,0.85)" }} />
                             </div>
