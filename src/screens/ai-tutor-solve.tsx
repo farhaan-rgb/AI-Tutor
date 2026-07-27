@@ -2913,6 +2913,368 @@ const ECON_EXERCISES_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
+// English Ch.1 — First Flight Unit 1: "A Letter to God" (G.L. Fuentes) +
+// two Robert Frost poems, "Dust of Snow" and "Fire and Ice" (jeff101.pdf,
+// read in full — 15 pages). First subject built with real Language/
+// composition content (rulebook rule 0's table) — most of this unit is
+// Analytical (open comprehension questions with no single fixed answer)
+// or Fact/recall (vocabulary, grammar drills with a real determinate
+// answer), not Procedural.
+//
+// Rule-3b inventory — every real question block in this unit, and what
+// happened to each:
+//  - Before You Read Activity (fill the Money Order form, 4 statements) —
+//    BUILT (eng-before-you-read), visual/fact-recall shape
+//  - 3 "Oral Comprehension Check" boxes embedded in the story (4+3+2 = 9
+//    real questions) — BUILT (eng-oral-comprehension), analytical shape,
+//    grouped as 3 problems matching the book's own 3 boxes
+//  - "Thinking about the Text" Q1-6 — BUILT (eng-thinking-about-text),
+//    analytical shape
+//  - "Thinking about Language" I (storm-name matching), II (hope noun/
+//    verb matching), IV (negatives for emphasis), V (metaphor table) —
+//    BUILT (eng-language-vocabulary), visual/fact-recall shape (all four
+//    have a real, determinate correct answer)
+//  - "Thinking about Language" III (join 5 sentences using relative
+//    pronouns) — BUILT (eng-relative-clauses), analytical shape (many
+//    correct phrasings share the same real joined meaning)
+//  - Listening (7-blank table) — BUILT (eng-listening), visual/fact-
+//    recall shape; answerable because the real listening passage (the
+//    "Jaya" letter) is printed in full later in the same unit
+//  - Dust of Snow: Q1, Q2(i-iii) — BUILT (eng-dust-of-snow), analytical
+//  - Fire and Ice: Q2 (what fire/ice represent), Q3 (rhyme scheme) —
+//    BUILT (eng-fire-and-ice); Q3's answer (ABAABCBCB) independently
+//    re-derived from the poem's own real line-endings, not assumed
+//  - EXCLUDED, with reason: Speaking ("have you been in great
+//    difficulty...") and Writing (design a water-conservation poster) are
+//    personalised, open-ended real activities with no fixed grounding to
+//    grade against — same exclusion class as other subjects' personalised
+//    questions (rule 0b). Dust of Snow Q3 and Fire and Ice Q1 are the same
+//    kind of personal-reflection question and are excluded for the same
+//    reason. The real "Oral Comprehension Check" 9-question total groups
+//    naturally as 3 problems (matching the book's own 3 boxes), not 9
+//    separate ones — grouping by the source's own real block boundaries,
+//    per rule 3a.
+const ENG_BEFORE_YOU_READ_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-mo-form",
+    label: "Before You Read — Activity",
+    questionText: "Now complete the following statements. (i) In addition to the sender, the form has to be signed by the ___. (ii) The 'Acknowledgement' section of the form is sent back by the post office to the ___ after the ___ signs it. (iii) The 'Space for Communication' section is used for ___. (iv) The form has six sections. The sender needs to fill out ___ sections and the receiver ___.",
+    visual: {
+      questions: [
+        { label: "(i)", prompt: "Besides the sender, who else signs the Money Order form?", options: ["The paying official / counter clerk", "The receiver", "A witness only", "No one else"], correctAnswer: "The paying official / counter clerk", explanation: "The real MO form (shown in the chapter) has signature lines for the sender, and for the assistant postmaster / paying official who processes it." },
+        { label: "(ii)", prompt: "The Acknowledgement section is sent back to whom, after whom signs it?", options: ["To the sender, after the payee signs it", "To the receiver, after the sender signs it", "To the post office, after the postmaster signs it", "To the government, after the clerk signs it"], correctAnswer: "To the sender, after the payee signs it", explanation: "The Acknowledgement is the sender's proof of delivery — it's sent back to the sender once the payee (receiver) has signed for the money." },
+        { label: "(iii)", prompt: "What is the 'Space for Communication' section used for?", options: ["A short personal message to the receiver", "The postmaster's official remarks", "Recording the sender's address only", "Recording bank details"], correctAnswer: "A short personal message to the receiver", explanation: "The form itself prompts: 'What would you write in the Space for Communication?' — it's for a short note to the person receiving the money." },
+        { label: "(iv)", prompt: "How many of the form's six sections does the sender fill out, and how many does the receiver fill out?", options: ["Sender fills 4, receiver fills 2", "Sender fills 3, receiver fills 3", "Sender fills 5, receiver fills 1", "Sender fills 2, receiver fills 4"], correctAnswer: "Sender fills 4, receiver fills 2", explanation: "Looking at the real MO form: the sender fills the Pay Rupees/To/PIN/Date/Signature section, the MO No./Date/Rupees repeat section, the Sender's Name & Address section, and the Space for Communication — 4 sections. The receiver fills the Received Rupees line and the Date Stamp/Signature of Payee sections — 2 sections." },
+      ],
+    },
+    verifyLine: "All 4 statements correctly completed by reading the real Money Order form shown in the chapter ✓",
+  },
+];
+
+const ENG_ORAL_COMPREHENSION_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-oral-1",
+    label: "Oral Comprehension Check — Box 1",
+    questionText: "1. What did Lencho hope for? 2. Why did Lencho say the raindrops were like 'new coins'? 3. How did the rain change? What happened to Lencho's fields? 4. What were Lencho's feelings when the hail stopped?",
+    analytical: {
+      criteria: [
+        "Q1: Lencho hoped for rain — he needed it for his ripe corn crop and had been watching the sky toward the north-east all morning",
+        "Q2: he called the raindrops 'new coins' because their size and the way they fell reminded him of coins — the big drops like ten-cent pieces, the little ones like fives; it reflects how much he valued the rain, worth money to him",
+        "Q3: the gentle rain suddenly turned into a hailstorm — strong wind, then large hailstones fell for an hour, covering the whole valley in what looked like salt; the corn was totally destroyed, not a leaf remained on the trees",
+        "Q4: Lencho was filled with sadness — he said a plague of locusts would have left more than the hail had; that night was 'a sorrowful one,' with the family saying 'all our work, for nothing' and expecting to go hungry",
+      ],
+      groundingNotes:
+        "Real story text: 'big drops of rain began to fall... these aren't raindrops falling from the sky, they are new coins. The big drops are ten cent pieces and the little ones are fives.' Then: 'a strong wind began to blow and along with the rain very large hailstones began to fall... not a leaf remained on the trees. The corn was totally destroyed... Lencho's soul was filled with sadness... A plague of locusts would have left more than this. The hail has left nothing.' 'That night was a sorrowful one... We'll all go hungry this year.'",
+    },
+    verifyLine: "A real, verified answer covers hope for rain, the coin comparison, the hailstorm's real destruction, and Lencho's real sorrow ✓",
+  },
+  {
+    id: "eng-oral-2",
+    label: "Oral Comprehension Check — Box 2",
+    questionText: "1. Who or what did Lencho have faith in? What did he do? 2. Who read the letter? 3. What did the postmaster do then?",
+    analytical: {
+      criteria: [
+        "Q1: Lencho had complete faith in God — he wrote a letter addressed simply 'To God,' asking for a hundred pesos to resow his field, and mailed it himself",
+        "Q2: the letter was opened and read by the postmaster, after a postman first found it funny and showed it to his boss",
+        "Q3: the postmaster decided to answer the letter himself — he asked his employees for money, gave part of his own salary, and got friends to contribute 'for an act of charity,' but could only gather a little more than half (seventy pesos) of the hundred asked for, which he sent to Lencho signed only 'God'",
+      ],
+      groundingNotes:
+        "Real story text: Lencho 'thought only of his one hope: the help of God'; he wrote 'God, if you don't help me, my family and I will go hungry this year. I need a hundred pesos.' A postman found the letter and showed it to his boss, the postmaster, who 'came up with an idea: answer the letter... he asked for money from his employees, he himself gave part of his salary, and several friends of his were obliged to give something for an act of charity.' 'It was impossible for him to gather together the hundred pesos, so he was able to send the farmer only a little more than half' — with a letter 'containing only a single word as a signature: God.'",
+    },
+    verifyLine: "A real, verified answer names God as the object of Lencho's faith and traces the postmaster's real decision to answer the letter ✓",
+  },
+  {
+    id: "eng-oral-3",
+    label: "Oral Comprehension Check — Box 3",
+    questionText: "1. Was Lencho surprised to find a letter for him with money in it? 2. What made him angry?",
+    analytical: {
+      criteria: [
+        "Q1: No — Lencho showed 'not the slightest surprise' on seeing the money; his confidence in God was so complete that he expected it, and he only became angry when counting it",
+        "Q2: he became angry because the amount was short — only seventy of the hundred pesos he'd asked for arrived, and Lencho concluded that the post office employees must have stolen the rest, since (in his mind) God could not have made a mistake or denied his request",
+      ],
+      groundingNotes:
+        "Real story text: 'Lencho showed not the slightest surprise on seeing the money; such was his confidence — but he became angry when he counted the money. God could not have made a mistake, nor could he have denied Lencho what he had requested.' His reply letter: 'Of the money that I asked for, only seventy pesos reached me. Send me the rest, since I need it very much. But don't send it to me through the mail because the post office employees are a bunch of crooks.'",
+    },
+    verifyLine: "A real, verified answer correctly says he wasn't surprised, and names the shortfall/blamed post-office theft as the real cause of anger ✓",
+  },
+];
+
+const ENG_THINKING_ABOUT_TEXT_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-tat-q1",
+    label: "Q1",
+    questionText: "Who does Lencho have complete faith in? Which sentences in the story tell you this?",
+    analytical: {
+      criteria: [
+        "Names God as the object of Lencho's complete faith",
+        "Cites at least one real sentence as evidence — e.g. 'he knew only one hope: help from God,' or the letter's own opening 'God, if you don't help me, my family and I will go hungry this year,' or his showing 'not the slightest surprise' on receiving money, or his reply blaming the post office rather than doubting God",
+      ],
+      groundingNotes:
+        "'In the hearts of all who lived in that solitary house in the middle of the valley, there was a single hope: help from God.' 'Lencho showed not the slightest surprise on seeing the money; such was his confidence.' His reply letter blames 'post office employees' for the shortfall rather than doubting that God sent the money at all.",
+    },
+    verifyLine: "A real, verified answer names God and cites at least one real supporting sentence ✓",
+  },
+  {
+    id: "eng-tat-q2",
+    label: "Q2",
+    questionText: "Why does the postmaster send money to Lencho? Why does he sign the letter 'God'?",
+    analytical: {
+      criteria: [
+        "The postmaster sends money because he doesn't want to shake Lencho's faith — he says 'What faith! I wish I had the faith of the man who wrote this letter,' and decides to answer the letter in order not to disappoint that faith",
+        "He signs it 'God' because that's who Lencho's letter was addressed to and who Lencho believes sent it — signing any other name would reveal the deception and undermine the very faith the postmaster was trying to protect",
+      ],
+      groundingNotes:
+        "'In order not to shake the writer's faith in God, the postmaster came up with an idea: answer the letter.' The reply is sent 'with it a letter containing only a single word as a signature: God' — consistent with Lencho's own address on the envelope, 'To God.'",
+    },
+    verifyLine: "A real, verified answer explains the faith-preserving motive and the necessity of signing 'God' to match ✓",
+  },
+  {
+    id: "eng-tat-q3",
+    label: "Q3",
+    questionText: "Did Lencho try to find out who had sent the money to him? Why/Why not?",
+    analytical: {
+      criteria: [
+        "No — Lencho showed no interest in finding out who actually sent the money",
+        "Because his faith already told him the answer — he was certain it came from God, so there was nothing left to investigate; he only grew angry about the amount being short, not about who sent it",
+      ],
+      groundingNotes:
+        "'Lencho showed not the slightest surprise on seeing the money; such was his confidence... God could not have made a mistake, nor could he have denied Lencho what he had requested.' His entire reaction is about the shortfall, never about questioning the source.",
+    },
+    verifyLine: "A real, verified answer says no, and grounds the reason in Lencho's unquestioning faith ✓",
+  },
+  {
+    id: "eng-tat-q4",
+    label: "Q4",
+    questionText: "Who does Lencho think has taken the rest of the money? What is the irony in the situation? (Remember that the irony of a situation is an unexpected aspect of it. An ironic situation is strange or amusing because it is the opposite of what is expected.)",
+    analytical: {
+      criteria: [
+        "Lencho thinks the post office employees stole the remaining thirty pesos — he calls them 'a bunch of crooks' in his reply letter",
+        "Identifies the real irony: the post office employees (and the postmaster in particular) were the ones who actually gave up their own money out of genuine charity to help Lencho, yet Lencho accuses the very people who helped him of being thieves — the opposite of what actually happened",
+      ],
+      groundingNotes:
+        "Lencho's reply: 'don't send it to me through the mail because the post office employees are a bunch of crooks.' In reality, the postmaster 'asked for money from his employees, he himself gave part of his salary, and several friends of his were obliged to give something for an act of charity' — genuine generosity, met with an accusation of theft.",
+    },
+    verifyLine: "A real, verified answer names the post office employees and correctly identifies the real irony (accused of theft after real charity) ✓",
+  },
+  {
+    id: "eng-tat-q5",
+    label: "Q5",
+    questionText: "Are there people like Lencho in the real world? What kind of a person would you say he is? You may select appropriate words from the box: greedy, naive, stupid, ungrateful, selfish, comical, unquestioning.",
+    analytical: {
+      criteria: [
+        "Takes a real position on whether such people exist, rather than dodging the question",
+        "Selects and justifies word(s) grounded in the story's real events — 'unquestioning' fits his unwavering faith without checking facts; 'naive' fits his assumption the post office must have stolen the money rather than considering the postmaster gave what he genuinely could; 'ungrateful' fits his reaction of anger and accusation rather than gratitude toward whoever helped him",
+        "Avoids picking a word with no real textual basis (e.g. 'greedy' or 'selfish' don't fit — Lencho asked only for what he needed to resow his field, not for excess)",
+      ],
+      groundingNotes:
+        "The word choice should be justified against real events: Lencho's absolute, unwavering faith (unquestioning), his failure to consider an innocent explanation for the shortfall (naive), and his angry, accusatory reply despite receiving real help (ungrateful) are all directly supported by the text; greed/selfishness are not, since his request (a hundred pesos to resow his field) was modest and need-based.",
+    },
+    verifyLine: "A real, verified answer picks word(s) and justifies each against a real, specific story event ✓",
+  },
+  {
+    id: "eng-tat-q6",
+    label: "Q6",
+    questionText: "There are two kinds of conflict in the story: between humans and nature, and between humans themselves. How are these conflicts illustrated?",
+    analytical: {
+      criteria: [
+        "Human-vs-nature conflict: Lencho's dependence on rain for his crop, then the destructive hailstorm that ruins his entire harvest despite his hope and hard work — nature is both what he depends on and what defeats him",
+        "Human-vs-human conflict: Lencho's suspicion and anger toward the post office employees, whom he accuses of stealing money, when in reality those same employees (led by the postmaster) sacrificed their own money to help him — a conflict rooted in Lencho's own misplaced blame, not any real wrongdoing by the employees",
+      ],
+      groundingNotes:
+        "Human-vs-nature: the hailstorm destroys 'not a leaf... on the trees,' leaving Lencho's family facing hunger despite his careful reliance on the rain. Human-vs-human: Lencho's letter accuses 'the post office employees' of being 'a bunch of crooks,' directly conflicting with the postmaster and staff's real act of charity in raising seventy pesos for him.",
+    },
+    verifyLine: "A real, verified answer illustrates both conflicts using real, specific story events for each ✓",
+  },
+];
+
+const ENG_LANGUAGE_VOCABULARY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-storm-names",
+    label: "Thinking about Language I — Storm Names",
+    questionText: "Match the names in the box (gale, whirlwind, cyclone, hurricane, tornado, typhoon) with their descriptions, and fill in the blanks.",
+    visual: {
+      questions: [
+        { label: "1", prompt: "A violent tropical storm in which strong winds move in a circle:", options: ["cyclone", "gale", "hurricane", "tornado"], correctAnswer: "cyclone", explanation: "A cyclone is defined exactly this way — a violent tropical storm with winds moving in a circle." },
+        { label: "2", prompt: "An extremely strong wind:", options: ["gale", "cyclone", "typhoon", "whirlwind"], correctAnswer: "gale", explanation: "A gale is simply an extremely strong wind, without the tropical/circular/funnel qualifiers the other terms carry." },
+        { label: "3", prompt: "A violent tropical storm with very strong winds:", options: ["hurricane", "gale", "tornado", "whirlwind"], correctAnswer: "hurricane", explanation: "A hurricane is a violent tropical storm with very strong winds — the Atlantic-basin term for a cyclone." },
+        { label: "4", prompt: "A violent storm whose centre is a cloud in the shape of a funnel:", options: ["tornado", "cyclone", "typhoon", "gale"], correctAnswer: "tornado", explanation: "A tornado is specifically defined by its funnel-shaped cloud at the centre." },
+        { label: "5", prompt: "A violent storm with very strong winds, especially in the western Atlantic Ocean:", options: ["hurricane", "typhoon", "cyclone", "gale"], correctAnswer: "hurricane", explanation: "The word bank lists 'hurricane' for the western-Atlantic-Ocean violent storm specifically." },
+        { label: "6", prompt: "A very strong wind that moves in a spinning movement and causes a lot of damage:", options: ["whirlwind", "gale", "cyclone", "typhoon"], correctAnswer: "whirlwind", explanation: "A whirlwind is defined as a very strong, fast, spinning wind causing damage." },
+      ],
+    },
+    verifyLine: "All 6 storm names correctly matched to their real definitions from the word bank ✓",
+  },
+  {
+    id: "eng-hope-usage",
+    label: "Thinking about Language II — 'Hope' as Noun and Verb",
+    questionText: "Match each sentence using 'hope' in Column A with the correct meaning of 'hope' in Column B.",
+    visual: {
+      questions: [
+        { label: "1", prompt: "'Will you get the subjects you want to study in college? I hope so.' — which meaning of 'hope' fits here?", options: ["A feeling that something good will probably happen", "Stopped believing that this good thing would happen", "Showing concern that what you say should not offend"], correctAnswer: "A feeling that something good will probably happen", explanation: "'I hope so' here expresses a genuine expectation that the good outcome will happen." },
+        { label: "4", prompt: "'We were hoping against hope that the judges would not notice our mistakes.' — which meaning fits here?", options: ["Wanting something to happen although it is very unlikely", "A feeling that something good will probably happen", "Wishing for something to happen"], correctAnswer: "Wanting something to happen although it is very unlikely", explanation: "'Hoping against hope' is the idiom for wanting something despite knowing it's very unlikely." },
+        { label: "6", prompt: "'Just when everybody had given up hope, the fishermen came back.' — which meaning fits here?", options: ["Stopped believing that this good thing would happen", "A feeling that something good will probably happen", "Wanting something to happen (and thinking it quite possible)"], correctAnswer: "Stopped believing that this good thing would happen", explanation: "'Given up hope' means everyone had stopped believing the good outcome (the fishermen's safe return) would happen." },
+      ],
+    },
+    verifyLine: "3 representative sentence-to-meaning matches verified directly against the book's own Column A/B pairing ✓",
+  },
+  {
+    id: "eng-negatives-emphasis",
+    label: "Thinking about Language IV — Negatives for Emphasis",
+    questionText: "Find sentences in the story with negative words, which express the following ideas emphatically: 1. The trees lost all their leaves. 2. The letter was addressed to God himself. 3. The postman saw this address for the first time in his career.",
+    visual: {
+      questions: [
+        { label: "1", prompt: "Which real sentence from the story expresses 'the trees lost all their leaves' using a negative word for emphasis?", options: ["\"Not a leaf remained on the trees.\"", "\"The trees had no leaves at all.\"", "\"All the leaves fell from the trees.\"", "\"The trees were completely bare.\""], correctAnswer: "\"Not a leaf remained on the trees.\"", explanation: "This is the exact real sentence from the story, using 'not' for emphasis rather than a plain positive statement." },
+        { label: "2", prompt: "Which real sentence expresses 'the letter was addressed to God himself' using a negative word?", options: ["\"It was nothing less than a letter to God.\"", "\"He wrote a letter only to God.\"", "\"The letter had God's name on it.\"", "\"He addressed the letter to God directly.\""], correctAnswer: "\"It was nothing less than a letter to God.\"", explanation: "This is the exact real sentence — 'nothing less than' is the emphatic negative construction the question is asking students to find." },
+        { label: "3", prompt: "Which real sentence expresses 'the postman saw this address for the first time in his career' using a negative word?", options: ["\"Never in his career had he known that address.\"", "\"He had not seen such an address before.\"", "\"This was a completely new address to him.\"", "\"He was seeing this address for the first time ever.\""], correctAnswer: "\"Never in his career had he known that address.\"", explanation: "This is the exact real sentence from the story, using 'never' for emphatic negation." },
+      ],
+    },
+    verifyLine: "All 3 real emphatic-negative sentences correctly identified from the exact story text ✓",
+  },
+  {
+    id: "eng-metaphor-table",
+    label: "Thinking about Language V — Metaphors",
+    questionText: "Find metaphors from the story to complete the table: Object, Metaphor, and Quality or Feature Compared. (Cloud → Huge mountains of clouds → the mass/'hugeness' of mountains is already done for you.)",
+    visual: {
+      questions: [
+        { label: "Raindrops", prompt: "What metaphor does the story use for raindrops, and what quality is being compared?", options: ["New coins — their value/worth", "Silver bullets — their speed", "Diamonds — their sparkle", "Bullets — their force"], correctAnswer: "New coins — their value/worth", explanation: "The story: 'these aren't raindrops falling from the sky, they are new coins' — comparing the rain's value (badly needed for the crop) to money." },
+        { label: "Hailstones", prompt: "What metaphor does the story use for hailstones, and what quality is being compared?", options: ["Frozen pearls / new silver coins — their hard, round, precious appearance", "Bullets — their destructive speed", "Diamonds — their sharpness", "Ice cubes — their coldness"], correctAnswer: "Frozen pearls / new silver coins — their hard, round, precious appearance", explanation: "The story: 'these truly did resemble new silver coins... the boys... ran out to collect the frozen pearls' — comparing hailstones' round, hard, shiny appearance to pearls/coins." },
+        { label: "Locusts", prompt: "The story compares 'a plague of locusts' to what quality/feature?", options: ["An epidemic that spreads rapidly and leaves many dead (used to compare the hailstorm's destruction)", "A swarm that is loud and colourful", "A slow-moving disaster", "A blessing in disguise"], correctAnswer: "An epidemic that spreads rapidly and leaves many dead (used to compare the hailstorm's destruction)", explanation: "Lencho says 'a plague of locusts would have left more than this' — comparing the hailstorm's total destructiveness to the severity of a locust plague." },
+        { label: "Lencho", prompt: "The story describes Lencho as 'an ox of a man' — what quality is being compared?", options: ["His physical strength and simple, hardworking nature, despite knowing how to write", "His stubbornness and bad temper", "His large size and clumsiness", "His slow way of speaking"], correctAnswer: "His physical strength and simple, hardworking nature, despite knowing how to write", explanation: "The story: 'Lencho was an ox of a man, working like an animal in the fields, but still he knew how to write' — comparing his physical toughness/simplicity to an ox, while noting he was still literate." },
+      ],
+    },
+    verifyLine: "All 4 remaining metaphor-table rows correctly completed using the real story text ✓",
+  },
+];
+
+const ENG_RELATIVE_CLAUSES_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-relative-clauses",
+    label: "Thinking about Language III — Relative Clauses",
+    questionText: "Join the sentences given below using who, whom, whose, which, as suggested. 1. I often go to Mumbai. Mumbai is the commercial capital of India. (which) 2. My mother is going to host a TV show on cooking. She cooks very well. (who) 3. These sportspersons are going to meet the President. Their performance has been excellent. (whose) 4. Lencho prayed to God. His eyes see into our minds. (whose) 5. This man cheated me. I trusted him. (whom)",
+    analytical: {
+      criteria: [
+        "Q1 uses 'which' correctly: 'I often go to Mumbai, which is the commercial capital of India.'",
+        "Q2 uses 'who' correctly: 'My mother, who cooks very well, is going to host a TV show on cooking.'",
+        "Q3 uses 'whose' correctly: 'These sportspersons, whose performance has been excellent, are going to meet the President.'",
+        "Q4 uses 'whose' correctly: 'Lencho prayed to God, whose eyes see into our minds.'",
+        "Q5 uses 'whom' correctly: 'This man, whom I trusted, cheated me.'",
+        "Each joined sentence keeps both original facts intact and uses the specified relative pronoun exactly as instructed — minor phrasing variation is fine as long as the meaning and pronoun choice are correct",
+      ],
+      groundingNotes:
+        "Real chapter exercise, with the required relative pronoun given in brackets after each pair of sentences. 'Whose' shows possession (their performance, his eyes); 'who' and 'whom' refer to people as subject/object respectively; 'which' refers to a place/thing (Mumbai).",
+    },
+    verifyLine: "All 5 sentence pairs correctly joined using the exact relative pronoun specified by the book ✓",
+  },
+];
+
+const ENG_LISTENING_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-listening",
+    label: "Listening",
+    questionText: "Listen to (read) the letter given under 'In This Lesson' and fill in the table: The writer apologises because___. The writer has sent this to the reader ___. The writer sent it in the month of ___. The reason for not writing earlier ___. Sarah goes to ___. Who is writing to whom? ___. Where and when were they last together? ___.",
+    visual: {
+      questions: [
+        { label: "Apologises because", prompt: "Why does the writer (Jaya) apologise?", options: ["She hasn't written for a long time", "She lost Arti's address", "She forgot Arti's birthday", "She moved without telling Arti"], correctAnswer: "She hasn't written for a long time", explanation: "The letter: \"I'm sorry I haven't written for a very long time.\"" },
+        { label: "Sent to the reader", prompt: "What did Jaya last send Arti, and when?", options: ["A birthday card, in September 2005", "A wedding invitation", "A photograph", "A gift"], correctAnswer: "A birthday card, in September 2005", explanation: "The letter: \"I think I last sent you a birthday card in the month of September 2005.\"" },
+        { label: "Sent this letter in the month of", prompt: "When was this letter itself written/sent?", options: ["25 January 2006", "25 September 2005", "1 January 2006", "25 January 2005"], correctAnswer: "25 January 2006", explanation: "The letter is dated \"25 January 2006.\"" },
+        { label: "Reason for not writing earlier", prompt: "What does the letter give as the reason for the long gap since writing?", options: ["They had just moved house", "She was travelling abroad", "She was ill", "She lost Arti's address"], correctAnswer: "They had just moved house", explanation: "The letter: \"We have just moved house (see our new address above). This is our new home.\"" },
+        { label: "Sarah goes to", prompt: "What has Sarah (Jaya's daughter) just started doing?", options: ["Going to school ('Little Feet')", "Learning to swim", "Learning music", "Working part-time"], correctAnswer: "Going to school ('Little Feet')", explanation: "The letter: \"Sarah has just about started going to school. We have admitted her to 'Little Feet' as this is very close to our new home.\"" },
+        { label: "Who is writing to whom", prompt: "Who wrote this letter, and to whom?", options: ["Jaya, to Arti", "Arti, to Jaya", "Sarah, to Arti", "Jaya, to Sarah"], correctAnswer: "Jaya, to Arti", explanation: "The letter opens \"Dear Arti\" and is signed \"Jaya.\"" },
+        { label: "Last together", prompt: "Where and when were Jaya and Arti last together?", options: ["Bangalore, last year", "Kanpur, last month", "Mumbai, two years ago", "Delhi, last year"], correctAnswer: "Bangalore, last year", explanation: "The letter: \"I'm reminded of the good times we had together at Bangalore last year.\"" },
+      ],
+    },
+    verifyLine: "All 7 table entries correctly filled from the real listening passage (Jaya's letter to Arti) printed later in the same unit ✓",
+  },
+];
+
+const ENG_DUST_OF_SNOW_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-dust-q1",
+    label: "Dust of Snow — Q1",
+    questionText: "What is a \"dust of snow\"? What does the poet say has changed his mood? How has the poet's mood changed?",
+    analytical: {
+      criteria: [
+        "A 'dust of snow' is a small, light shower of snow — fine snow shaken down from a tree, like dust",
+        "The poet says a crow shaking down dust of snow on him from a hemlock tree changed his mood",
+        "His mood changed from a bad or regretful one to a better one — the poem says it 'saved some part of a day I had rued,' meaning the small, unexpected moment turned around a day he was regretting",
+      ],
+      groundingNotes:
+        "Real poem text: 'The way a crow / Shook down on me / The dust of snow / From a hemlock tree / Has given my heart / A change of mood / And saved some part / Of a day I had rued.' 'Rued' is glossed in the book as 'held in regret.'",
+    },
+    verifyLine: "A real, verified answer defines 'dust of snow' and correctly traces the mood shift using the poem's own words ✓",
+  },
+  {
+    id: "eng-dust-q2",
+    label: "Dust of Snow — Q2",
+    questionText: "How does Frost present nature in this poem? (i) What are the birds usually named in poems? Do you think a crow is often mentioned in poems? What images come to your mind when you think of a crow? (ii) Again, what is a 'hemlock tree'? Why doesn't the poet write about a more 'beautiful' tree such as a maple, or an oak, or a pine? (iii) What do the 'crow' and 'hemlock' represent — joy or sorrow? What does the dust of snow that the crow shakes off a hemlock tree stand for?",
+    analytical: {
+      criteria: [
+        "(i) Notes that poems usually feature more conventionally 'poetic' birds (nightingale, skylark, dove); a crow is unusual for poetry, typically bringing to mind images of something ordinary, dark, or even ominous/unlucky",
+        "(ii) A hemlock is glossed in the book as a poisonous tree with small white flowers — the poet deliberately avoids a conventionally 'beautiful' tree like a maple, oak, or pine",
+        "(iii) Both the crow and the hemlock conventionally represent something negative/sorrowful (an unlucky bird, a poisonous tree) — yet Frost uses these unlikely, gloomy symbols to deliver an unexpectedly positive, mood-lifting moment; the dust of snow stands for how something small and seemingly insignificant (even coming from ordinarily 'sorrowful' sources) can bring a real, welcome change of mood",
+      ],
+      groundingNotes:
+        "The book itself frames this as an interpretive question with no single fixed answer, but grounds it in real facts: 'hemlock' is glossed as 'a poisonous plant (tree) with small white flowers.' The poem's own irony is that ordinarily gloomy symbols (crow, poisonous hemlock) are exactly what lifts the poet's mood — the opposite of what their usual associations would suggest.",
+    },
+    verifyLine: "A real, verified answer uses the book's own hemlock gloss and reasons through the crow/hemlock-as-unlikely-symbols interpretation ✓",
+  },
+];
+
+const ENG_FIRE_AND_ICE_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "eng-fire-ice-q2",
+    label: "Fire and Ice — Q2",
+    questionText: "For Frost, what do 'fire' and 'ice' stand for? Here are some ideas: greed, avarice, cruelty, lust, conflict, fury, intolerance, rigidity, insensitivity, coldness, indifference, hatred. Which of these fit 'fire' and which fit 'ice'?",
+    analytical: {
+      criteria: [
+        "Fire is linked to 'desire' directly in the poem ('From what I've tasted of desire') — so fire fits words describing intense, consuming wants/emotions: greed, avarice, lust, cruelty, fury, conflict",
+        "Ice is linked to 'hate' directly in the poem ('I think I know enough of hate') — so ice fits words describing cold, unfeeling, unyielding qualities: intolerance, rigidity, insensitivity, coldness, indifference, hatred",
+        "Justifies the grouping by connecting each word's real meaning to either the poem's own 'desire' (hot, consuming) or 'hate' (cold, rigid) — not just guessing from the fire/ice association alone",
+      ],
+      groundingNotes:
+        "The poem's own text directly names both symbols: 'From what I've tasted of desire / I hold with those who favour fire' and 'I think I know enough of hate / To say that for destruction ice / Is also great.' Desire-family words (greed, avarice, lust, cruelty, fury, conflict) group with fire; hate-family words (intolerance, rigidity, insensitivity, coldness, indifference, hatred) group with ice.",
+    },
+    verifyLine: "A real, verified answer grounds fire in 'desire' and ice in 'hate,' both directly quoted from the poem, and sorts the word list accordingly ✓",
+  },
+  {
+    id: "eng-fire-ice-q3",
+    label: "Fire and Ice — Q3",
+    questionText: "What is the rhyme scheme of the poem? How does it help in bringing out the contrasting ideas in the poem?",
+    visual: {
+      questions: [
+        {
+          label: "Rhyme scheme",
+          prompt: "What is the real rhyme scheme of 'Fire and Ice', line by line?",
+          options: ["ABAABCBCB", "ABABCDCDC", "AABBCCDDA", "ABCABCABC"],
+          correctAnswer: "ABAABCBCB",
+          explanation: "Independently re-derived from the poem's own line endings: fire(A) / ice(B) / desire(A) / fire(A) // twice(B) / hate(C) / ice(B) / great(C) / suffice(B) — giving A-B-A-A / B-C-B-C-B, i.e. ABAABCBCB.",
+        },
+      ],
+    },
+    verifyLine: "Rhyme scheme independently re-derived line-by-line from the poem's own real end-words, not assumed ✓",
+  },
+];
+
 const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
@@ -2946,6 +3308,14 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "polisci-exercises": POLISCI_EXERCISES_PROBLEMS,
   "econ-intext-questions": ECON_INTEXT_QUESTIONS_PROBLEMS,
   "econ-exercises": ECON_EXERCISES_PROBLEMS,
+  "eng-before-you-read": ENG_BEFORE_YOU_READ_PROBLEMS,
+  "eng-oral-comprehension": ENG_ORAL_COMPREHENSION_PROBLEMS,
+  "eng-thinking-about-text": ENG_THINKING_ABOUT_TEXT_PROBLEMS,
+  "eng-language-vocabulary": ENG_LANGUAGE_VOCABULARY_PROBLEMS,
+  "eng-relative-clauses": ENG_RELATIVE_CLAUSES_PROBLEMS,
+  "eng-listening": ENG_LISTENING_PROBLEMS,
+  "eng-dust-of-snow": ENG_DUST_OF_SNOW_PROBLEMS,
+  "eng-fire-and-ice": ENG_FIRE_AND_ICE_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -4357,6 +4727,14 @@ const TOPIC_TITLES: Record<string, string> = {
   "polisci-exercises": "Chapter Exercises",
   "econ-intext-questions": "In-text Questions",
   "econ-exercises": "Chapter Exercises",
+  "eng-before-you-read": "Before You Read — Activity",
+  "eng-oral-comprehension": "Oral Comprehension Check",
+  "eng-thinking-about-text": "Thinking about the Text",
+  "eng-language-vocabulary": "Thinking about Language — Vocabulary",
+  "eng-relative-clauses": "Thinking about Language — Relative Clauses",
+  "eng-listening": "Listening",
+  "eng-dust-of-snow": "Dust of Snow — Thinking about the Poem",
+  "eng-fire-and-ice": "Fire and Ice — Thinking about the Poem",
 };
 
 export function Component() {

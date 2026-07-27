@@ -147,7 +147,7 @@ export const DUMMY_CRASH_COURSE_PROGRESS: Record<number, Record<CrashCourseSubje
 
 export type CrashStreamId = "pcm" | "pcb" | "maths";
 export type CrashClassLevel = 10 | 11 | 12;
-export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history" | "geography" | "political-science" | "economics";
+export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history" | "geography" | "political-science" | "economics" | "english";
 
 export interface CrashCourse1112Subject {
   id: CrashCourse1112SubjectId;
@@ -188,6 +188,7 @@ const SUBJ_ACCENT = {
   geography: { accent: "#a0d911", gradientBg: "linear-gradient(135deg, #131a02 0%, #253405 55%, #40590a 100%)" }, // AntD lime-6
   "political-science": { accent: "#fa541c", gradientBg: "linear-gradient(135deg, #1f0b02 0%, #3d1505 55%, #6d240a 100%)" }, // AntD volcano-6
   economics: { accent: "#eb2f96", gradientBg: "linear-gradient(135deg, #1f0517 0%, #3d0a2c 55%, #6d134e 100%)" }, // AntD magenta-6
+  english: { accent: "#1890ff", gradientBg: "linear-gradient(135deg, #02101f 0%, #05203d 55%, #0a3d6d 100%)" }, // AntD blue-6
 } as const;
 
 // NCERT chapter lists — current syllabus, post-2024 rationalization.
@@ -318,6 +319,39 @@ const CHAPTERS_10_ECONOMICS = [
   "Money and Credit",
   "Globalisation and the Indian Economy",
   "Consumer Rights",
+];
+// NCERT Class 10 English — two real, separate prescribed books studied as
+// one subject: "First Flight" (main reader, 9 real units — each pairing a
+// prose piece with 1-2 poems) and "Footprints without Feet" (supplementary
+// reader, 9 real short stories). Verified against jeff101-109.pdf and
+// jefp101-109.pdf (downloaded and checked directly). Real, current syllabus
+// — note "The Hundred Dresses I/II" is NOT in this list despite being widely
+// remembered as part of First Flight; it was dropped in NCERT's post-2020
+// syllabus rationalisation and this current (2026-27 reprint) PDF set
+// confirms only 9 real units remain, not the 11 an older memory would
+// suggest. Chapter 1 here means First Flight's Unit 1; Footprints' 9
+// stories are appended after First Flight's 9, not interleaved, matching
+// how the two books are physically separate and typically taught in that
+// order.
+const CHAPTERS_10_ENGLISH = [
+  "A Letter to God",
+  "Nelson Mandela: Long Walk to Freedom",
+  "Two Stories about Flying",
+  "From the Diary of Anne Frank",
+  "Glimpses of India",
+  "Mijbil the Otter",
+  "Madam Rides the Bus",
+  "The Sermon at Benares",
+  "The Proposal",
+  "A Triumph of Surgery",
+  "The Thief's Story",
+  "The Midnight Visitor",
+  "A Question of Trust",
+  "Footprints without Feet",
+  "The Making of a Scientist",
+  "The Necklace",
+  "Bholi",
+  "The Book That Saved the Earth",
 ];
 const CHAPTERS_11_MATH = [
   "Sets",
@@ -526,6 +560,29 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
       mkSubject("economics", "Economics", "ECO", CHAPTERS_10_ECONOMICS),
     ],
   },
+  // Seventh AI-tutor demo course — first genuinely non-Social-Science,
+  // non-Maths/Science subject: two real prescribed books (First Flight +
+  // Footprints without Feet) studied as one "English" subject, unlike
+  // Social Science's four separately-enrolled books. Also the first
+  // subject built with real Language/composition content (rulebook rule
+  // 0's table) rather than Procedural/Analytical.
+  "ncert-10-english": {
+    sku: "ncert-10-english",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "English",
+    examTarget: "CBSE Class 10 Boards",
+    title: "X English NCERT",
+    subtitleShort: "English · First Flight + Footprints without Feet",
+    description: "Class 10 NCERT English — First Flight (prose & poetry) and Footprints without Feet (supplementary reader) — chapter by chapter, with an AI tutor that explains any concept on request, discusses comprehension and language questions with real feedback, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("english", "English", "ENG", CHAPTERS_10_ENGLISH),
+    ],
+  },
   "crash-11-pcm": {
     sku: "crash-11-pcm",
     classLevel: 11,
@@ -604,7 +661,7 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
   },
 };
 
-export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
+export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
 export type Crash1112Sku = (typeof CRASH_1112_SKUS)[number];
 
 export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112Sku {
@@ -619,7 +676,7 @@ export function getCrash1112Info(sku: string | null | undefined): CrashCourse111
 // Which 11-12/crash skus have the real /ai-tutor/* experience built (vs. the
 // generic crash-course-hub placeholder the other skus still use). Update this
 // alongside chapter-home's per-sku chapter data whenever a new course is added.
-export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics"] as const;
+export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "ncert-10-english"] as const;
 
 // The four real Social Science books, grouped as one "Class X Social" entry
 // point on Discover (see marketplace-v1.tsx) even though each is its own

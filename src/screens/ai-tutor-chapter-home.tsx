@@ -375,6 +375,48 @@ const CH1_ECONOMICS_SECTIONS: Section[] = [
   },
 ];
 
+// English Chapter 1 — First Flight Unit 1: "A Letter to God" + two Robert
+// Frost poems (jeff101.pdf, read in full: 15 pages). Unlike History/
+// Geography/Political Science/Economics, this unit's real practice splits
+// across 8 separate topics (not one "in-text questions" bucket) because
+// the book itself presents 8 real, separately-labelled question blocks —
+// see ai-tutor-solve.tsx for the full rule-3b inventory and what got
+// excluded (Speaking, Writing, and the two personal-reflection poem
+// questions).
+const CH1_ENGLISH_SECTIONS: Section[] = [
+  {
+    label: "Before You Read",
+    topics: [
+      { id: "eng-before-you-read", title: "Before You Read — Activity (Money Order form)", meta: "Not started · 4 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "A Letter to God",
+    topics: [
+      { id: "a-letter-to-god", title: "A Letter to God", meta: "Not started · Concept", status: "not-started", explainQuery: "a-letter-to-god", kind: "concept" },
+      { id: "eng-oral-comprehension", title: "Oral Comprehension Check — Practice", meta: "Not started · 9 questions (3 boxes)", status: "not-started" },
+      { id: "eng-thinking-about-text", title: "Thinking about the Text — Practice", meta: "Not started · 6 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "Thinking about Language",
+    topics: [
+      { id: "thinking-about-language-grammar", title: "Thinking about Language — grammar", meta: "Not started · Concept", status: "not-started", explainQuery: "thinking-about-language-grammar", kind: "concept" },
+      { id: "eng-language-vocabulary", title: "Vocabulary — Practice", meta: "Not started · Storm names, hope, negatives, metaphors", status: "not-started" },
+      { id: "eng-relative-clauses", title: "Relative Clauses — Practice", meta: "Not started · 5 sentences", status: "not-started" },
+      { id: "eng-listening", title: "Listening — Practice", meta: "Not started · 7 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "Dust of Snow & Fire and Ice",
+    topics: [
+      { id: "frost-poems-dust-and-fire", title: "Two Robert Frost poems", meta: "Not started · Concept", status: "not-started", explainQuery: "frost-poems-dust-and-fire", kind: "concept" },
+      { id: "eng-dust-of-snow", title: "Dust of Snow — Practice", meta: "Not started · 2 questions", status: "not-started" },
+      { id: "eng-fire-and-ice", title: "Fire and Ice — Practice", meta: "Not started · 2 questions", status: "not-started" },
+    ],
+  },
+];
+
 // Science chapters 2-13 have no built Explain/Solve content yet, and unlike
 // Maths chapters 3-14, their real sub-topic bullets haven't been researched
 // from jesc102-113.pdf yet either (only Ch.1 has) — so this is an honest
@@ -497,6 +539,9 @@ function sectionsForChapter(sku: string, chapterIdx: number): Section[] {
   }
   if (sku === "ncert-10-economics") {
     return chapterIdx === 0 ? CH1_ECONOMICS_SECTIONS : genericLockedSections("econ", chapterIdx);
+  }
+  if (sku === "ncert-10-english") {
+    return chapterIdx === 0 ? CH1_ENGLISH_SECTIONS : genericLockedSections("eng", chapterIdx);
   }
   return chapterIdx === 0 ? CH1_SECTIONS : chapterIdx === 1 ? CH2_SECTIONS : mathsLockedSectionsFor(chapterIdx);
 }
