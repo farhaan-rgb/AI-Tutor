@@ -1698,7 +1698,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
             <p style={{ ...typo.cardBodyStyle, color: "var(--foreground)", lineHeight: 1.6 }}>{problem.questionText}</p>
           </div>
 
-          {problem.parts && (
+          {problem.parts && problem.parts.length > 1 && (
             <>
               <p style={{ ...typo.metaStyle, marginBottom: 8 }}>Choose a sub-part</p>
               <div className="flex flex-wrap" style={{ gap: 8, marginBottom: 16 }}>
@@ -1911,8 +1911,10 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
       {/* Multi-part questions get a sub-part picker here, on the walkthrough
           screen — not on the "select" screen, where the top-level pills
           already choose between whole problems (Q1 vs Q2 vs ...). Any part
-          is reachable at any time; a checkmark marks the ones already done. */}
-      {problem.parts && (
+          is reachable at any time; a checkmark marks the ones already done.
+          Hidden with exactly one part — a single-part problem (e.g. Q14,
+          just "Reaction") has nothing to choose between. */}
+      {problem.parts && problem.parts.length > 1 && (
         <div className="flex flex-wrap items-center shrink-0" style={{ gap: 6, padding: "10px 20px 0" }}>
           {problem.parts.map((part, i) => {
             const done = completedParts[i];

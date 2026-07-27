@@ -73,6 +73,21 @@ option. Fixed by hiding both the repeated prompt and the picker whenever a
 visual problem has exactly one sub-question; the top card alone already
 states it in full.
 
+**No picker for a single choice, full stop — check every "does this problem
+have parts" render, not just the one you happened to be looking at.** The
+`parts` shape (multi-step derivations) has the exact same failure as
+`visual` above, and it was missed on the first pass specifically because
+the visual case was fixed in isolation instead of as an instance of a
+general rule. Q14 (silver refining) has exactly one real part — "Reaction"
+— and still showed a "Choose a sub-part" picker with one lonely chip,
+because the check was `problem.parts && (...)` instead of `problem.parts &&
+problem.parts.length > 1 && (...)`. There were two separate render sites
+for this same picker (select screen, walkthrough screen) — both needed the
+fix, not just the one in view. **The general rule, for any picker in this
+file: gate on "more than one real option," not on "the field exists."** A
+field being present doesn't mean there's a choice to make — check the
+count.
+
 **A problem-index doesn't get to grow with the problem count.** The
 "choose a problem" selector (topic → which of N real problems) is
 UI chrome, not content — its job is to get the student to the actual
