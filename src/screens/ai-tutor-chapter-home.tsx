@@ -104,12 +104,15 @@ const CH2_SECTIONS: Section[] = [
 ];
 
 // Science Chapter 1 — "Chemical Reactions and Equations" (jesc101.pdf). Sample
-// scope (see CONTENT_RULEBOOK.md / the AI Tutor conversation): 2 of the
-// chapter's real sections, not all 5 reaction types or the full 20-question
-// end exercise. Per rulebook rule 3a, each concept topic's own Practice is
-// just its matching worked example — the book's own separate "QUESTIONS"
-// box (section 1.1) and end-of-chapter "EXERCISES" section each get their
-// own standalone topic instead of being folded into a concept topic.
+// scope (see CONTENT_RULEBOOK.md / the AI Tutor conversation): 3 of the
+// chapter's real sections (1.1, 1.2, 1.3), not all 5 reaction types in 1.2 or
+// the full 20-question end exercise. Per rulebook rule 3a, each concept
+// topic's own Practice is just its matching worked example — the book's own
+// separate in-text "QUESTIONS"/"Recall Activity" blocks (sections 1.1, 1.2,
+// 1.3) and end-of-chapter "EXERCISES" section each get their own standalone
+// topic instead of being folded into a concept topic. Section 1.2's and
+// 1.3's question topics were added late, after a full rule-3b inventory
+// caught them missing entirely on the first pass — see rule 3b.
 const CH1_SCIENCE_SECTIONS: Section[] = [
   {
     label: "1.1 — Chemical Equations",
@@ -122,12 +125,20 @@ const CH1_SCIENCE_SECTIONS: Section[] = [
     label: "1.2 — Types of Chemical Reactions",
     topics: [
       { id: "reaction-types-redox", title: "Types of reactions, oxidation & reduction", meta: "Not started · Worked example", status: "not-started", explainQuery: "reaction-types-redox", kind: "both" },
+      { id: "sec-1-2-questions", title: "In-text Questions — Practice", meta: "Not started · 4 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "1.3 — Have You Observed the Effects of Oxidation Reactions in Everyday Life?",
+    topics: [
+      { id: "corrosion-rancidity", title: "Corrosion & rancidity", meta: "Not started · Real-world effects", status: "not-started", explainQuery: "corrosion-rancidity", kind: "concept" },
+      { id: "sec-1-3-questions", title: "In-text Questions — Practice", meta: "Not started · 3 questions", status: "not-started" },
     ],
   },
   {
     label: "End-of-chapter Exercises",
     topics: [
-      { id: "ch1-sci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · Q1–Q2 of 20 (sample)", status: "not-started" },
+      { id: "ch1-sci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · Q1–Q2, Q18–Q20 of 20 (sample)", status: "not-started" },
     ],
   },
 ];

@@ -120,6 +120,35 @@ Self-check when building a chapter: for every inline "QUESTIONS"/"EXERCISE"
 block in the source, does it have its own topic — and does that topic use
 every real question in the block (rule 3), not a subset?
 
+## 3b. Inventory every question-block before writing anything, and don't let shared numbers fake coverage
+
+Rule 3a's check ("does every block have its own topic") only works if you
+actually know every block exists. Before writing a single topic, read the
+*whole* chapter once and write down every real question-block — every
+inline "QUESTIONS" box, every embedded activity-turned-question, every
+numbered "EXERCISE" — against the section it actually sits in. Build
+against that list. Don't discover structure opportunistically section-by-
+section, because a block sitting after content you haven't built yet is
+exactly the kind of thing that goes unnoticed if "have I started this
+section" is the only thing prompting you to look for one.
+
+This is precisely how it happened again, right after rule 3a was written
+for it: Science Ch.1 section 1.3 (Corrosion, Rancidity) was left out of
+the sample scope entirely, and its trailing "QUESTIONS" box — 3 real
+questions — was never inventoried, so it didn't register as something to
+either build or explicitly mark out of scope. One of those three
+questions (CuO(s) + H₂(g) → Cu(s) + H₂O(l), identify oxidised/reduced)
+happened to share its numbers with section 1.2.5's own worked example,
+which *was* built — and that coincidence, recalled from memory rather
+than checked against a written inventory, made the box feel already
+covered. It wasn't: the other two real questions in that same box were
+never touched, and the box itself got mislabeled in code comments as
+section 1.2's, not 1.3's.
+
+**Two real citations sharing the same numbers are still two citations.**
+Building one doesn't retire the other from the list — verify against the
+inventory, not against what a previous build happens to remind you of.
+
 ## 4. Steps must show real derivation, not skip to the answer
 
 A step is one operation (one division, one factor pulled out, one line of

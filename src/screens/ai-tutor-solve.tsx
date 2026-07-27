@@ -696,9 +696,10 @@ const REACTION_TYPES_REDOX_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
-// Real end-of-chapter "EXERCISES" section (jesc101.pdf p.14) — 20 real
-// questions total; sample scope uses Q1-Q2 only (see CONTENT_RULEBOOK.md /
-// the AI Tutor conversation for why this build doesn't cover all 20 yet).
+// Real end-of-chapter "EXERCISES" section (jesc101.pdf pp.14-16) — 20 real
+// questions total; sample scope covers Q1-Q2 and Q18-Q20 (5 of 20, explicitly
+// a sample — see CONTENT_RULEBOOK.md rule 3 on never silently capping without
+// flagging it).
 const CHAPTER_1_EXERCISES_PROBLEMS: PracticeProblem[] = [
   {
     id: "reaction-classification",
@@ -711,6 +712,214 @@ const CHAPTER_1_EXERCISES_PROBLEMS: PracticeProblem[] = [
       ],
     },
     verifyLine: "Both classifications confirmed ✓",
+  },
+  {
+    id: "paint-on-iron",
+    label: "Q18",
+    questionText: "Why do we apply paint on iron articles?",
+    visual: {
+      questions: [
+        {
+          label: "Q18",
+          prompt: "Why do we apply paint on iron articles?",
+          options: [
+            "To prevent rusting — paint keeps out the air and moisture iron needs to corrode",
+            "To make the metal stronger",
+            "To make the surface conduct electricity better",
+            "It's purely decorative, with no chemical reason",
+          ],
+          correctAnswer: "To prevent rusting — paint keeps out the air and moisture iron needs to corrode",
+          explanation: "Rusting needs both oxygen and moisture in contact with the iron surface. A coat of paint seals that surface off from air and water, so the reaction that forms Fe₂O₃·xH₂O can't get started.",
+        },
+      ],
+    },
+    verifyLine: "Paint blocks air and moisture from reaching the iron surface ✓",
+  },
+  {
+    id: "nitrogen-flushing",
+    label: "Q19",
+    questionText: "Oil and fat containing food items are flushed with nitrogen. Why?",
+    visual: {
+      questions: [
+        {
+          label: "Q19",
+          prompt: "Why are oil- and fat-containing food packets flushed with nitrogen gas?",
+          options: [
+            "Nitrogen is unreactive, so it keeps oxygen away from the food and prevents rancidity",
+            "Nitrogen makes the food taste better",
+            "Nitrogen kills bacteria in the packet",
+            "Nitrogen keeps the packet inflated for cushioning during transport",
+          ],
+          correctAnswer: "Nitrogen is unreactive, so it keeps oxygen away from the food and prevents rancidity",
+          explanation: "Rancidity is the slow oxidation of fats and oils by atmospheric oxygen. Nitrogen is an unreactive gas — filling the packet with it displaces the oxygen that would otherwise oxidise the food and spoil its smell and taste.",
+        },
+      ],
+    },
+    verifyLine: "Nitrogen displaces oxygen, so the fats can't oxidise ✓",
+  },
+  {
+    id: "corrosion-rancidity-terms",
+    label: "Q20",
+    questionText: "Explain the following terms with one example each. (a) Corrosion (b) Rancidity",
+    parts: [
+      {
+        label: "(a) Corrosion",
+        steps: [
+          { prompt: "What is corrosion, in one line?", answer: "A metal's surface is attacked by substances around it — moisture, acids, gases in the air — and gets slowly eaten away" },
+          { prompt: "Give a real example.", answer: "Rusting of iron: Fe reacts with O₂ in the presence of water to form Fe₂O₃·xH₂O (hydrated iron(III) oxide) — the reddish-brown flaky coating on old iron gates and railings" },
+        ],
+      },
+      {
+        label: "(b) Rancidity",
+        steps: [
+          { prompt: "What is rancidity, in one line?", answer: "Fats and oils in food slowly oxidise when left exposed to air, changing the food's smell and taste" },
+          { prompt: "Give a real example.", answer: "Chips or namkeen left in an open packet for a few days start to smell and taste different (\"gone stale\") — that's why packets are flushed with nitrogen and sealed airtight" },
+        ],
+      },
+    ],
+    verifyLine: "Corrosion (rusting of iron) and rancidity (oxidised fats/oils), each with a real example ✓",
+  },
+];
+
+// Section 1.2 (jesc101.pdf pp.8-11) has THREE distinct in-text question
+// moments the earlier build missed entirely, found only by doing the rule-3b
+// full inventory rather than building section-by-section: (1) a real
+// "QUESTIONS" box between 1.2.2 and 1.2.3 (whitewashing substance X + why
+// Activity 1.7 collects double the gas in one tube), (2) the "Recall Activity
+// 1.2" callback under 1.2.4 (i/ii/iii on the PbI₂ precipitate), (3) the
+// "Recall Activity 1.1" callback under 1.2.5 (is Mg oxidised or reduced).
+// All three are folded into one topic, same pattern as sec-1-1-questions.
+const SECTION_1_2_QUESTIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "sec1-2-whitewashing",
+    label: "Q1",
+    questionText: "A solution of a substance 'X' is used for whitewashing. (i) Name the substance 'X' and write its formula. (ii) Write the reaction of the substance named in (i) with water.",
+    visual: {
+      questions: [
+        { label: "(i)", prompt: "What is substance X, used for whitewashing?", options: ["Calcium hydroxide, Ca(OH)₂", "Calcium oxide, CaO", "Calcium carbonate, CaCO₃", "Calcium chloride, CaCl₂"], correctAnswer: "Calcium hydroxide, Ca(OH)₂", explanation: "Slaked lime — calcium hydroxide — dissolved in water gives 'milk of lime,' the solution used for whitewashing." },
+        { label: "(ii)", prompt: "What reaction gives the whitewashed wall its shiny finish over a few days?", options: ["Ca(OH)₂ + CO₂ → CaCO₃ + H₂O", "CaO + H₂O → Ca(OH)₂", "CaCO₃ → CaO + CO₂", "Ca(OH)₂ + 2HCl → CaCl₂ + 2H₂O"], correctAnswer: "Ca(OH)₂ + CO₂ → CaCO₃ + H₂O", explanation: "Calcium hydroxide slowly reacts with carbon dioxide in the air, forming a thin layer of calcium carbonate — the same compound marble is made of — which gives the shiny finish." },
+      ],
+    },
+    verifyLine: "X is calcium hydroxide; it reacts with CO₂ in air, not with water ✓",
+  },
+  {
+    id: "sec1-2-electrolysis-gas",
+    label: "Q2",
+    questionText: "Why is the amount of gas collected in one of the test tubes in Activity 1.7 double the amount collected in the other? Name this gas.",
+    visual: {
+      questions: [
+        {
+          label: "Q2",
+          prompt: "In the electrolysis of water, which gas is collected in double the volume, and why?",
+          options: [
+            "Hydrogen — water is H₂O, so 2 parts hydrogen form for every 1 part oxygen",
+            "Oxygen — it's less soluble in water than hydrogen",
+            "Hydrogen — it's lighter and rises faster",
+            "Both gases are always collected in equal volumes",
+          ],
+          correctAnswer: "Hydrogen — water is H₂O, so 2 parts hydrogen form for every 1 part oxygen",
+          explanation: "Electrolysis splits water as 2H₂O → 2H₂ + O₂ — twice as many hydrogen molecules form as oxygen molecules, so the hydrogen test tube collects double the volume.",
+        },
+      ],
+    },
+    verifyLine: "Hydrogen collects at double the volume of oxygen ✓",
+  },
+  {
+    id: "sec1-2-recall-1-2",
+    label: "Recall Activity 1.2",
+    questionText: "Recall Activity 1.2, where you mixed solutions of lead(II) nitrate and potassium iodide. (i) What colour precipitate formed, and what compound is it? (ii) Write the balanced chemical equation. (iii) Is this a double displacement reaction?",
+    visual: {
+      questions: [
+        { label: "(i)", prompt: "What colour precipitate formed in Activity 1.2, and what is it?", options: ["Yellow precipitate of lead iodide, PbI₂", "White precipitate of lead sulphate, PbSO₄", "Blue precipitate of copper hydroxide", "No precipitate forms"], correctAnswer: "Yellow precipitate of lead iodide, PbI₂", explanation: "Lead ions and iodide ions combine to form insoluble lead iodide — a bright yellow solid." },
+        { label: "(ii)", prompt: "What's the balanced equation for this reaction?", options: ["Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃", "Pb(NO₃)₂ + KI → PbI + KNO₃", "PbI₂ + 2KNO₃ → Pb(NO₃)₂ + 2KI", "Pb(NO₃)₂ + 2KI → PbI₂ + KNO₃"], correctAnswer: "Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃", explanation: "2KI is needed to balance both the lead and the two nitrate ions — 1 Pb, 2 N, 6 O, 2 K, 2 I on both sides." },
+        { label: "(iii)", prompt: "Is this a double displacement reaction?", options: ["Yes — lead and potassium ions exchange partners", "No — it's a combination reaction", "No — it's a decomposition reaction", "No — it's a displacement reaction"], correctAnswer: "Yes — lead and potassium ions exchange partners", explanation: "Just like BaCl₂ + Na₂SO₄, two compounds swap ions to form a new precipitate and a new solution — the definition of double displacement." },
+      ],
+    },
+    verifyLine: "Yellow PbI₂ precipitate, balanced equation confirmed, double displacement ✓",
+  },
+  {
+    id: "sec1-2-recall-1-1",
+    label: "Recall Activity 1.1",
+    questionText: "Recall Activity 1.1, where a magnesium ribbon burns with a dazzling flame and changes into a white substance, magnesium oxide. Is magnesium being oxidised or reduced in this reaction?",
+    visual: {
+      questions: [
+        { label: "Mg", prompt: "Is magnesium oxidised or reduced when it burns to form magnesium oxide?", options: ["Oxidised", "Reduced"], correctAnswer: "Oxidised", explanation: "Magnesium gains oxygen (Mg → MgO) — gaining oxygen means it's oxidised." },
+      ],
+    },
+    verifyLine: "Magnesium is oxidised ✓",
+  },
+];
+
+// Real "QUESTIONS" box at the end of section 1.3 (jesc101.pdf p.13) — three
+// real questions, verified against the actual PDF text (not memory). Q1
+// echoes Activity 1.9's Fe+CuSO₄ colour change (reaction-types-redox's own
+// worked example); Q3(ii) reuses the same CuO+H₂ numbers shown there too.
+// Both are still built as their own problems here — see CONTENT_RULEBOOK.md
+// rule 3b: a shared number doesn't retire a distinct real citation.
+const SECTION_1_3_QUESTIONS_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "sec1-3-q1",
+    label: "Q1",
+    questionText: "Why does the colour of copper sulphate solution change when an iron nail is dipped in it?",
+    visual: {
+      questions: [
+        {
+          label: "Q1",
+          prompt: "Why does the colour of copper sulphate solution change when an iron nail is dipped in it?",
+          options: [
+            "Iron displaces copper — Cu²⁺ (blue) is replaced by Fe²⁺ (pale green) in solution",
+            "Iron dissolves and turns the solution rust-coloured",
+            "The nail's surface coating reacts with the solution's water",
+            "It's a decomposition reaction — copper sulphate breaks down on its own",
+          ],
+          correctAnswer: "Iron displaces copper — Cu²⁺ (blue) is replaced by Fe²⁺ (pale green) in solution",
+          explanation: "This is the same reaction as Activity 1.9: Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s). Iron is more reactive than copper, so it displaces copper out of solution — the blue colour (from Cu²⁺) fades as pale green iron sulphate (Fe²⁺) forms, and copper deposits on the nail.",
+        },
+      ],
+    },
+    verifyLine: "Fe displaces Cu — blue CuSO₄ fades as pale green FeSO₄ forms ✓",
+  },
+  {
+    id: "sec1-3-q2",
+    label: "Q2",
+    questionText: "Give an example of a double displacement reaction other than the one given in Activity 1.10.",
+    visual: {
+      questions: [
+        {
+          label: "Q2",
+          prompt: "Which of these is a real double displacement reaction from this chapter, other than Activity 1.10 (BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl)?",
+          options: [
+            "Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃ (Activity 1.2)",
+            "Fe + CuSO₄ → FeSO₄ + Cu (Activity 1.9)",
+            "CaO + H₂O → Ca(OH)₂ (Activity 1.4)",
+            "2FeSO₄ → Fe₂O₃ + SO₂ + SO₃ (Activity 1.5)",
+          ],
+          correctAnswer: "Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃ (Activity 1.2)",
+          explanation: "Lead and potassium swap partners — lead(II) nitrate and potassium iodide exchange ions to give a yellow lead iodide precipitate and potassium nitrate, exactly like Activity 1.10 does with barium and sodium. The other three options are displacement, combination, and decomposition reactions respectively — not double displacement.",
+        },
+      ],
+    },
+    verifyLine: "Activity 1.2 (Pb(NO₃)₂ + 2KI → PbI₂ + 2KNO₃) is a real double displacement, distinct from Activity 1.10 ✓",
+  },
+  {
+    id: "sec1-3-q3",
+    label: "Q3",
+    questionText: "Identify the substances that are oxidised and the substances that are reduced in the following reactions. (i) 4Na(s) + O₂(g) → 2Na₂O(s) (ii) CuO(s) + H₂(g) → Cu(s) + H₂O(l)",
+    parts: [
+      {
+        label: "(i)",
+        steps: [
+          { prompt: "What happens to sodium in 4Na + O₂ → 2Na₂O?", answer: "Sodium combines with (gains) oxygen to form Na₂O — sodium is oxidised", trap: { wrongGuess: "sodium is reduced", hint: "gaining oxygen is the definition of oxidation, not reduction — sodium had no oxygen before and has some after." } },
+        ],
+      },
+      {
+        label: "(ii)",
+        steps: [
+          { prompt: "What happens to CuO and H₂ in CuO + H₂ → Cu + H₂O?", answer: "CuO loses oxygen (→ Cu) so it's reduced; H₂ gains oxygen (→ H₂O) so it's oxidised — the same reaction shown in this chapter's own worked example" },
+        ],
+      },
+    ],
+    verifyLine: "(i) Na is oxidised (ii) CuO is reduced, H₂ is oxidised ✓",
   },
 ];
 
@@ -730,6 +939,8 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "balancing-chemical-equations": BALANCING_EQUATIONS_PROBLEMS,
   "sec-1-1-questions": SECTION_1_1_QUESTIONS_PROBLEMS,
   "reaction-types-redox": REACTION_TYPES_REDOX_PROBLEMS,
+  "sec-1-2-questions": SECTION_1_2_QUESTIONS_PROBLEMS,
+  "sec-1-3-questions": SECTION_1_3_QUESTIONS_PROBLEMS,
   "ch1-sci-exercises": CHAPTER_1_EXERCISES_PROBLEMS,
 };
 
@@ -1596,6 +1807,8 @@ const TOPIC_TITLES: Record<string, string> = {
   "balancing-chemical-equations": "Writing & balancing equations",
   "sec-1-1-questions": "In-text Questions — 1.1",
   "reaction-types-redox": "Types of reactions, oxidation & reduction",
+  "sec-1-2-questions": "In-text Questions — 1.2",
+  "sec-1-3-questions": "In-text Questions — 1.3",
   "ch1-sci-exercises": "Chapter Exercises",
 };
 

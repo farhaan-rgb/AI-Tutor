@@ -8,10 +8,11 @@
  * not generic filler, and each topic shows ITS OWN example rather than always
  * falling back to HCF/LCM.
  */
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { ArrowLeft, Sparkles, Send, Mic, Check } from "lucide-react";
+import { ArrowLeft, Sparkles, Send, Mic, Check, Play, Pause, RotateCcw, RotateCw, Gauge } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
+import { EXPLAIN_NARRATION } from "../app/data/explain-narration";
 
 interface TopicContent {
   title: string;
@@ -214,6 +215,26 @@ const TOPIC_COPY: Record<string, TopicContent> = {
     exerciseId: "reaction-types-redox",
     exerciseLabel: "Practice",
   },
+  // Section 1.3 — no numbered Example of its own in the book; the two
+  // illustrations it gives (rusting, rancidity) are real-world effects, not
+  // worked calculations, so this is Explain-only (kind: "concept") with no
+  // matching Practice topic — see CONTENT_RULEBOOK.md rule 3b for why this
+  // section was nearly skipped entirely.
+  "corrosion-rancidity": {
+    title: "Corrosion & rancidity",
+    chapterLabel: "Chemical Reactions and Equations",
+    intro:
+      "Oxidation reactions don't stop being relevant once you leave the lab — they happen slowly, all the time, in metals and food. When a metal is attacked by substances around it — moisture, acids, gases in the air — it corrodes. Iron corroding is called rusting: iron reacts with oxygen in the presence of water to form hydrated iron(III) oxide, Fe₂O₃·xH₂O, the reddish-brown flaky layer you see on old iron gates and railings. Other metals corrode too — silver tarnishes black (silver sulphide), copper develops a green coat (copper carbonate) — but rusting is the most familiar because iron is used so widely.",
+    exampleLabel: "Everyday effect · Rusting of iron",
+    exampleLines: ["Fe reacts with O₂(g), in the presence of water, over time", "<strong>Forms Fe₂O₃·xH₂O</strong> — hydrated iron(III) oxide, i.e. rust", "This is why iron objects are painted, oiled, or galvanised — to keep out water and air"],
+    followUpPrompt: "Food oxidises too, in its own way — want to see how that shows up as rancidity?",
+    followUpStudent: "yeah, what happens to food",
+    followUpLabel: "Everyday effect · Rancidity",
+    followUpLines: ["Fats and oils in food slowly oxidise when left exposed to air", "<strong>The food's smell and taste change</strong> — this is rancidity", "That's why chip packets are flushed with nitrogen gas, and containers are sealed airtight — both keep oxygen away"],
+    closing: "Same underlying idea as everywhere else in this chapter — something gaining oxygen over time — just showing up as rust on a gate or a stale packet of chips instead of a lab reaction. The Questions below cover the three the book asks right after this section.",
+    exerciseId: "sec-1-3-questions",
+    exerciseLabel: "Questions",
+  },
 };
 
 function Bubble({ from, children }: { from: "tutor" | "student"; children: React.ReactNode }) {
@@ -251,11 +272,195 @@ function WorkedExample({ label, lines }: { label: string; lines: string[] }) {
   );
 }
 
+// Splits a narration script into sentences for live-highlight captions.
+// Splits on sentence-ending punctuation only — an em-dash-joined clause
+// (common in these scripts) stays part of the same sentence, matching how
+// it'd actually be read aloud in one breath.
+function splitScriptIntoSentences(script: string): string[] {
+  return script
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(/(?<=[.?!])\s+/)
+    .filter(Boolean);
+}
+
+function formatTime(seconds: number): string {
+  if (!isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+const PLAYBACK_SPEEDS = [1, 1.25, 1.5, 2, 0.75];
+
+// Audio-first Explain rendering for topics in EXPLAIN_NARRATION — see
+// EXPLAIN_NARRATION_RULEBOOK.md. `script` is the exact text the audio was
+// generated from — every word rendered here comes from it verbatim, split
+// into sentences for the live caption highlight.
+//
+// Sync note: OpenAI's TTS API doesn't return word/sentence timestamps, so the
+// highlight timing below is an approximation — each sentence's on-screen
+// window is weighted by its share of the script's total character count
+// against the audio's real duration, not a true forced alignment. Close
+// enough to track along by eye; don't treat the per-sentence boundaries as
+// exact.
+function NarrationPlayer({ script, audioSrc }: { script: string; audioSrc: string }) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const transcriptRef = useRef<HTMLDivElement>(null);
+  const activeLineRef = useRef<HTMLSpanElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [speedIndex, setSpeedIndex] = useState(0);
+
+  const sentences = useMemo(() => splitScriptIntoSentences(script), [script]);
+  const segments = useMemo(() => {
+    const totalChars = sentences.reduce((sum, s) => sum + s.length, 0) || 1;
+    let acc = 0;
+    return sentences.map((text) => {
+      const start = acc;
+      acc += (text.length / totalChars) * duration;
+      return { text, start, end: acc };
+    });
+  }, [sentences, duration]);
+
+  const activeIndex = duration
+    ? segments.findIndex((seg) => currentTime >= seg.start && currentTime < seg.end)
+    : -1;
+
+  useEffect(() => {
+    const container = transcriptRef.current;
+    const active = activeLineRef.current;
+    if (!container || !active) return;
+    const target = active.offsetTop - container.clientHeight / 2 + active.clientHeight / 2;
+    container.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+  }, [activeIndex]);
+
+  function togglePlay() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) audio.pause();
+    else audio.play();
+  }
+
+  function skip(delta: number) {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.min(Math.max(0, audio.currentTime + delta), duration || audio.duration || 0);
+  }
+
+  function cycleSpeed() {
+    const next = (speedIndex + 1) % PLAYBACK_SPEEDS.length;
+    setSpeedIndex(next);
+    if (audioRef.current) audioRef.current.playbackRate = PLAYBACK_SPEEDS[next];
+  }
+
+  return (
+    <div className="flex flex-col" style={{ gap: 14 }}>
+      <audio
+        ref={audioRef}
+        src={audioSrc}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => setPlaying(false)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+      />
+
+      {/* Player controls */}
+      <div
+        className="flex flex-col"
+        style={{ gap: 14, borderRadius: 16, padding: "18px", background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%)" }}
+      >
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => skip(-10)}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(255,255,255,0.15)", border: "none", cursor: "pointer" }}
+          >
+            <RotateCcw style={{ width: 15, height: 15, color: "var(--white)" }} />
+          </button>
+          <button
+            onClick={togglePlay}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 52, height: 52, borderRadius: "50%", background: "var(--white)", border: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(0,0,0,0.18)" }}
+          >
+            {playing ? <Pause style={{ width: 21, height: 21, color: "var(--primary-700)" }} /> : <Play style={{ width: 21, height: 21, color: "var(--primary-700)", marginLeft: 3 }} />}
+          </button>
+          <button
+            onClick={() => skip(10)}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(255,255,255,0.15)", border: "none", cursor: "pointer" }}
+          >
+            <RotateCw style={{ width: 15, height: 15, color: "var(--white)" }} />
+          </button>
+
+          <div className="flex-1 min-w-0">
+            <p style={{ ...typo.badgeStyle, color: "rgba(255,255,255,0.85)" }}>Narrated explanation</p>
+          </div>
+
+          <button
+            onClick={cycleSpeed}
+            className="flex items-center gap-1 shrink-0"
+            style={{ ...typo.badgeStyle, color: "var(--white)", background: "rgba(255,255,255,0.15)", border: "none", borderRadius: 20, padding: "6px 10px", cursor: "pointer" }}
+          >
+            <Gauge style={{ width: 12, height: 12 }} />
+            {PLAYBACK_SPEEDS[speedIndex]}x
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span style={{ ...typo.metaStyle, color: "rgba(255,255,255,0.85)", minWidth: 32 }}>{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            step={0.1}
+            value={Math.min(currentTime, duration || 0)}
+            onChange={(e) => {
+              const t = Number(e.target.value);
+              if (audioRef.current) audioRef.current.currentTime = t;
+              setCurrentTime(t);
+            }}
+            style={{ flex: 1, accentColor: "var(--white)" }}
+          />
+          <span style={{ ...typo.metaStyle, color: "rgba(255,255,255,0.85)", minWidth: 32, textAlign: "right" }}>{formatTime(duration)}</span>
+        </div>
+      </div>
+
+      {/* Live transcript — highlights the sentence in sync with playback (see sync note above) */}
+      <div
+        ref={transcriptRef}
+        style={{ maxHeight: 260, overflowY: "auto", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 16 }}
+      >
+        <p style={{ ...typo.cardBodyStyle, lineHeight: 1.9 }}>
+          {segments.map((seg, i) => (
+            <span
+              key={i}
+              ref={i === activeIndex ? activeLineRef : undefined}
+              style={
+                i === activeIndex
+                  ? { color: "var(--foreground)", fontWeight: "var(--font-weight-semibold)", background: "var(--primary-50)", borderRadius: 4 }
+                  : undefined
+              }
+            >
+              {seg.text}{" "}
+            </span>
+          ))}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function Component() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const topicKey = params.get("topic") ?? "hcf-lcm-three";
   const topic = TOPIC_COPY[topicKey] ?? TOPIC_COPY["hcf-lcm-three"];
+  // Present only for topics with a pre-generated narration (EXPLAIN_NARRATION_RULEBOOK.md) —
+  // those get an audio-first Explain screen instead of the chat-bubble walkthrough.
+  const narration = EXPLAIN_NARRATION[topicKey];
   // Demo-only completion flag (not a real feature) — lets whoever's driving the
   // walkthrough simulate "this topic has been explained", so Chapter Home can
   // show it as completed. Persisted so it survives navigating back.
@@ -283,28 +488,34 @@ export function Component() {
       <div style={{ height: 1, background: "var(--border)" }} />
 
       <div className="flex-1 overflow-y-auto flex flex-col" style={{ padding: "16px 18px", gap: 14 }}>
-        <Bubble from="tutor">{topic.intro}</Bubble>
-
-        {topic.lemmaLines && (
+        {narration ? (
+          <NarrationPlayer script={narration.script} audioSrc={narration.audioSrc} />
+        ) : (
           <>
-            <WorkedExample label={topic.lemmaLabel!} lines={topic.lemmaLines} />
-            <Bubble from="tutor">{topic.lemmaTransition}</Bubble>
+            <Bubble from="tutor">{topic.intro}</Bubble>
+
+            {topic.lemmaLines && (
+              <>
+                <WorkedExample label={topic.lemmaLabel!} lines={topic.lemmaLines} />
+                <Bubble from="tutor">{topic.lemmaTransition}</Bubble>
+              </>
+            )}
+
+            <WorkedExample label={topic.exampleLabel} lines={topic.exampleLines} />
+
+            {topic.followUpPrompt && (
+              <>
+                <Bubble from="tutor">{topic.followUpPrompt}</Bubble>
+                <Bubble from="student">{topic.followUpStudent}</Bubble>
+                <WorkedExample label={topic.followUpLabel!} lines={topic.followUpLines!} />
+              </>
+            )}
+
+            <Bubble from="tutor">{topic.closing}</Bubble>
           </>
         )}
 
-        <WorkedExample label={topic.exampleLabel} lines={topic.exampleLines} />
-
-        {topic.followUpPrompt && (
-          <>
-            <Bubble from="tutor">{topic.followUpPrompt}</Bubble>
-            <Bubble from="student">{topic.followUpStudent}</Bubble>
-            <WorkedExample label={topic.followUpLabel!} lines={topic.followUpLines!} />
-          </>
-        )}
-
-        <Bubble from="tutor">{topic.closing}</Bubble>
-
-        <div className="flex gap-2 flex-wrap" style={{ marginLeft: 34 }}>
+        <div className="flex gap-2 flex-wrap" style={{ marginLeft: narration ? 0 : 34 }}>
           <button
             onClick={markUnderstood}
             className="flex items-center gap-1.5"
