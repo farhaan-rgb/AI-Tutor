@@ -31,8 +31,10 @@
 import { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, Mic, Square, Type, PenLine } from "lucide-react";
+import { motion } from "motion/react";
 import { StatusBar, typo } from "../shared/premium-ui";
 import { BottomSheet } from "../shared/bottom-sheet";
+import { Skeleton } from "../app/components/ui/skeleton";
 
 type StepState = "done" | "active" | "locked";
 
@@ -2361,7 +2363,7 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
                   <Sparkles style={{ width: 18, height: 18, color: "var(--warning)" }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Ask AI tutor for a model answer</p>
+                  <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Ask AI tutor for a sample answer</p>
                   <p style={typo.metaStyle}>See a real answer, then try your own</p>
                 </div>
               </button>
@@ -2394,7 +2396,33 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
               </button>
 
               <div style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)" }}>
-                {modelAnswerLoading && <p style={typo.metaStyle}>Writing a model answer…</p>}
+                {/* A real answer takes a few real seconds to generate — a
+                    static "Writing a model answer…" line just sat there
+                    with nothing to look at, and "model answer" itself
+                    reads as exam-board jargon rather than something a
+                    student would say. Replaced with a plain "AI tutor is
+                    thinking" line plus a pulsing sparkle and skeleton
+                    lines standing in for the answer being written, reusing
+                    the same Skeleton component used elsewhere in the app —
+                    not a bespoke spinner. */}
+                {modelAnswerLoading && (
+                  <div className="flex flex-col" style={{ gap: 10 }}>
+                    <div className="flex items-center gap-2">
+                      <motion.div
+                        animate={{ opacity: [0.35, 1, 0.35] }}
+                        transition={{ duration: 1.3, repeat: Infinity, ease: "easeInOut" }}
+                        className="flex items-center justify-center shrink-0"
+                      >
+                        <Sparkles style={{ width: 15, height: 15, color: "var(--warning)" }} />
+                      </motion.div>
+                      <p style={typo.metaStyle}>Your AI tutor is thinking…</p>
+                    </div>
+                    <Skeleton style={{ height: 13, width: "92%" }} />
+                    <Skeleton style={{ height: 13, width: "78%" }} />
+                    <Skeleton style={{ height: 13, width: "86%" }} />
+                    <Skeleton style={{ height: 13, width: "60%" }} />
+                  </div>
+                )}
                 {modelAnswerError && (
                   <div className="flex items-start gap-2">
                     <AlertTriangle style={{ width: 15, height: 15, color: "var(--error)", flexShrink: 0, marginTop: 1 }} />
