@@ -105,14 +105,15 @@ const CH2_SECTIONS: Section[] = [
 
 // Science Chapter 1 — "Chemical Reactions and Equations" (jesc101.pdf). Sample
 // scope (see CONTENT_RULEBOOK.md / the AI Tutor conversation): 3 of the
-// chapter's real sections (1.1, 1.2, 1.3), not all 5 reaction types in 1.2 or
-// the full 20-question end exercise. Per rulebook rule 3a, each concept
-// topic's own Practice is just its matching worked example — the book's own
-// separate in-text "QUESTIONS"/"Recall Activity" blocks (sections 1.1, 1.2,
-// 1.3) and end-of-chapter "EXERCISES" section each get their own standalone
-// topic instead of being folded into a concept topic. Section 1.2's and
-// 1.3's question topics were added late, after a full rule-3b inventory
-// caught them missing entirely on the first pass — see rule 3b.
+// chapter's real sections (1.1, 1.2, 1.3), not all 5 reaction types in 1.2 —
+// but the end-of-chapter EXERCISES are now built in full (all 20). Per
+// rulebook rule 3a, each concept topic's own Practice is just its matching
+// worked example — the book's own separate in-text "QUESTIONS"/"Recall
+// Activity" blocks (sections 1.1, 1.2, 1.3) and end-of-chapter "EXERCISES"
+// section each get their own standalone topic instead of being folded into a
+// concept topic. Section 1.2's and 1.3's question topics were added late,
+// after a full rule-3b inventory caught them missing entirely on the first
+// pass — see rule 3b.
 const CH1_SCIENCE_SECTIONS: Section[] = [
   {
     label: "1.1 — Chemical Equations",
@@ -138,7 +139,7 @@ const CH1_SCIENCE_SECTIONS: Section[] = [
   {
     label: "End-of-chapter Exercises",
     topics: [
-      { id: "ch1-sci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · Q1–Q2, Q18–Q20 of 20 (sample)", status: "not-started" },
+      { id: "ch1-sci-exercises", title: "Chapter Exercises — Practice", meta: "Not started · All 20 questions", status: "not-started" },
     ],
   },
 ];

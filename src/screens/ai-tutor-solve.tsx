@@ -696,10 +696,15 @@ const REACTION_TYPES_REDOX_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
-// Real end-of-chapter "EXERCISES" section (jesc101.pdf pp.14-16) — 20 real
-// questions total; sample scope covers Q1-Q2 and Q18-Q20 (5 of 20, explicitly
-// a sample — see CONTENT_RULEBOOK.md rule 3 on never silently capping without
-// flagging it).
+// Real end-of-chapter "EXERCISES" section (jesc101.pdf pp.14-16) — all 20
+// real questions. Q1-3 are the book's own MCQs, cross-checked against the
+// official answer key (jesc1an.pdf: 1.(i) 2.(d) 3.(a)). Q4-17 have no answer
+// key (NCERT only keys MCQs) — each is derived/verified independently here:
+// every equation atom-counted, every reaction type matched to the chapter's
+// own definitions. Several deliberately reuse real reactions already shown
+// elsewhere in this chapter as their example (Q16, Q17) — per rule 3b, a
+// citation being used elsewhere doesn't disqualify it from being the correct,
+// real answer to a different question that asks for one.
 const CHAPTER_1_EXERCISES_PROBLEMS: PracticeProblem[] = [
   {
     id: "reaction-classification",
@@ -711,7 +716,271 @@ const CHAPTER_1_EXERCISES_PROBLEMS: PracticeProblem[] = [
         { label: "(ii)", prompt: "Fe₂O₃(s) + 2Al(s) → Al₂O₃(s) + 2Fe(s) — what type of reaction is this?", options: ["Combination", "Double displacement", "Decomposition", "Displacement"], correctAnswer: "Displacement", explanation: "Aluminium is more reactive than iron, so it displaces iron from its oxide — this is the classic thermite reaction." },
       ],
     },
-    verifyLine: "Both classifications confirmed ✓",
+    verifyLine: "Both classifications confirmed ✓ (matches official answer key: 1.(i), 2.(d))",
+  },
+  {
+    id: "hcl-iron-filings",
+    label: "Q3",
+    questionText: "What happens when dilute hydrochloric acid is added to iron fillings? Tick the correct answer.",
+    visual: {
+      questions: [
+        {
+          label: "Q3",
+          prompt: "What happens when dilute HCl is added to iron filings?",
+          options: [
+            "Hydrogen gas and iron chloride are produced",
+            "Chlorine gas and iron hydroxide are produced",
+            "No reaction takes place",
+            "Iron salt and water are produced",
+          ],
+          correctAnswer: "Hydrogen gas and iron chloride are produced",
+          explanation: "Fe(s) + 2HCl(aq) → FeCl₂(aq) + H₂(g) — iron, being more reactive than hydrogen, displaces it from the acid, producing iron(II) chloride and hydrogen gas.",
+        },
+      ],
+    },
+    verifyLine: "Fe + 2HCl → FeCl₂ + H₂ — matches official answer key: 3.(a) ✓",
+  },
+  {
+    id: "balanced-equation-why",
+    label: "Q4",
+    questionText: "What is a balanced chemical equation? Why should chemical equations be balanced?",
+    parts: [
+      { label: "What is it?", steps: [
+        { prompt: "What is a balanced chemical equation?", answer: "A chemical equation where the number of atoms of each element is the same on both the reactant side and the product side" },
+      ] },
+      { label: "Why balance?", steps: [
+        { prompt: "Why must a chemical equation be balanced?", answer: "Because of the law of conservation of mass — matter can neither be created nor destroyed in a chemical reaction, so every atom present in the reactants must still be present in the products. An unbalanced equation would imply atoms appeared or vanished, which isn't physically possible." },
+      ] },
+    ],
+    verifyLine: "Equal atom counts on both sides, required by conservation of mass ✓",
+  },
+  {
+    id: "translate-and-balance",
+    label: "Q5",
+    questionText: "Translate the following statements into chemical equations and then balance them.",
+    parts: [
+      { label: "(a) Hydrogen + Nitrogen → Ammonia", steps: [
+        { prompt: "Write the skeletal equation.", answer: "H₂ + N₂ → NH₃" },
+        { prompt: "Count atoms — what needs balancing?", answer: "2 N on the left needs 2 NH₃ on the right, which then needs 6 H — so 3 H₂ on the left" },
+        { prompt: "Balanced equation?", answer: "3H₂ + N₂ → 2NH₃" },
+      ] },
+      { label: "(b) Hydrogen sulphide + air → Water + Sulphur dioxide", steps: [
+        { prompt: "Write the skeletal equation.", answer: "H₂S + O₂ → H₂O + SO₂" },
+        { prompt: "Count atoms — what needs balancing?", answer: "Balance S first: 2H₂S gives 2 S, needs 2 SO₂. That needs 4 H → 2 H₂O. Total O needed: 2(H₂O)+4(SO₂)=6 O, from 3 O₂", trap: { wrongGuess: "balance oxygen first", hint: "sulphur only appears once per molecule on each side — fixing S first (via H₂S) locks in how much H₂O and SO₂ you need, and O falls out from that." } },
+        { prompt: "Balanced equation?", answer: "2H₂S + 3O₂ → 2H₂O + 2SO₂" },
+      ] },
+      { label: "(c) Barium chloride + Aluminium sulphate → Aluminium chloride + Barium sulphate precipitate", steps: [
+        { prompt: "Write the skeletal equation.", answer: "BaCl₂ + Al₂(SO₄)₃ → AlCl₃ + BaSO₄" },
+        { prompt: "Which compound has the most atoms to track? Start there.", answer: "Al₂(SO₄)₃ has 2 Al and 3 SO₄ groups — put 3 in front of BaSO₄ and 2 in front of AlCl₃" },
+        { prompt: "Now balance Ba and Cl to match.", answer: "3 BaSO₄ needs 3 Ba, so 3 BaCl₂ on the left; that gives 6 Cl, matching 2×3=6 Cl in 2AlCl₃" },
+        { prompt: "Balanced equation?", answer: "3BaCl₂ + Al₂(SO₄)₃ → 2AlCl₃ + 3BaSO₄(s)" },
+      ] },
+      { label: "(d) Potassium + Water → Potassium hydroxide + Hydrogen", steps: [
+        { prompt: "Write the skeletal equation.", answer: "K + H₂O → KOH + H₂" },
+        { prompt: "Count atoms — what needs balancing?", answer: "1 K, 2 H, 1 O on the left vs 1 K, 3 H, 1 O on the right — H doesn't match" },
+        { prompt: "Balance by doubling K and H₂O.", answer: "2K + 2H₂O → 2KOH + H₂" },
+      ] },
+    ],
+    verifyLine: "All four reactions translated and balanced — atom counts match on both sides ✓",
+  },
+  {
+    id: "balance-only-1",
+    label: "Q6",
+    questionText: "Balance the following chemical equations.",
+    parts: [
+      { label: "(a) HNO₃ + Ca(OH)₂ → Ca(NO₃)₂ + H₂O", steps: [
+        { prompt: "Count atoms — what needs balancing?", answer: "1 H, 1 N, 3 O (HNO₃) vs 1 Ca, 2 O, 2 H (Ca(OH)₂) on the left; N and H don't match the right side yet" },
+        { prompt: "Balance by doubling HNO₃ and H₂O.", answer: "2HNO₃ + Ca(OH)₂ → Ca(NO₃)₂ + 2H₂O" },
+      ] },
+      { label: "(b) NaOH + H₂SO₄ → Na₂SO₄ + H₂O", steps: [
+        { prompt: "Count atoms — what needs balancing?", answer: "1 Na on the left, 2 Na needed on the right (Na₂SO₄) — double NaOH, which then needs 2 H₂O" },
+        { prompt: "Balanced equation?", answer: "2NaOH + H₂SO₄ → Na₂SO₄ + 2H₂O" },
+      ] },
+      { label: "(c) NaCl + AgNO₃ → AgCl + NaNO₃", steps: [
+        { prompt: "Count atoms — is it already balanced?", answer: "1 Na, 1 Cl, 1 Ag, 1 N, 3 O on both sides — already balanced 1:1:1:1", trap: { wrongGuess: "it needs a coefficient somewhere", hint: "count every atom before assuming a reaction needs balancing — a straight 1-to-1 swap of ions, like this one, is sometimes already balanced as written." } },
+      ] },
+      { label: "(d) BaCl₂ + H₂SO₄ → BaSO₄ + HCl", steps: [
+        { prompt: "Count atoms — what needs balancing?", answer: "2 Cl on the left, only 1 in HCl on the right — double HCl" },
+        { prompt: "Balanced equation?", answer: "BaCl₂ + H₂SO₄ → BaSO₄ + 2HCl" },
+      ] },
+    ],
+    verifyLine: "All four equations balanced ✓",
+  },
+  {
+    id: "balance-only-2",
+    label: "Q7",
+    questionText: "Write the balanced chemical equations for the following reactions.",
+    parts: [
+      { label: "(a) Calcium hydroxide + Carbon dioxide → Calcium carbonate + Water", steps: [
+        { prompt: "Write the equation and check if it's balanced.", answer: "Ca(OH)₂ + CO₂ → CaCO₃ + H₂O — already balanced 1:1:1:1 (1 Ca, 2 O+2 O=4 O total, 2 H, 1 C on each side)" },
+      ] },
+      { label: "(b) Zinc + Silver nitrate → Zinc nitrate + Silver", steps: [
+        { prompt: "Write the skeletal equation.", answer: "Zn + AgNO₃ → Zn(NO₃)₂ + Ag" },
+        { prompt: "Count atoms — what needs balancing?", answer: "Zn(NO₃)₂ needs 2 NO₃ groups — double AgNO₃, which then gives 2 Ag" },
+        { prompt: "Balanced equation?", answer: "Zn + 2AgNO₃ → Zn(NO₃)₂ + 2Ag" },
+      ] },
+      { label: "(c) Aluminium + Copper chloride → Aluminium chloride + Copper", steps: [
+        { prompt: "Write the skeletal equation.", answer: "Al + CuCl₂ → AlCl₃ + Cu" },
+        { prompt: "Count atoms — what needs balancing?", answer: "AlCl₃ needs 3 Cl, CuCl₂ only supplies 2 per unit — take 3 CuCl₂ (6 Cl) and 2 AlCl₃ (6 Cl) so Cl matches" },
+        { prompt: "Balanced equation?", answer: "2Al + 3CuCl₂ → 2AlCl₃ + 3Cu" },
+      ] },
+      { label: "(d) Barium chloride + Potassium sulphate → Barium sulphate + Potassium chloride", steps: [
+        { prompt: "Write the skeletal equation.", answer: "BaCl₂ + K₂SO₄ → BaSO₄ + KCl" },
+        { prompt: "Count atoms — what needs balancing?", answer: "2 K on the left needs 2 KCl on the right, which then needs 2 Cl — matching BaCl₂'s 2 Cl" },
+        { prompt: "Balanced equation?", answer: "BaCl₂ + K₂SO₄ → BaSO₄ + 2KCl" },
+      ] },
+    ],
+    verifyLine: "All four equations written and balanced ✓",
+  },
+  {
+    id: "balance-and-classify",
+    label: "Q8",
+    questionText: "Write the balanced chemical equation for the following and identify the type of reaction in each case.",
+    visual: {
+      questions: [
+        { label: "(a)", prompt: "Potassium bromide(aq) + Barium iodide(aq) → Potassium iodide(aq) + Barium bromide(s). Balanced equation: 2KBr + BaI₂ → 2KI + BaBr₂. What type of reaction is this?", options: ["Double displacement", "Displacement", "Combination", "Decomposition"], correctAnswer: "Double displacement", explanation: "Potassium and barium ions swap partners — bromide and iodide exchange between the two compounds, and BaBr₂ forms as an insoluble product." },
+        { label: "(b)", prompt: "Zinc carbonate(s) → Zinc oxide(s) + Carbon dioxide(g). Already balanced 1:1:1. What type of reaction is this?", options: ["Decomposition", "Combination", "Displacement", "Double displacement"], correctAnswer: "Decomposition", explanation: "A single compound (ZnCO₃) breaks down into two simpler substances (ZnO and CO₂) — the defining feature of a decomposition reaction, same pattern as CaCO₃ → CaO + CO₂." },
+        { label: "(c)", prompt: "Hydrogen(g) + Chlorine(g) → Hydrogen chloride(g). Balanced equation: H₂ + Cl₂ → 2HCl. What type of reaction is this?", options: ["Combination", "Decomposition", "Displacement", "Double displacement"], correctAnswer: "Combination", explanation: "Two elements join to form a single new product — the defining feature of a combination reaction." },
+        { label: "(d)", prompt: "Magnesium(s) + Hydrochloric acid(aq) → Magnesium chloride(aq) + Hydrogen(g). Balanced equation: Mg + 2HCl → MgCl₂ + H₂. What type of reaction is this?", options: ["Displacement", "Double displacement", "Combination", "Decomposition"], correctAnswer: "Displacement", explanation: "Magnesium, being more reactive than hydrogen, displaces it out of the acid — one element replacing another in a compound." },
+      ],
+    },
+    verifyLine: "All four balanced and classified ✓",
+  },
+  {
+    id: "exo-endo-thermic",
+    label: "Q9",
+    questionText: "What does one mean by exothermic and endothermic reactions? Give examples.",
+    parts: [
+      { label: "Exothermic", steps: [
+        { prompt: "What is an exothermic reaction?", answer: "A reaction that releases heat along with the products" },
+        { prompt: "Give real examples from this chapter.", answer: "CaO(s) + H₂O(l) → Ca(OH)₂(aq) + Heat (Activity 1.4), and burning of natural gas: CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(g)" },
+      ] },
+      { label: "Endothermic", steps: [
+        { prompt: "What is an endothermic reaction?", answer: "A reaction in which energy is absorbed, usually as heat, light, or electricity" },
+        { prompt: "Give real examples from this chapter.", answer: "Electrolysis of water: 2H₂O(l) --electricity--> 2H₂(g) + O₂(g) (Activity 1.7), and decomposition of silver chloride in sunlight: 2AgCl(s) --sunlight--> 2Ag(s) + Cl₂(g) (Activity 1.8)" },
+      ] },
+    ],
+    verifyLine: "Exothermic releases heat, endothermic absorbs it — both illustrated with real chapter reactions ✓",
+  },
+  {
+    id: "respiration-exothermic",
+    label: "Q10",
+    questionText: "Why is respiration considered an exothermic reaction? Explain.",
+    parts: [
+      { label: "Explain", steps: [
+        { prompt: "What happens chemically during respiration?", answer: "Glucose from digested food combines with oxygen in the body's cells: C₆H₁₂O₆(aq) + 6O₂(aq) → 6CO₂(aq) + 6H₂O(l) + energy" },
+        { prompt: "Why does that make it exothermic?", answer: "The reaction releases energy as one of its products — that's the definition of exothermic. This is the energy the body actually uses to stay alive." },
+      ] },
+    ],
+    verifyLine: "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + energy — energy is released, so respiration is exothermic ✓",
+  },
+  {
+    id: "decomposition-opposite",
+    label: "Q11",
+    questionText: "Why are decomposition reactions called the opposite of combination reactions? Write equations for these reactions.",
+    parts: [
+      { label: "Why opposite?", steps: [
+        { prompt: "What does a combination reaction do?", answer: "Two or more substances combine to form a single new product: A + B → AB" },
+        { prompt: "What does a decomposition reaction do?", answer: "A single substance breaks down into two or more simpler substances: AB → A + B — the exact reverse direction of a combination reaction" },
+      ] },
+      { label: "Equations", steps: [
+        { prompt: "Give a real combination example.", answer: "CaO(s) + H₂O(l) → Ca(OH)₂(aq) + Heat" },
+        { prompt: "Give a real decomposition example.", answer: "CaCO₃(s) --heat--> CaO(s) + CO₂(g)" },
+      ] },
+    ],
+    verifyLine: "Combination joins substances; decomposition breaks one apart — literally reverse patterns ✓",
+  },
+  {
+    id: "decomposition-energy-forms",
+    label: "Q12",
+    questionText: "Write one equation each for decomposition reactions where energy is supplied in the form of heat, light or electricity.",
+    visual: {
+      questions: [
+        { label: "Heat", prompt: "Which real reaction from this chapter is a decomposition driven by heat?", options: ["2FeSO₄(s) --heat--> Fe₂O₃(s) + SO₂(g) + SO₃(g)", "2AgCl(s) --sunlight--> 2Ag(s) + Cl₂(g)", "2H₂O(l) --electricity--> 2H₂(g) + O₂(g)", "CaO(s) + H₂O(l) → Ca(OH)₂(aq)"], correctAnswer: "2FeSO₄(s) --heat--> Fe₂O₃(s) + SO₂(g) + SO₃(g)", explanation: "Heating ferrous sulphate crystals (Activity 1.5) breaks them down into ferric oxide, sulphur dioxide, and sulphur trioxide." },
+        { label: "Light", prompt: "Which real reaction from this chapter is a decomposition driven by light?", options: ["2AgCl(s) --sunlight--> 2Ag(s) + Cl₂(g)", "2FeSO₄(s) --heat--> Fe₂O₃(s) + SO₂(g) + SO₃(g)", "2H₂O(l) --electricity--> 2H₂(g) + O₂(g)", "Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)"], correctAnswer: "2AgCl(s) --sunlight--> 2Ag(s) + Cl₂(g)", explanation: "Silver chloride left in sunlight (Activity 1.8) decomposes into silver and chlorine — the reaction black-and-white photography relies on." },
+        { label: "Electricity", prompt: "Which real reaction from this chapter is a decomposition driven by electricity?", options: ["2H₂O(l) --electricity--> 2H₂(g) + O₂(g)", "2AgCl(s) --sunlight--> 2Ag(s) + Cl₂(g)", "2FeSO₄(s) --heat--> Fe₂O₃(s) + SO₂(g) + SO₃(g)", "Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)"], correctAnswer: "2H₂O(l) --electricity--> 2H₂(g) + O₂(g)", explanation: "Passing electricity through water (Activity 1.7) splits it into hydrogen and oxygen gas." },
+      ],
+    },
+    verifyLine: "Heat → FeSO₄ decomposition, Light → AgCl decomposition, Electricity → electrolysis of water ✓",
+  },
+  {
+    id: "displacement-vs-double",
+    label: "Q13",
+    questionText: "What is the difference between displacement and double displacement reactions? Write equations for these reactions.",
+    parts: [
+      { label: "Difference", steps: [
+        { prompt: "What happens in a displacement reaction?", answer: "One element replaces another element in a compound — only one thing gets swapped out" },
+        { prompt: "What happens in a double displacement reaction?", answer: "Two compounds exchange ions with each other — both partners swap at once, usually producing a precipitate" },
+      ] },
+      { label: "Equations", steps: [
+        { prompt: "Give a real displacement example.", answer: "Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s) (Activity 1.9) — iron displaces copper" },
+        { prompt: "Give a real double displacement example.", answer: "Na₂SO₄(aq) + BaCl₂(aq) → BaSO₄(s) + 2NaCl(aq) (Activity 1.10) — sodium and barium ions swap partners" },
+      ] },
+    ],
+    verifyLine: "Displacement swaps one element; double displacement swaps ions between two compounds ✓",
+  },
+  {
+    id: "silver-refining",
+    label: "Q14",
+    questionText: "In the refining of silver, the recovery of silver from silver nitrate solution involved displacement by copper metal. Write down the reaction involved.",
+    parts: [
+      { label: "Reaction", steps: [
+        { prompt: "Write the skeletal equation.", answer: "Cu(s) + AgNO₃(aq) → Cu(NO₃)₂(aq) + Ag(s)" },
+        { prompt: "Count atoms — what needs balancing?", answer: "Cu(NO₃)₂ needs 2 NO₃ groups — double AgNO₃, which then gives 2 Ag" },
+        { prompt: "Balanced equation?", answer: "Cu(s) + 2AgNO₃(aq) → Cu(NO₃)₂(aq) + 2Ag(s)" },
+      ] },
+    ],
+    verifyLine: "Cu + 2AgNO₃ → Cu(NO₃)₂ + 2Ag — copper, more reactive than silver, displaces it ✓",
+  },
+  {
+    id: "precipitation-reaction",
+    label: "Q15",
+    questionText: "What do you mean by a precipitation reaction? Explain by giving examples.",
+    parts: [
+      { label: "Explain", steps: [
+        { prompt: "What is a precipitation reaction?", answer: "A reaction in which an insoluble solid (a precipitate) forms and separates out of the solution — any reaction producing such a solid can be called a precipitation reaction" },
+        { prompt: "Give real examples from this chapter.", answer: "Na₂SO₄(aq) + BaCl₂(aq) → BaSO₄(s) + 2NaCl(aq) (Activity 1.10, white precipitate), and Pb(NO₃)₂(aq) + 2KI(aq) → PbI₂(s) + 2KNO₃(aq) (Activity 1.2, yellow precipitate)" },
+      ] },
+    ],
+    verifyLine: "BaSO₄ and PbI₂ — both real, insoluble precipitates from this chapter's own activities ✓",
+  },
+  {
+    id: "oxidation-reduction-terms",
+    label: "Q16",
+    questionText: "Explain the following in terms of gain or loss of oxygen with two examples each. (a) Oxidation (b) Reduction",
+    parts: [
+      { label: "(a) Oxidation", steps: [
+        { prompt: "What is oxidation, in terms of oxygen?", answer: "The gain of oxygen by a substance during a reaction" },
+        { prompt: "Give two real examples.", answer: "2Cu(s) + O₂(g) --heat--> 2CuO(s) (Activity 1.11 — copper gains oxygen), and 4Na(s) + O₂(g) → 2Na₂O(s) (sodium gains oxygen)" },
+      ] },
+      { label: "(b) Reduction", steps: [
+        { prompt: "What is reduction, in terms of oxygen?", answer: "The loss of oxygen by a substance during a reaction" },
+        { prompt: "Give two real examples.", answer: "CuO(s) + H₂(g) --heat--> Cu(s) + H₂O(l) (CuO loses oxygen), and 2PbO(s) + C(s) → 2Pb(s) + CO₂(g) (PbO loses oxygen — same reaction as Q1)" },
+      ] },
+    ],
+    verifyLine: "Oxidation = gains oxygen (Cu, Na examples); Reduction = loses oxygen (CuO, PbO examples) ✓",
+  },
+  {
+    id: "shiny-brown-element",
+    label: "Q17",
+    questionText: "A shiny brown coloured element 'X' on heating in air becomes black in colour. Name the element 'X' and the black coloured compound formed.",
+    visual: {
+      questions: [
+        {
+          label: "Q17",
+          prompt: "Which shiny brown element turns black when heated in air, and what's the black compound?",
+          options: [
+            "X = Copper (Cu); black compound = Copper(II) oxide, CuO",
+            "X = Iron (Fe); black compound = Iron(III) oxide, Fe₂O₃",
+            "X = Zinc (Zn); black compound = Zinc oxide, ZnO",
+            "X = Lead (Pb); black compound = Lead oxide, PbO",
+          ],
+          correctAnswer: "X = Copper (Cu); black compound = Copper(II) oxide, CuO",
+          explanation: "This is Activity 1.11: 2Cu(s) + O₂(g) --heat--> 2CuO(s). Shiny brown copper reacts with atmospheric oxygen on heating and its surface becomes coated with black copper(II) oxide.",
+        },
+      ],
+    },
+    verifyLine: "X = Copper; 2Cu + O₂ → 2CuO gives the black coating ✓",
   },
   {
     id: "paint-on-iron",
