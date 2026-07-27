@@ -144,6 +144,68 @@ const CH1_SCIENCE_SECTIONS: Section[] = [
   },
 ];
 
+// History Chapter 1 — "The Rise of Nationalism in Europe" (jess301.pdf, read
+// in full: 28 pages). First non-Maths/Science subject — see
+// CONTENT_RULEBOOK.md for why every Explain topic here is kind:"concept"
+// (Explain-only): History has no worked derivation to hand back as this
+// concept's own Practice the way Maths/Science topics do (rule 1's reuse
+// principle) — the real practice content is each section's own separate
+// in-text Activity/Discuss questions, plus the end-of-chapter Write in
+// Brief/Discuss sections, each its own standalone topic per rule 3a.
+// Section 6 genuinely has no in-text question topic — confirmed by a direct
+// read of the real chapter, not an oversight (see rule 3b's inventory,
+// documented in ai-tutor-solve.tsx above SECTION_1_HISTORY_PROBLEMS).
+const CH1_HISTORY_SECTIONS: Section[] = [
+  {
+    label: "1 — The French Revolution and the Idea of the Nation",
+    topics: [
+      { id: "french-revolution-idea-of-nation", title: "The French Revolution & the idea of the nation", meta: "Not started · Concept", status: "not-started", explainQuery: "french-revolution-idea-of-nation", kind: "concept" },
+      { id: "hist-sec1-questions", title: "In-text Questions — Practice", meta: "Not started · 2 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "2 — The Making of Nationalism in Europe",
+    topics: [
+      { id: "making-of-nationalism-europe", title: "The making of nationalism in Europe", meta: "Not started · Concept", status: "not-started", explainQuery: "making-of-nationalism-europe", kind: "concept" },
+      { id: "hist-sec2-questions", title: "In-text Questions — Practice", meta: "Not started · 2 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "3 — The Age of Revolutions: 1830–1848",
+    topics: [
+      { id: "age-of-revolutions-1830-1848", title: "The Age of Revolutions: 1830–1848", meta: "Not started · Concept", status: "not-started", explainQuery: "age-of-revolutions-1830-1848", kind: "concept" },
+      { id: "hist-sec3-questions", title: "In-text Questions — Practice", meta: "Not started · 4 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "4 — The Making of Germany and Italy",
+    topics: [
+      { id: "making-of-germany-italy", title: "The making of Germany and Italy", meta: "Not started · Concept", status: "not-started", explainQuery: "making-of-germany-italy", kind: "concept" },
+      { id: "hist-sec4-questions", title: "In-text Questions — Practice", meta: "Not started · 4 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "5 — Visualising the Nation",
+    topics: [
+      { id: "visualising-the-nation", title: "Visualising the nation", meta: "Not started · Concept", status: "not-started", explainQuery: "visualising-the-nation", kind: "concept" },
+      { id: "hist-sec5-questions", title: "In-text Questions — Practice", meta: "Not started · 3 questions", status: "not-started" },
+    ],
+  },
+  {
+    label: "6 — Nationalism and Imperialism",
+    topics: [
+      { id: "nationalism-and-imperialism", title: "Nationalism and imperialism", meta: "Not started · Concept", status: "not-started", explainQuery: "nationalism-and-imperialism", kind: "concept" },
+    ],
+  },
+  {
+    label: "End-of-chapter Questions",
+    topics: [
+      { id: "hist-write-in-brief", title: "Write in Brief — Practice", meta: "Not started · 5 questions (Q1 has 5 parts)", status: "not-started" },
+      { id: "hist-discuss", title: "Discuss — Practice", meta: "Not started · 5 questions", status: "not-started" },
+    ],
+  },
+];
+
 // Science chapters 2-13 have no built Explain/Solve content yet, and unlike
 // Maths chapters 3-14, their real sub-topic bullets haven't been researched
 // from jesc102-113.pdf yet either (only Ch.1 has) — so this is an honest
@@ -233,9 +295,20 @@ function chapterTitlesFor(sku: string): string[] {
   return info.subjects[0].chapterList;
 }
 
+// History chapters 2-5 have no built Explain/Solve content yet — same
+// generic "locked, not yet broken down" placeholder as Science's.
+function historyLockedSections(chapterIdx: number): Section[] {
+  return [
+    { label: "Full chapter", topics: [{ id: `hist-c${chapterIdx}-locked`, title: "Concepts & practice", meta: "", status: "locked" }] },
+  ];
+}
+
 function sectionsForChapter(sku: string, chapterIdx: number): Section[] {
   if (sku === "ncert-10-science") {
     return chapterIdx === 0 ? CH1_SCIENCE_SECTIONS : scienceLockedSections(chapterIdx);
+  }
+  if (sku === "ncert-10-history") {
+    return chapterIdx === 0 ? CH1_HISTORY_SECTIONS : historyLockedSections(chapterIdx);
   }
   return chapterIdx === 0 ? CH1_SECTIONS : chapterIdx === 1 ? CH2_SECTIONS : mathsLockedSectionsFor(chapterIdx);
 }

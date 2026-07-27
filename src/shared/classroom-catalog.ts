@@ -147,7 +147,7 @@ export const DUMMY_CRASH_COURSE_PROGRESS: Record<number, Record<CrashCourseSubje
 
 export type CrashStreamId = "pcm" | "pcb" | "maths";
 export type CrashClassLevel = 10 | 11 | 12;
-export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science";
+export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history";
 
 export interface CrashCourse1112Subject {
   id: CrashCourse1112SubjectId;
@@ -184,6 +184,7 @@ const SUBJ_ACCENT = {
   maths:     { accent: "#597ef7", gradientBg: "linear-gradient(135deg, #050a1f 0%, #0a153d 55%, #1d2f7a 100%)" }, // AntD geekblue-5
   biology:   { accent: "#73d13d", gradientBg: "linear-gradient(135deg, #051a02 0%, #103d0a 55%, #226814 100%)" }, // AntD green-5
   science:   { accent: "#9254de", gradientBg: "linear-gradient(135deg, #12071f 0%, #22103d 55%, #391a6d 100%)" }, // AntD purple-5
+  history:   { accent: "#d48806", gradientBg: "linear-gradient(135deg, #1f1502 0%, #3d2b05 55%, #6d4a0a 100%)" }, // AntD gold-6
 } as const;
 
 // NCERT chapter lists — current syllabus, post-2024 rationalization.
@@ -275,6 +276,16 @@ const CHAPTERS_10_SCIENCE = [
   "Electricity",
   "Magnetic Effects of Electric Current",
   "Our Environment",
+];
+// NCERT Class 10 History ("India and the Contemporary World II") — real
+// chapter titles, verified against jess301-305.pdf (downloaded and
+// page-1-of-each checked directly, not from memory).
+const CHAPTERS_10_HISTORY = [
+  "The Rise of Nationalism in Europe",
+  "Nationalism in India",
+  "The Making of a Global World",
+  "The Age of Industrialisation",
+  "Print Culture and the Modern World",
 ];
 const CHAPTERS_11_MATH = [
   "Sets",
@@ -406,6 +417,27 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
       mkSubject("science", "Science", "SCI", CHAPTERS_10_SCIENCE),
     ],
   },
+  // Third AI-tutor demo course — same shape again, first non-Maths/Science
+  // subject (History, one of Social Science's four real books — see the AI
+  // Tutor conversation for why History specifically, and why Social Science
+  // isn't one combined course).
+  "ncert-10-history": {
+    sku: "ncert-10-history",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Social Science",
+    examTarget: "CBSE Class 10 Boards",
+    title: "Class 10 NCERT History",
+    subtitleShort: "History · Full NCERT Syllabus",
+    description: "Class 10 NCERT History (India and the Contemporary World II), chapter by chapter — every section of the real textbook, every discussion question, with an AI tutor that explains any concept on request, discusses any question with real feedback, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("history", "History", "HIST", CHAPTERS_10_HISTORY),
+    ],
+  },
   "crash-11-pcm": {
     sku: "crash-11-pcm",
     classLevel: 11,
@@ -484,7 +516,7 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
   },
 };
 
-export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
+export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
 export type Crash1112Sku = (typeof CRASH_1112_SKUS)[number];
 
 export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112Sku {
@@ -499,7 +531,7 @@ export function getCrash1112Info(sku: string | null | undefined): CrashCourse111
 // Which 11-12/crash skus have the real /ai-tutor/* experience built (vs. the
 // generic crash-course-hub placeholder the other skus still use). Update this
 // alongside chapter-home's per-sku chapter data whenever a new course is added.
-export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science"] as const;
+export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history"] as const;
 export function isAiTutorSku(sku: string | null | undefined): boolean {
   return !!sku && (AI_TUTOR_SKUS as readonly string[]).includes(sku);
 }

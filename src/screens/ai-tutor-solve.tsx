@@ -1209,6 +1209,573 @@ const SECTION_1_3_QUESTIONS_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
+// History Ch.1 — "The Rise of Nationalism in Europe" (jess301.pdf, read in
+// full: 28 pages). First non-Maths/Science subject — see CONTENT_RULEBOOK.md
+// for why this content is `analytical` rather than procedural (History has
+// no worked derivations; almost every real question here is "explain/
+// discuss/describe/compare," with no single determinate answer).
+//
+// Rule-3b inventory of every real question-block in this chapter, mapped to
+// its section, done BEFORE writing any of these:
+//  - Section 1 (French Revolution): 2 real prompts (Fig.1 Activity, Source A
+//    Renan Discuss) — both built below.
+//  - Section 2 (Making of Nationalism): 3 real prompts — Source B List
+//    Discuss and Fig.6 caricature Discuss are built; the "plot the Vienna
+//    Congress changes on a map of Europe" Activity is EXCLUDED — it's a
+//    real map-drawing exercise this app has no plotting surface for, not a
+//    silently-dropped citation.
+//  - Section 3 (Age of Revolutions): 4 real prompts — Grimm/language Discuss,
+//    Silesian-weavers Discuss, the weaver's-report Activity (composition-
+//    style, still uses the analytical shape — see rule note below), and the
+//    Source C women's-rights Discuss. All 4 built.
+//  - Section 4 (Germany & Italy): 4 real prompts — Bismarck-caricature and
+//    Garibaldi-caricature Activities (analytical), the Fig.14(a)
+//    self-identification question (analytical), and the Fig.14(b)
+//    map-reading question — which IS visual/perceptual (real determinate
+//    answers read off the map's year-coding), so it uses the `visual` shape,
+//    not `analytical`, even though it's grouped in the same in-text topic.
+//  - Section 5 (Visualising the Nation): 3 real prompts — Box 3/Fig.17
+//    Germania-symbolism Activity, Fig.18 fallen-Germania Activity, and the
+//    Fig.10/Fig.19 perspective-taking Activity (composition-style). All 3
+//    built.
+//  - Section 6 (Nationalism and Imperialism): confirmed by direct read — this
+//    section has NO in-text Activity/Discuss box of its own. Not an
+//    oversight; there's genuinely nothing here to build.
+//  - End of chapter: "Write in brief" (5 real questions, Q1 has 5 real
+//    sub-parts built as 5 separate problems) and "Discuss" (5 real
+//    questions) — both built in full below. The "Project" (find nationalist
+//    symbols outside Europe) is EXCLUDED — a real multi-day open research
+//    task, not an in-app practice interaction.
+//
+// A couple of these (the weaver's report, the Frankfurt-parliament
+// perspective question) are Language/composition rather than strictly
+// Analytical/argumentative per rule 0's table — both still use the
+// `analytical` shape here rather than a separate one, since the underlying
+// interaction (write freely, get qualitative AI feedback, never right/wrong)
+// is identical; only the criteria's emphasis differs (concrete real details
+// + adopted voice, vs. argument soundness).
+const SECTION_1_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "hist-fig1-utopian-vision",
+    label: "Activity",
+    questionText: "In what way do you think this print (Fig. 1) depicts a utopian vision?",
+    analytical: {
+      criteria: [
+        "Recognises the print imagines 'democratic and social Republics' across all of Europe and America as one unified procession — an idealistic vision, not a real political state of affairs in 1848",
+        "Notes the print shows nations that didn't yet exist as united states (e.g. the German peoples marching under a flag expressing only 'liberal hopes... to unify the numerous German-speaking principalities') as if they already were",
+        "Connects the allegorical figures (Liberty bearing the torch of Enlightenment and the Charter of the Rights of Man; Christ, saints and angels symbolising fraternity) to an idealised, not literal, vision",
+        "Uses the term 'utopian' correctly — a vision so ideal it's unlikely to actually exist",
+      ],
+      groundingNotes:
+        "Fig. 1 (Sorrieu, 1848) shows peoples of Europe and America marching in procession past the statue of Liberty, grouped as distinct nations by flag and costume — including the German peoples, who 'did not yet exist as a united nation' at the time; the flag they carry only expresses 'liberal hopes in 1848 to unify the numerous German-speaking principalities into a nation-state.' Christ, saints and angels gaze from the heavens, symbolising fraternity among nations. 'Utopian' is glossed in the chapter as 'a vision of a society that is so ideal that it is unlikely to actually exist.'",
+    },
+    verifyLine: "A real, verified answer covers the imagined unity, the not-yet-real nations, and the allegorical figures ✓",
+  },
+  {
+    id: "hist-renan-nation",
+    label: "Discuss",
+    questionText: "Summarise the attributes of a nation, as Renan understands them. Why, in his view, are nations important?",
+    analytical: {
+      criteria: [
+        "Identifies that Renan rejects language, race, religion, or territory as what makes a nation",
+        "States Renan's actual definition — a nation is 'the culmination of a long past of endeavours, sacrifice and devotion,' built on common glories, a shared will in the present, and a wish to perform great deeds together",
+        "Cites Renan's phrase that a nation's existence is 'a daily plebiscite' — a continuously renewed, chosen solidarity, not something fixed at birth",
+        "Explains why Renan says nations matter — their existence is 'a guarantee of liberty,' which would be lost if the world had only one law and one master",
+      ],
+      groundingNotes:
+        "Ernst Renan, 'What is a Nation?' (1882 lecture): criticises the idea that a nation is formed by common language, race, religion, or territory. 'A nation is the culmination of a long past of endeavours, sacrifice and devotion... To have common glories in the past, to have a common will in the present, to have performed great deeds together, to wish to perform still more, these are the essential conditions of being a people... Its existence is a daily plebiscite... A nation never has any real interest in annexing or holding on to a country against its will. The existence of nations is a good thing, a necessity even. Their existence is a guarantee of liberty, which would be lost if the world had only one law and only one master.'",
+    },
+    verifyLine: "A real, verified answer names Renan's actual criteria (shared past/will/deeds, daily plebiscite) and his liberty argument ✓",
+  },
+];
+
+const SECTION_2_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "hist-list-zollverein",
+    label: "Discuss",
+    questionText: "Describe the political ends that List hopes to achieve through economic measures.",
+    analytical: {
+      criteria: [
+        "Identifies the zollverein (customs union) as the real economic measure being discussed",
+        "States List's actual goal — to 'bind the Germans economically into a nation,' not just create commercial convenience",
+        "Explains the reasoning: a free, unified internal economic system strengthens national sentiment and interests both internally and externally",
+        "Recognises this as a case of economic policy being used deliberately as a nation-building tool, not pursued for economic reasons alone",
+      ],
+      groundingNotes:
+        "Friedrich List, Professor of Economics at Tübingen, wrote in 1834: 'The aim of the zollverein is to bind the Germans economically into a nation. It will strengthen the nation materially as much by protecting its interests externally as by stimulating its internal productivity. It ought to awaken and raise national sentiment through a fusion of individual and provincial interests. The German people have realised that a free economic system is the only means to engender national feeling.' The zollverein (1834) abolished tariff barriers and reduced the number of currencies from over thirty to two among most German states, and a growing railway network further stimulated mobility — economic nationalism reinforcing the wider nationalist sentiment of the time.",
+    },
+    verifyLine: "A real, verified answer names the zollverein and List's own stated goal — binding Germans into a nation, not just trade ✓",
+  },
+  {
+    id: "hist-caricature-club-of-thinkers",
+    label: "Discuss",
+    questionText: "What is the caricaturist trying to depict?",
+    analytical: {
+      criteria: [
+        "Identifies the cartoon (Fig. 6, 'The Club of Thinkers,' c.1820) as mocking the suppression of free thought and speech after 1815",
+        "Cites the real detail — the plaque reads 'How long will thinking be allowed to us?' and the club's rules include 'muzzles will be distributed to members upon entering'",
+        "Connects this to the real historical context — conservative regimes after 1815 imposed censorship laws on newspapers, books, plays and songs to control ideas of liberty and freedom associated with the French Revolution",
+      ],
+      groundingNotes:
+        "Fig. 6, 'The Club of Thinkers,' anonymous caricature c.1820. The plaque reads: 'The most important question of today's meeting: How long will thinking be allowed to us?' The board lists rules including 'Silence is the first commandment of this learned society' and 'To avoid the eventuality whereby a member of this club may succumb to the temptation of speech, muzzles will be distributed to members upon entering.' Surrounding text: conservative regimes set up after 1815 were autocratic, did not tolerate criticism or dissent, and imposed censorship laws to control what was said in newspapers, books, plays and songs, reflecting ideas of liberty and freedom associated with the French Revolution.",
+    },
+    verifyLine: "A real, verified answer names the plaque/muzzle detail and connects it to real post-1815 censorship ✓",
+  },
+];
+
+const SECTION_3_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "hist-language-national-identity",
+    label: "Discuss",
+    questionText: "Discuss the importance of language and popular traditions in the creation of national identity.",
+    analytical: {
+      criteria: [
+        "Cites the Grimm Brothers' work (collecting German folktales, publishing a 33-volume German dictionary) as building a shared German cultural/national identity, explicitly against French domination",
+        "Cites the Polish case — after Russian occupation, Polish was forced out of schools and Russian imposed everywhere; the clergy then used Polish for Church gatherings and religious instruction as an act of resistance, and priests/bishops were jailed or exiled by Russian authorities for refusing to preach in Russian",
+        "Concludes Polish came to be seen as 'a symbol of the struggle against Russian dominance' — i.e. language itself became a nationalist weapon, not just a communication tool",
+        "Draws the general point: culture (folklore, language) built and expressed nationalist feeling as much as wars or treaties did",
+      ],
+      groundingNotes:
+        "Box 1: the Grimm brothers (Jacob and Wilhelm) spent six years travelling and collecting German folktales, publishing their first collection in 1812 and later a 33-volume German dictionary; they saw French domination as a threat to German culture and their folklore/language projects as building an authentic German identity. Separately: after Russian occupation of Poland, Polish was forced out of schools and Russian imposed everywhere; following an 1831 armed rebellion (crushed), clergy began using Polish for Church gatherings and religious instruction as resistance — many priests and bishops were jailed or sent to Siberia by Russian authorities for refusing to preach in Russian. 'The use of Polish came to be seen as a symbol of the struggle against Russian dominance.'",
+    },
+    verifyLine: "A real, verified answer cites both the Grimm Brothers and the Polish-language cases ✓",
+  },
+  {
+    id: "hist-silesian-weavers-cause",
+    label: "Discuss",
+    questionText: "Describe the cause of the Silesian weavers' uprising. Comment on the viewpoint of the journalist.",
+    analytical: {
+      criteria: [
+        "States the real cause — contractors supplied raw material and orders for finished textiles to weavers, then drastically reduced their payments, amid extreme poverty and desperate need for jobs",
+        "Describes the real event of 4 June 1845 — a large crowd of weavers marched to the contractor's mansion demanding higher wages, were treated with scorn, then forced their way in and smashed windows, furniture and porcelain, and plundered the storehouse",
+        "Notes the contractor fled and returned 24 hours later with the army; eleven weavers were shot in the exchange that followed",
+        "Comments on journalist Wilhelm Wolff's viewpoint — a sympathetic, socially engaged account that documents worker suffering ('the misery of the workers is extreme') in vivid detail, not a neutral or contractor-sympathetic one",
+      ],
+      groundingNotes:
+        "Journalist Wilhelm Wolff described events in a Silesian weaving village (18,000 inhabitants, cotton weaving the main occupation): 'The misery of the workers is extreme. The desperate need for jobs has been taken advantage of by the contractors to reduce the prices of the goods they order... On 4 June at 2 p.m. a large crowd of weavers emerged from their homes and marched in pairs up to the mansion of their contractor demanding higher wages. They were treated with scorn and threats alternately. Following this, a group of them forced their way into the house, smashed its elegant window-panes, furniture, porcelain... another group broke into the storehouse and plundered it of supplies of cloth which they tore to shreds... The contractor fled with his family... He returned 24 hours later having requisitioned the army. In the exchange that followed, eleven weavers were shot.'",
+    },
+    verifyLine: "A real, verified answer names the pay cuts, the 4 June 1845 events, and Wolff's sympathetic viewpoint ✓",
+  },
+  {
+    id: "hist-weaver-report",
+    label: "Activity",
+    questionText: "Imagine you are a weaver who saw the events as they unfolded. Write a report on what you saw.",
+    analytical: {
+      criteria: [
+        "Written in first-person, eyewitness voice, as the Activity asks",
+        "Incorporates specific real details from the source — contractors cutting piece-rates despite extreme hardship, the 4 June march to the mansion, the crowd being met with scorn, the smashed windows/furniture/porcelain, the plundered storehouse, the contractor's flight, his return with soldiers, and the eleven weavers shot",
+        "Conveys the desperation and hardship described in the real account, not a generic or invented scenario",
+      ],
+      groundingNotes:
+        "Same Wilhelm Wolff account as above — this is a composition exercise grounded in that same real event, not a fictional scenario, so a strong 'report' should read as a first-person eyewitness account of those specific real details.",
+    },
+    verifyLine: "A real, verified answer stays grounded in the real 4 June 1845 events, written in first-person ✓",
+  },
+  {
+    id: "hist-womens-rights-sources",
+    label: "Discuss",
+    questionText: "Compare the positions on the question of women's rights voiced by the three writers cited above. What do they reveal about liberal ideology?",
+    analytical: {
+      criteria: [
+        "States Carl Welcker's position — men and women have naturally different roles (man = public/protector/provider, woman = home/family), and that granting equality 'would only endanger harmony and destroy the dignity of the family'",
+        "States Louise Otto-Peters' position — as a feminist activist, she points out the hypocrisy of men who fight for liberty for themselves but deny the same to women, insisting 'liberty is indivisible'",
+        "States the anonymous letter-writer's position — it's 'ridiculous and unreasonable' to deny propertied women the vote, since they perform civic duties and contribute to the state as much as men",
+        "Concludes what this reveals about liberal ideology — that it championed universal liberty and equality in principle, yet many liberals (like Welcker) excluded women from it in practice, exposing a real internal contradiction",
+      ],
+      groundingNotes:
+        "Source C: Carl Welcker (liberal politician, Frankfurt Parliament) — 'Nature has created men and women to carry out different functions... Man, the stronger, the bolder and freer... has been designated as protector of the family... Woman, the weaker... requires the protection of man. Her sphere is the home... equality between the sexes would only endanger harmony and destroy the dignity of the family.' Louise Otto-Peters (1819-95, founded a women's political journal) wrote in 1849: 'Let us ask how many men... would be prepared to fight and die for the freedom of the entire human race?... Liberty is indivisible.' An anonymous letter to the same newspaper's editor (25 June 1850) argued it is 'ridiculous and unreasonable to deny women political rights even though they enjoy the right to property... Why this injustice? Is it not a disgrace that even the stupidest cattle-herder possesses the right to vote... whereas highly talented women owning considerable property are excluded from this right, even though they contribute so much to the maintenance of the state?'",
+    },
+    verifyLine: "A real, verified answer states all three real positions and names the internal contradiction in liberal ideology ✓",
+  },
+];
+
+const SECTION_4_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "hist-bismarck-caricature",
+    label: "Activity",
+    questionText: "Describe the caricature. How does it represent the relationship between Bismarck and the elected deputies of Parliament? What interpretation of democratic processes is the artist trying to convey?",
+    analytical: {
+      criteria: [
+        "Describes the real caricature (Fig. 13, Figaro, Vienna, 1870) — Bismarck shown wielding a whip over cowering figures representing the elected deputies",
+        "Interprets this as showing Bismarck (and Prussian state power) dominating over the elected assembly, rather than being accountable to it",
+        "Connects this to the real body text — German unification was driven by the monarchy, army and bureaucracy under Bismarck's leadership, not by the earlier liberal parliamentary initiative of 1848 (the Frankfurt assembly), which had been suppressed",
+        "Concludes the artist is critiquing how genuine democratic process was subordinated to autocratic/military power in the making of Germany",
+      ],
+      groundingNotes:
+        "Fig. 13: 'Caricature of Otto von Bismarck in the German reichstag (parliament), from Figaro, Vienna, 5 March 1870.' Body text (section 4.1): after 1848, nationalism moved away from democracy and revolution — Prussia's chief minister Otto von Bismarck led the unification 'with the help of the Prussian army and bureaucracy,' via three wars over seven years; 'the nation-building process in Germany had demonstrated the dominance of Prussian state power.' This followed the earlier 1848 Frankfurt Parliament, whose liberal initiative for an elected, constitutional nation was ultimately repressed (the assembly was forced to disband when troops were called in).",
+    },
+    verifyLine: "A real, verified answer describes the whip/deputies caricature and ties it to Prussian state power overriding the parliamentary initiative ✓",
+  },
+  {
+    id: "hist-garibaldi-caricature",
+    label: "Activity",
+    questionText: "The artist has portrayed Garibaldi as holding onto the base of the boot, so that the King of Sardinia-Piedmont can enter it from the top. What statement is this caricature making?",
+    analytical: {
+      criteria: [
+        "Recognises 'the boot' as the shape of the Italian peninsula on the map",
+        "Identifies that Garibaldi (leading his volunteer 'Red Shirts,' who grew to about 30,000) did the real fighting to win southern Italy and the Kingdom of the Two Sicilies",
+        "Notes that King Victor Emmanuel II of Sardinia-Piedmont is shown entering 'the boot' from the top — claiming the crown of the unified nation Garibaldi's forces actually won",
+        "Comments on the real tension this reveals — popular revolutionary action (Garibaldi, and earlier Mazzini's Young Italy) built the nation, but the outcome was a monarchy under Piedmont's king, not the republic Mazzini and Garibaldi's movement had originally envisioned",
+      ],
+      groundingNotes:
+        "Fig. 15: 'Garibaldi helping King Victor Emmanuel II of Sardinia-Piedmont to pull on the boot named Italy. English caricature of 1859.' Body text: Giuseppe Garibaldi led armed volunteers ('Red Shirts,' growing to about 30,000) who in 1860 marched into South Italy and the Kingdom of the Two Sicilies and won local peasant support to drive out Spanish rulers; in 1861 Victor Emmanuel II — not Garibaldi, and not a republic — was proclaimed king of united Italy. Mazzini had earlier sought 'a unitary Italian Republic' through Young Italy; Cavour, who led the diplomatic side of unification, 'was neither a revolutionary nor a democrat.'",
+    },
+    verifyLine: "A real, verified answer names Garibaldi's real fighting, the King claiming the throne, and the republic-vs-monarchy tension ✓",
+  },
+  {
+    id: "hist-italy-self-identification",
+    label: "Activity",
+    questionText: "Look at Fig. 14(a). Do you think that the people living in any of these regions thought of themselves as Italians?",
+    analytical: {
+      criteria: [
+        "Recognises mid-19th-century Italy was politically fragmented — seven separate dynastic states plus Habsburg-ruled regions, with no single Italian nation yet",
+        "Notes even the Italian language itself 'had not acquired one common form' and still had many regional and local variations",
+        "Cites the real detail that even elite unification leaders, like Cavour, 'spoke French much better than he did Italian'",
+        "Cites the striking real anecdote — peasant masses in southern Italy who supported Garibaldi had never even heard the word 'Italia,' and believed 'La Talia' was Victor Emmanuel's wife",
+        "Concludes that a shared 'Italian' identity was, at this stage, largely an elite political project rather than a lived reality for most people",
+      ],
+      groundingNotes:
+        "Body text (section 4.2, 'Italy Unified'): 'Italy was divided into seven states, of which only one, Sardinia-Piedmont, was ruled by an Italian princely house... Even the Italian language had not acquired one common form and still had many regional and local variations.' Chief Minister Cavour, who led unification diplomatically, 'spoke much better French than he did Italian.' 'Much of the Italian population, among whom rates of illiteracy were very high, remained blissfully unaware of liberal-nationalist ideology. The peasant masses who had supported Garibaldi in southern Italy had never heard of Italia, and believed that La Talia was Victor Emmanuel's wife!'",
+    },
+    verifyLine: "A real, verified answer cites the fragmentation, the language variation, Cavour's French, and the 'La Talia' anecdote ✓",
+  },
+  {
+    id: "hist-italy-map-reading",
+    label: "Activity",
+    questionText: "Examine Fig. 14(b). Which was the first region to become part of unified Italy? Which was the last region to join? In which year did the largest number of states join?",
+    visual: {
+      questions: [
+        {
+          label: "First",
+          prompt: "Reading Fig. 14(b)'s year-coded map, which region/group of states was the first to join Sardinia-Piedmont's original core?",
+          options: [
+            "Lombardy and the central Italian states (Parma, Modena, Tuscany) plus the Kingdom of the Two Sicilies, in 1859-60",
+            "Venetia, in 1866",
+            "Rome and the Papal States, in 1870",
+            "None joined — all of Italy was united from the start",
+          ],
+          correctAnswer: "Lombardy and the central Italian states (Parma, Modena, Tuscany) plus the Kingdom of the Two Sicilies, in 1859-60",
+          explanation: "Sardinia-Piedmont was the pre-existing core (1858 on the map). The first real wave of joining regions came via Cavour's 1859 war against Austria (winning Lombardy) and Garibaldi's 1860 campaign into central and southern Italy (Parma, Modena, Tuscany, and the Kingdom of the Two Sicilies) — all marked 1858-60 on the map.",
+        },
+        {
+          label: "Last",
+          prompt: "Which region joined last, per the map?",
+          options: ["Rome and the Papal States, in 1870", "Venetia, in 1866", "Lombardy, in 1859-60", "Sicily, in 1860"],
+          correctAnswer: "Rome and the Papal States, in 1870",
+          explanation: "The Papal States, where a French garrison was stationed, held out until 1870 — France withdrew its troops (occupied by the war with Prussia) and Rome was finally joined to Italy that year, per Box 2's account of Garibaldi's 1867 attempt and the map's 1870 label.",
+        },
+        {
+          label: "Most joined",
+          prompt: "In which year (or year-range) did the largest number of states join at once?",
+          options: ["1859-60", "1866", "1870", "1858"],
+          correctAnswer: "1859-60",
+          explanation: "The map shows several distinct regions — Lombardy, Parma, Modena, Tuscany, and the Kingdom of the Two Sicilies — all joining together in the 1859-60 window, versus just Venetia alone in 1866 and just Rome/the Papal States alone in 1870.",
+        },
+      ],
+    },
+    verifyLine: "1859-60 (Lombardy + central states + Two Sicilies) joined first and in the largest number; Rome joined last, in 1870 ✓",
+  },
+];
+
+const SECTION_5_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "hist-germania-symbolism",
+    label: "Activity",
+    questionText: "With the help of the chart in Box 3, identify the attributes of Veit's Germania and interpret the symbolic meaning of the painting. In an earlier allegorical rendering of 1836, Veit had portrayed the Kaiser's crown at the place where he has now located the broken chain. Explain the significance of this change.",
+    analytical: {
+      criteria: [
+        "Names the real attributes from Box 3 and their real meanings — broken chains (being freed), breastplate with eagle (symbol of the German empire, strength), crown of oak leaves (heroism), sword (readiness to fight), olive branch around the sword (willingness to make peace), the black-red-gold tricolour (flag of the 1848 liberal-nationalists, banned by the Dukes of the German states), rays of the rising sun (beginning of a new era)",
+        "Interprets the overall meaning — Germania as a free, empowered nation, ready to defend itself but seeking peace, at the dawn of a new (unified, liberal) era",
+        "Explains the crown-to-broken-chain change — a shift from a monarchy-centred symbol (the Kaiser's crown, 1836) to a symbol of the nation's own liberation (broken chains, 1848), reflecting that year's revolutionary, popular-sovereignty aspirations rather than allegiance to a ruling monarch",
+      ],
+      groundingNotes:
+        "Box 3 ('Meanings of the symbols'): Broken chains = being freed; Breastplate with eagle = symbol of the German empire, strength; Crown of oak leaves = heroism; Sword = readiness to fight; Olive branch around the sword = willingness to make peace; Black, red and gold tricolour = flag of the liberal-nationalists in 1848, banned by the Dukes of the German states; Rays of the rising sun = beginning of a new era. Fig. 17 caption: Philip Veit's 1848 Germania painting was prepared to hang from the ceiling of the Frankfurt Church of St Paul when the parliament convened in March 1848. The Activity notes Veit's earlier 1836 rendering placed the Kaiser's crown where the broken chain now sits.",
+    },
+    verifyLine: "A real, verified answer names all of Box 3's real attributes and explains the crown→chain shift in symbolism ✓",
+  },
+  {
+    id: "hist-fallen-germania",
+    label: "Activity",
+    questionText: "Describe what you see in Fig. 17. What historical events could Hübner be referring to in this allegorical vision of the nation?",
+    analytical: {
+      criteria: [
+        "Describes the real image — Julius Hübner's 'The Fallen Germania' (1850): a defeated female allegorical figure lying collapsed on the ground, with a broken sword and shield nearby",
+        "Contrasts this with the standing, triumphant Germania Philip Veit painted just two years earlier, in 1848",
+        "Connects the change to the real historical event in between — the failure and suppression of the 1848 liberal revolutions (the Frankfurt Parliament was ultimately forced to disband when troops were called in, and conservative forces reasserted control across the German states)",
+        "Concludes the allegory tracks the nation's real fortunes — triumphant hope in 1848, defeat by 1850",
+      ],
+      groundingNotes:
+        "Fig. 18 caption: 'The fallen Germania, Julius Hübner, 1850' (the question as printed says 'Fig. 17,' which is Veit's standing 1848 Germania — the two images sit on consecutive pages and the intended contrast is clearly between them). Body text (section 3.3): the 1848 Frankfurt Parliament's liberal-nationalist initiative — an elected assembly that drafted a constitution for a German nation under a constitutional monarchy — collapsed when the offered king (Friedrich Wilhelm IV of Prussia) rejected the crown and joined other monarchs in opposing the assembly; 'in the end troops were called in and the assembly was forced to disband.'",
+    },
+    verifyLine: "A real, verified answer describes the fallen Germania and ties it to the real 1848-50 collapse of the Frankfurt Parliament ✓",
+  },
+  {
+    id: "hist-frankfurt-perspective",
+    label: "Activity",
+    questionText: "Look once more at Fig. 10. Imagine you were a citizen of Frankfurt in March 1848 and were present during the proceedings of the parliament. How would you (a) as a man seated in the hall of deputies, and (b) as a woman observing from the galleries, relate to the banner of Germania hanging from the ceiling?",
+    analytical: {
+      criteria: [
+        "As (a) the male deputy: conveys a sense of direct participation and ownership — Germania represents a nation he himself has a real vote and voice in shaping, since deputies (all men) held the actual political rights being exercised",
+        "As (b) the woman in the gallery: grounded in the real fact that women were admitted only as observers, not participants, despite the real political activism described elsewhere in the chapter (forming their own political associations, founding newspapers, demanding rights — Source C)",
+        "Names the real contradiction directly — a strong answer notices that Germania, a FEMALE figure, symbolically represents the whole nation, while the actual women present in the room are denied the political rights that nation is busy defining",
+      ],
+      groundingNotes:
+        "Fig. 10 caption: 'The Frankfurt parliament in the Church of St Paul... Notice the women in the upper left gallery.' Body text: when the Frankfurt parliament convened, 'women were admitted only as observers, to stand in the visitors' gallery,' despite large numbers of women having formed their own political associations, founded newspapers, and taken part in political meetings and demonstrations over the years — the same contradiction discussed via Source C's three writers on women's rights.",
+    },
+    verifyLine: "A real, verified answer contrasts the deputy's real vote with the observer-only status of women in the gallery ✓",
+  },
+];
+
+// End-of-chapter "Write in brief" (jess301.pdf p.28) — 5 real questions, Q1
+// has 5 real sub-parts, built as 5 separate problems (each independently
+// answerable, same pattern as Science's sec-1-1-questions bundling several
+// real questions under one topic).
+const WRITE_IN_BRIEF_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "wib-q1a-mazzini",
+    label: "Q1(a)",
+    questionText: "Write a note on Guiseppe Mazzini.",
+    analytical: {
+      criteria: [
+        "Born in Genoa, 1805; became a member of the secret society the Carbonari as a young man",
+        "Sent into exile in 1831 (aged 26) for attempting a revolution in Liguria",
+        "Founded two more underground societies — Young Italy (Marseilles) and Young Europe (Berne) — for like-minded young men from Poland, France, Italy and the German states",
+        "Believed nations were the natural units of mankind, ordained by God; sought a unitary Italian Republic (not a monarchy) via revolutionary uprisings",
+        "His secret-society model and opposition to monarchy made him, in Metternich's words, 'the most dangerous enemy of our social order'",
+      ],
+      groundingNotes:
+        "'One such individual was the Italian revolutionary Giuseppe Mazzini. Born in Genoa in 1805, he became a member of the secret society of the Carbonari. As a young man of 26, he was sent into exile in 1831 for attempting a revolution in Liguria. He subsequently founded two more underground societies, first, Young Italy in Marseilles, and then, Young Europe in Berne... Mazzini believed that God had intended nations to be the natural units of mankind. So Italy could not continue to be a patchwork of small states and kingdoms. It had to be forged into a single unified republic... Mazzini's relentless opposition to monarchy and his vision of democratic republics frightened the conservatives. Metternich described him as 'the most dangerous enemy of our social order.'",
+    },
+    verifyLine: "A real, verified answer covers Mazzini's exile, Young Italy/Young Europe, and his republican vision ✓",
+  },
+  {
+    id: "wib-q1b-cavour",
+    label: "Q1(b)",
+    questionText: "Write a note on Count Camillo de Cavour.",
+    analytical: {
+      criteria: [
+        "Chief Minister who led the movement to unify Italy's regions",
+        "Was neither a revolutionary nor a democrat, unlike Mazzini",
+        "Spoke French much better than he did Italian, like many of the wealthy, educated Italian elite",
+        "Engineered a tactful diplomatic alliance with France, through which Sardinia-Piedmont defeated Austrian forces in 1859",
+      ],
+      groundingNotes:
+        "'Chief Minister Cavour who led the movement to unify the regions of Italy was neither a revolutionary nor a democrat. Like many other wealthy and educated members of the Italian elite, he spoke much better French than he did Italian. Through a tactful diplomatic alliance with France engineered by Cavour, Sardinia-Piedmont succeeded in defeating the Austrian forces in 1859.'",
+    },
+    verifyLine: "A real, verified answer covers Cavour's role, his non-revolutionary character, and the 1859 French alliance ✓",
+  },
+  {
+    id: "wib-q1c-greek-independence",
+    label: "Q1(c)",
+    questionText: "Write a note on the Greek war of independence.",
+    analytical: {
+      criteria: [
+        "Greece had been part of the Ottoman Empire since the fifteenth century",
+        "The growth of revolutionary nationalism in Europe sparked a Greek independence struggle beginning in 1821",
+        "Greek nationalists got support from Greeks living in exile, and from West Europeans sympathetic to ancient Greek culture",
+        "Poets and artists (e.g. Delacroix's 'Massacre at Chios') mobilised European public opinion; the English poet Lord Byron organised funds and died fighting for the cause in 1824",
+        "The Treaty of Constantinople (1832) recognised Greece as an independent nation",
+      ],
+      groundingNotes:
+        "'Greece had been part of the Ottoman Empire since the fifteenth century. The growth of revolutionary nationalism in Europe sparked off a struggle for independence amongst the Greeks which began in 1821. Nationalists in Greece got support from other Greeks living in exile and also from many West Europeans who had sympathies for ancient Greek culture. Poets and artists lauded Greece as the cradle of European civilisation and mobilised public opinion... The English poet Lord Byron organised funds and later went to fight in the war, where he died of fever in 1824. Finally, the Treaty of Constantinople of 1832 recognised Greece as an independent nation.' Fig. 8, 'The Massacre at Chios' by Delacroix, depicted the killing of 20,000 Greeks by Turks to appeal to European sympathy.",
+    },
+    verifyLine: "A real, verified answer covers the 1821 start, European support/Byron, and the 1832 Treaty of Constantinople ✓",
+  },
+  {
+    id: "wib-q1d-frankfurt-parliament",
+    label: "Q1(d)",
+    questionText: "Write a note on the Frankfurt parliament.",
+    analytical: {
+      criteria: [
+        "An all-German National Assembly, voted for by political associations of middle-class professionals, businessmen and prosperous artisans",
+        "831 elected representatives convened on 18 May 1848 in the Church of St Paul in Frankfurt",
+        "Drafted a constitution for a German nation to be headed by a monarch subject to a parliament",
+        "Collapsed when the offered king, Friedrich Wilhelm IV of Prussia, rejected the crown and joined other monarchs opposing the assembly; troops were eventually called in and the assembly was forced to disband",
+        "Women were admitted only as observers in the gallery, not as participants",
+      ],
+      groundingNotes:
+        "'In the German regions a large number of political associations whose members were middle-class professionals, businessmen and prosperous artisans came together in the city of Frankfurt to vote for an all-German National Assembly. On 18 May 1848, 831 elected representatives marched in a festive procession to take their places in the Frankfurt parliament convened in the Church of St Paul. They drafted a constitution for a German nation to be headed by a monarchy subject to a parliament. When the deputies offered the crown on these terms to Friedrich Wilhelm IV, King of Prussia, he rejected it and joined other monarchs to oppose the elected assembly... In the end troops were called in and the assembly was forced to disband.' Women were 'admitted only as observers, to stand in the visitors' gallery.'",
+    },
+    verifyLine: "A real, verified answer covers the 1848 convening, the constitution offer, and its collapse ✓",
+  },
+  {
+    id: "wib-q1e-women-nationalist-struggles",
+    label: "Q1(e)",
+    questionText: "Write a note on the role of women in nationalist struggles.",
+    analytical: {
+      criteria: [
+        "Women participated actively in nationalist and liberal movements — forming their own political associations, founding newspapers, and taking part in political meetings and demonstrations over many years",
+        "Despite this, they were largely denied the political rights they fought for — e.g. admitted only as observers, not participants, in the Frankfurt Parliament",
+        "Real activists like Louise Otto-Peters founded a women's political journal and directly argued for women's inclusion in the liberty being fought for",
+        "This exposed a real contradiction within liberal-nationalist ideology, which championed universal liberty in principle while many liberals (e.g. Carl Welcker) opposed extending it to women in practice",
+      ],
+      groundingNotes:
+        "'The issue of extending political rights to women was a controversial one within the liberal movement, in which large numbers of women had participated actively over the years. Women had formed their own political associations, founded newspapers and taken part in political meetings and demonstrations. Despite this they were denied suffrage rights during the election of the [Frankfurt] Assembly... women were admitted only as observers, to stand in the visitors' gallery.' Source C gives Louise Otto-Peters (feminist activist, founded a women's political journal) directly challenging this exclusion, against Carl Welcker's opposing view that equality 'would only endanger harmony and destroy the dignity of the family.'",
+    },
+    verifyLine: "A real, verified answer covers women's real activism, their real exclusion, and the contradiction this exposed ✓",
+  },
+  {
+    id: "wib-q2-french-collective-identity",
+    label: "Q2",
+    questionText: "What steps did the French revolutionaries take to create a sense of collective identity among the French people?",
+    analytical: {
+      criteria: [
+        "Ideas of la patrie (the fatherland) and le citoyen (the citizen) emphasised a united community with equal rights under a constitution",
+        "A new French flag, the tricolour, replaced the former royal standard",
+        "The Estates General was elected by the body of active citizens and renamed the National Assembly",
+        "New hymns were composed, oaths taken, and martyrs commemorated, all in the name of the nation",
+        "A centralised administrative system formulated uniform laws for all citizens within French territory",
+        "Internal customs duties and dues were abolished, and a uniform system of weights and measures was adopted",
+        "Regional dialects were discouraged, and French as spoken and written in Paris became the common language of the nation",
+      ],
+      groundingNotes:
+        "'From the very beginning, the French revolutionaries introduced various measures and practices that could create a sense of collective identity amongst the French people. The ideas of la patrie (the fatherland) and le citoyen (the citizen) emphasised the notion of a united community enjoying equal rights under a constitution. A new French flag, the tricolour, was chosen to replace the former royal standard. The Estates General was elected by the body of active citizens and renamed the National Assembly. New hymns were composed, oaths taken and martyrs commemorated, all in the name of the nation. A centralised administrative system was put in place and it formulated uniform laws for all citizens within its territory. Internal customs duties and dues were abolished and a uniform system of weights and measures was adopted. Regional dialects were discouraged and French, as it was spoken and written in Paris, became the common language of the nation.'",
+    },
+    verifyLine: "A real, verified answer covers the real symbolic (flag, hymns), administrative (laws, customs), and linguistic steps taken ✓",
+  },
+  {
+    id: "wib-q3-marianne-germania",
+    label: "Q3",
+    questionText: "Who were Marianne and Germania? What was the importance of the way in which they were portrayed?",
+    analytical: {
+      criteria: [
+        "Both are female allegories personifying a nation — France (Marianne) and Germany (Germania) — a way of giving an abstract idea a concrete, human form, since it's harder to represent a nation the way a ruler can be represented by a portrait or statue",
+        "Marianne — her attributes (red cap, tricolour, cockade) were drawn from Liberty and the Republic; her statues were erected in public squares and her image marked on coins and stamps to help the public identify with the national symbol",
+        "Germania — wears a crown of oak leaves (the German oak stands for heroism), and carries other symbolic attributes (sword, broken chains, tricolour) as described in Box 3",
+        "The importance: these weren't portraits of real women, but symbols meant to be universally recognisable and to build public identification with the idea of the nation itself",
+      ],
+      groundingNotes:
+        "'While it is easy enough to represent a ruler through a portrait or a statue, how does one go about giving a face to a nation? Artists... found a way out by personifying a nation... The female form that was chosen to personify the nation did not stand for any particular woman in real life; rather it sought to give the abstract idea of the nation a concrete form. That is, the female figure became an allegory of the nation.' Marianne: 'a popular Christian name, which underlined the idea of a people's nation... characteristics were drawn from those of Liberty and the Republic — the red cap, the tricolour, the cockade. Statues of Marianne were erected in public squares... Marianne images were marked on coins and stamps.' Germania: 'wears a crown of oak leaves, as the German oak stands for heroism' (plus Box 3's full attribute list).",
+    },
+    verifyLine: "A real, verified answer names both allegories, their real attributes, and why personification mattered ✓",
+  },
+  {
+    id: "wib-q4-german-unification",
+    label: "Q4",
+    questionText: "Briefly trace the process of German unification.",
+    analytical: {
+      criteria: [
+        "1848: middle-class Germans' liberal initiative to unite the German confederation via an elected parliament (Frankfurt) was repressed by monarchy and the military, backed by Prussia's landed Junkers",
+        "Leadership then passed to Prussia, whose chief minister Otto von Bismarck led unification 'from above' via the army and bureaucracy, not via elected liberal politics",
+        "Three wars over seven years — with Austria, Denmark and France — ended in Prussian victory and completed unification",
+        "In January 1871, Prussian king William I was proclaimed German Emperor in a ceremony at the Palace of Versailles (Hall of Mirrors)",
+        "The new state emphasised modernising currency, banking, and the legal/judicial system, with Prussian measures becoming the model for the rest of Germany",
+      ],
+      groundingNotes:
+        "'After 1848, nationalism in Europe moved away from its association with democracy and revolution... This liberal initiative to nation-building was, however, repressed by the combined forces of the monarchy and the military, supported by the large landowners (called Junkers) of Prussia. From then on, Prussia took on the leadership of the movement for national unification. Its chief minister, Otto von Bismarck, was the architect of this process carried out with the help of the Prussian army and bureaucracy. Three wars over seven years — with Austria, Denmark and France — ended in Prussian victory and completed the process of unification. In January 1871... the Prussian king, William I, was proclaimed German Emperor in a ceremony held at Versailles.' The new state 'placed a strong emphasis on modernising the currency, banking, legal and judicial systems in Germany. Prussian measures and practices often became a model for the rest of Germany.'",
+    },
+    verifyLine: "A real, verified answer traces 1848's failure, Bismarck's role, the three wars, and the 1871 Versailles proclamation ✓",
+  },
+  {
+    id: "wib-q5-napoleon-administrative-changes",
+    label: "Q5",
+    questionText: "What changes did Napoleon introduce to make the administrative system more efficient in the territories ruled by him?",
+    analytical: {
+      criteria: [
+        "Introduced the Civil Code of 1804 (the Napoleonic Code), which did away with all privileges based on birth, established equality before the law, and secured the right to property",
+        "Exported this Code to regions under French control — the Dutch Republic, Switzerland, Italy and Germany",
+        "Simplified administrative divisions, abolished the feudal system, and freed peasants from serfdom and manorial dues in the conquered regions",
+        "Removed guild restrictions in towns, and improved transport and communication systems",
+        "These measures, taken together, aimed to make the whole administrative system more rational and efficient, even though Napoleon had (through his return to monarchy) destroyed democracy in France itself",
+      ],
+      groundingNotes:
+        "'Within the wide swathe of territory that came under his control, Napoleon set about introducing many of the reforms he had already introduced in France. Through a return to monarchy Napoleon had, no doubt, destroyed democracy in France, but in the administrative field he had incorporated revolutionary principles in order to make the whole system more rational and efficient. The Civil Code of 1804 — usually known as the Napoleonic Code — did away with all privileges based on birth, established equality before the law and secured the right to property. This Code was exported to the regions under French control. In the Dutch Republic, in Switzerland, in Italy and Germany, Napoleon simplified administrative divisions, abolished the feudal system and freed peasants from serfdom and manorial dues. In the towns too, guild restrictions were removed. Transport and communication systems were improved.'",
+    },
+    verifyLine: "A real, verified answer covers the Napoleonic Code, its export, and the feudal/guild reforms ✓",
+  },
+];
+
+// End-of-chapter "Discuss" (jess301.pdf p.28) — 5 real questions, all
+// genuinely open-ended/analytical with no single determinate answer.
+const DISCUSS_HISTORY_PROBLEMS: PracticeProblem[] = [
+  {
+    id: "discuss-q1-1848-liberal-revolution",
+    label: "Q1",
+    questionText: "Explain what is meant by the 1848 revolution of the liberals. What were the political, social and economic ideas supported by the liberals?",
+    analytical: {
+      criteria: [
+        "Identifies 1848 as a revolution led by the educated middle classes (in contrast to the parallel revolts of poor peasants/workers happening the same year)",
+        "Political ideas: constitutionalism, national unification, a nation-state on parliamentary principles, a constitution, freedom of the press and freedom of association",
+        "In Germany specifically: the Frankfurt Parliament's attempt at an elected assembly drafting a constitution for a monarchy subject to parliament",
+        "Social ideas: some liberals supported extending political rights, though this was contested for women specifically (Source C)",
+        "Economic ideas: liberalism stood for freedom of markets and abolition of state-imposed restrictions on the movement of goods and capital (e.g. the zollverein)",
+      ],
+      groundingNotes:
+        "'Parallel to the revolts of the poor, unemployed and starving peasants and workers in many European countries in the year 1848, a revolution led by the educated middle classes was under way... men and women of the liberal middle classes combined their demands for constitutionalism with national unification... They took advantage of the growing popular unrest to push their demands for the creation of a nation-state on parliamentary principles — a constitution, freedom of the press and freedom of association.' Economically, liberalism 'stood for the freedom of markets and the abolition of state-imposed restrictions on the movement of goods and capital.'",
+    },
+    verifyLine: "A real, verified answer separates 1848's middle-class liberal revolution from the parallel peasant revolts, covering political/social/economic strands ✓",
+  },
+  {
+    id: "discuss-q2-culture-nationalism",
+    label: "Q2",
+    questionText: "Choose three examples to show the contribution of culture to the growth of nationalism in Europe.",
+    analytical: {
+      criteria: [
+        "Names three genuinely distinct real examples from the chapter (any three of the following count)",
+        "Romanticism/folk culture — Herder and other Romantics argued true national spirit (volksgeist) was found among common people, expressed via folk songs, folk poetry and folk dances",
+        "The Grimm Brothers — collecting German folktales and compiling a 33-volume German dictionary as a deliberate act of German cultural nation-building against French domination",
+        "Music — Karol Kurpinski celebrated Polish national struggle through his operas and music, turning folk dances (the polonaise, mazurka) into nationalist symbols",
+        "Visual allegory — female personifications of the nation (Marianne, Germania) built shared public identification with the idea of the nation via statues, coins, and stamps",
+        "Language — the deliberate use of Polish as an act of resistance to Russian rule",
+      ],
+      groundingNotes:
+        "Section 3.1 ('The Romantic Imagination and National Feeling'): 'Culture played an important role in creating the idea of the nation: art and poetry, stories and music helped express and shape nationalist feelings... Herder... claimed that true German culture was to be discovered among the common people — das volk. It was through folk songs, folk poetry and folk dances that the true spirit of the nation (volksgeist) was popularised.' Also: the Grimm Brothers (Box 1); Karol Kurpinski 'celebrated the national struggle through his operas and music, turning folk dances like the polonaise and mazurka into nationalist symbols'; and the Marianne/Germania allegories (section 5).",
+    },
+    verifyLine: "A real, verified answer names 3 real, distinct cultural examples — not invented ones ✓",
+  },
+  {
+    id: "discuss-q3-two-countries-nation-development",
+    label: "Q3",
+    questionText: "Through a focus on any two countries, explain how nations developed over the nineteenth century.",
+    analytical: {
+      criteria: [
+        "Chooses any two of the chapter's real case studies (Germany, Italy, Britain, Greece, or France are all legitimate choices) and develops each with real, specific detail rather than generic statements",
+        "Germany: 1848 Frankfurt Parliament's liberal failure, followed by Prussian-led 'unification from above' via Bismarck, the army and three wars (1866-1871), culminating in William I's 1871 proclamation at Versailles",
+        "Italy: pre-unification fragmentation into seven states, Mazzini's republican Young Italy movement, Cavour's diplomatic/military route via alliance with France (1859), Garibaldi's Red Shirts winning the south (1860), culminating in Victor Emmanuel II crowned king (1861), with Venetia (1866) and Rome (1870) joining later",
+        "Britain (if chosen): a gradual, centuries-long process (not a single revolution) — the English Parliament's 1688 assertion of power, the 1707 Act of Union with Scotland, and the forcible suppression of Scottish Highland and Irish identity to build a single British national culture",
+      ],
+      groundingNotes:
+        "Full real detail across sections 3.3-4.3 for Germany and Italy's unification processes (as summarised in the Q4/wib-q4 grounding above), and section 4.3 for Britain's case (see the britain-model grounding used in the Explain content for 'The Strange Case of Britain').",
+    },
+    verifyLine: "A real, verified answer develops two genuinely distinct real national case studies with specific detail ✓",
+  },
+  {
+    id: "discuss-q4-britain-nationalism-unlike",
+    label: "Q4",
+    questionText: "How was the history of nationalism in Britain unlike the rest of Europe?",
+    analytical: {
+      criteria: [
+        "Britain's nation-state was not the result of a sudden revolution — it was the result of a long, gradual process, unlike Germany/Italy's mid-19th-century unifications",
+        "There was no single 'British nation' prior to the 18th century — the primary identities were ethnic ones (English, Welsh, Scot, Irish), each with distinct cultural/political traditions",
+        "As the English nation grew in wealth and power, the English Parliament (which had seized power from the monarchy in 1688) became the instrument through which England imposed its influence over the other nations of the isles",
+        "The 1707 Act of Union between England and Scotland formed the 'United Kingdom of Great Britain' — in effect, England imposing its influence on Scotland; Scotland's distinctive culture and institutions were systematically suppressed, and Scottish Highlanders were forbidden from speaking Gaelic or wearing their national dress",
+        "Ireland suffered a similar fate — a country divided between Catholics and Protestants, with Britain helping Irish Protestants dominate a largely Catholic country; after a failed 1798 revolt (Wolfe Tone), Ireland was forcibly incorporated into the United Kingdom in 1801",
+        "The symbols of the new Britain (the Union Jack flag, the national anthem 'God Save Our Noble King,' the English language) were actively promoted, with the older nations surviving only as subordinate partners",
+      ],
+      groundingNotes:
+        "'The model of the nation or the nation-state, some scholars have argued, is Great Britain. In Britain the formation of the nation-state was not the result of a sudden upheaval or revolution. It was the result of a long-drawn-out process. There was no British nation prior to the eighteenth century. The primary identities of the people who inhabited the British Isles were ethnic ones — such as English, Welsh, Scot or Irish... As the English nation steadily grew in wealth, importance and power, it was able to extend its influence over the other nations of the islands. The English parliament, which had seized power from the monarchy in 1688... was the instrument through which a nation-state, with England at its centre, came to be forged. The Act of Union (1707) between England and Scotland... meant, in effect, that England was able to impose its influence on Scotland. The British parliament was henceforth dominated by its English members. The growth of a British identity meant that Scotland's distinctive culture and political institutions were systematically suppressed. The Catholic clans... suffered terrible repression... The Scottish Highlanders were forbidden to speak their Gaelic language or wear their national dress... Ireland suffered a similar fate... After a failed revolt led by Wolfe Tone... Ireland was forcibly incorporated into the United Kingdom in 1801. A new 'British nation' was forged through the propagation of a dominant English culture. The symbols of the new Britain — the British flag (Union Jack), the national anthem (God Save Our Noble King), the English language — were actively promoted.'",
+    },
+    verifyLine: "A real, verified answer covers the gradual process, the 1707/1801 unions, and the suppression of Scottish/Irish identity ✓",
+  },
+  {
+    id: "discuss-q5-balkans-nationalist-tensions",
+    label: "Q5",
+    questionText: "Why did nationalist tensions emerge in the Balkans?",
+    analytical: {
+      criteria: [
+        "Names the spread of romantic nationalism among Balkan Slavic peoples combined with the disintegration of the Ottoman Empire as the volatile starting condition",
+        "Notes Balkan peoples based independence claims on nationality, using history to argue they had once been independent before being subjugated",
+        "Notes that Balkan states were also fiercely jealous of and rivalrous with each other, each hoping to gain territory at the others' expense — not just seeking independence from the Ottomans",
+        "Identifies Great Power rivalry (Russia, Germany, England, Austro-Hungary), each keen to counter the others' hold on the region and extend its own control, as the complicating factor",
+        "Connects this combination to a series of regional wars and ultimately the First World War",
+      ],
+      groundingNotes:
+        "Section 6: 'The most serious source of nationalist tension in Europe after 1871 was the area called the Balkans... The Balkan peoples based their claims for independence or political rights on nationality and used history to prove that they had once been independent but had subsequently been subjugated by foreign powers... The Balkan states were fiercely jealous of each other and each hoped to gain more territory at the expense of the others. Matters were further complicated because the Balkans also became the scene of big power rivalry... Each power — Russia, Germany, England, Austro-Hungary — was keen on countering the hold of other powers over the Balkans, and extending its own control over the area. This led to a series of wars in the region and finally the First World War.'",
+    },
+    verifyLine: "A real, verified answer covers Ottoman disintegration + romantic nationalism, inter-Balkan rivalry, and Great Power rivalry ✓",
+  },
+];
+
 const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
@@ -1228,6 +1795,13 @@ const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "sec-1-2-questions": SECTION_1_2_QUESTIONS_PROBLEMS,
   "sec-1-3-questions": SECTION_1_3_QUESTIONS_PROBLEMS,
   "ch1-sci-exercises": CHAPTER_1_EXERCISES_PROBLEMS,
+  "hist-sec1-questions": SECTION_1_HISTORY_PROBLEMS,
+  "hist-sec2-questions": SECTION_2_HISTORY_PROBLEMS,
+  "hist-sec3-questions": SECTION_3_HISTORY_PROBLEMS,
+  "hist-sec4-questions": SECTION_4_HISTORY_PROBLEMS,
+  "hist-sec5-questions": SECTION_5_HISTORY_PROBLEMS,
+  "hist-write-in-brief": WRITE_IN_BRIEF_HISTORY_PROBLEMS,
+  "hist-discuss": DISCUSS_HISTORY_PROBLEMS,
 };
 
 function StepCircle({ state, index }: { state: StepState; index: number }) {
@@ -2291,6 +2865,13 @@ const TOPIC_TITLES: Record<string, string> = {
   "sec-1-2-questions": "In-text Questions — 1.2",
   "sec-1-3-questions": "In-text Questions — 1.3",
   "ch1-sci-exercises": "Chapter Exercises",
+  "hist-sec1-questions": "In-text Questions — Section 1",
+  "hist-sec2-questions": "In-text Questions — Section 2",
+  "hist-sec3-questions": "In-text Questions — Section 3",
+  "hist-sec4-questions": "In-text Questions — Section 4",
+  "hist-sec5-questions": "In-text Questions — Section 5",
+  "hist-write-in-brief": "Write in Brief",
+  "hist-discuss": "Discuss",
 };
 
 export function Component() {
