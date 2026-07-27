@@ -147,7 +147,7 @@ export const DUMMY_CRASH_COURSE_PROGRESS: Record<number, Record<CrashCourseSubje
 
 export type CrashStreamId = "pcm" | "pcb" | "maths";
 export type CrashClassLevel = 10 | 11 | 12;
-export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history";
+export type CrashCourse1112SubjectId = "physics" | "chemistry" | "maths" | "biology" | "science" | "history" | "geography" | "political-science" | "economics";
 
 export interface CrashCourse1112Subject {
   id: CrashCourse1112SubjectId;
@@ -185,6 +185,9 @@ const SUBJ_ACCENT = {
   biology:   { accent: "#73d13d", gradientBg: "linear-gradient(135deg, #051a02 0%, #103d0a 55%, #226814 100%)" }, // AntD green-5
   science:   { accent: "#9254de", gradientBg: "linear-gradient(135deg, #12071f 0%, #22103d 55%, #391a6d 100%)" }, // AntD purple-5
   history:   { accent: "#d48806", gradientBg: "linear-gradient(135deg, #1f1502 0%, #3d2b05 55%, #6d4a0a 100%)" }, // AntD gold-6
+  geography: { accent: "#a0d911", gradientBg: "linear-gradient(135deg, #131a02 0%, #253405 55%, #40590a 100%)" }, // AntD lime-6
+  "political-science": { accent: "#fa541c", gradientBg: "linear-gradient(135deg, #1f0b02 0%, #3d1505 55%, #6d240a 100%)" }, // AntD volcano-6
+  economics: { accent: "#eb2f96", gradientBg: "linear-gradient(135deg, #1f0517 0%, #3d0a2c 55%, #6d134e 100%)" }, // AntD magenta-6
 } as const;
 
 // NCERT chapter lists — current syllabus, post-2024 rationalization.
@@ -286,6 +289,35 @@ const CHAPTERS_10_HISTORY = [
   "The Making of a Global World",
   "The Age of Industrialisation",
   "Print Culture and the Modern World",
+];
+// NCERT Class 10 Geography ("Contemporary India II") — real chapter titles,
+// verified against jess101-107.pdf (downloaded and checked directly).
+const CHAPTERS_10_GEOGRAPHY = [
+  "Resources and Development",
+  "Forest and Wildlife Resources",
+  "Water Resources",
+  "Agriculture",
+  "Minerals and Energy Resources",
+  "Manufacturing Industries",
+  "Lifelines of National Economy",
+];
+// NCERT Class 10 Political Science ("Democratic Politics II") — real
+// chapter titles, verified against jess401-405.pdf.
+const CHAPTERS_10_POLITICAL_SCIENCE = [
+  "Power-sharing",
+  "Federalism",
+  "Gender, Religion and Caste",
+  "Political Parties",
+  "Outcomes of Democracy",
+];
+// NCERT Class 10 Economics ("Understanding Economic Development") — real
+// chapter titles, verified against jess201-205.pdf.
+const CHAPTERS_10_ECONOMICS = [
+  "Development",
+  "Sectors of the Indian Economy",
+  "Money and Credit",
+  "Globalisation and the Indian Economy",
+  "Consumer Rights",
 ];
 const CHAPTERS_11_MATH = [
   "Sets",
@@ -438,6 +470,62 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
       mkSubject("history", "History", "HIST", CHAPTERS_10_HISTORY),
     ],
   },
+  // Fourth, fifth, sixth AI-tutor demo courses — same shape again, the
+  // remaining three of Social Science's four real books (History was
+  // first). All four together are what "Class X Social" groups on Discover
+  // (see marketplace-v1.tsx) — each is still its own real, separate course
+  // underneath, not one combined syllabus.
+  "ncert-10-geography": {
+    sku: "ncert-10-geography",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Social Science",
+    examTarget: "CBSE Class 10 Boards",
+    title: "X Geography NCERT",
+    subtitleShort: "Geography · Full NCERT Syllabus",
+    description: "Class 10 NCERT Geography (Contemporary India II), chapter by chapter — every section of the real textbook, every exercise, with an AI tutor that explains any concept on request, solves any problem step by step, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("geography", "Geography", "GEO", CHAPTERS_10_GEOGRAPHY),
+    ],
+  },
+  "ncert-10-political-science": {
+    sku: "ncert-10-political-science",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Social Science",
+    examTarget: "CBSE Class 10 Boards",
+    title: "X Political Science NCERT",
+    subtitleShort: "Political Science · Full NCERT Syllabus",
+    description: "Class 10 NCERT Political Science (Democratic Politics II), chapter by chapter — every section of the real textbook, every discussion question, with an AI tutor that explains any concept on request, discusses any question with real feedback, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("political-science", "Political Science", "POL", CHAPTERS_10_POLITICAL_SCIENCE),
+    ],
+  },
+  "ncert-10-economics": {
+    sku: "ncert-10-economics",
+    classLevel: 10,
+    stream: "pcb",
+    streamLabel: "Social Science",
+    examTarget: "CBSE Class 10 Boards",
+    title: "X Economics NCERT",
+    subtitleShort: "Economics · Full NCERT Syllabus",
+    description: "Class 10 NCERT Economics (Understanding Economic Development), chapter by chapter — every section of the real textbook, every exercise, with an AI tutor that explains any concept on request, discusses any question with real feedback, and answers doubts anytime.",
+    accentColor: CRASH_1112_ACCENT,
+    accentColorLight: CRASH_1112_ACCENT_LIGHT,
+    gradientBg: CRASH_1112_GRADIENT,
+    gradientBgLight: CRASH_1112_GRADIENT_L,
+    subjects: [
+      mkSubject("economics", "Economics", "ECO", CHAPTERS_10_ECONOMICS),
+    ],
+  },
   "crash-11-pcm": {
     sku: "crash-11-pcm",
     classLevel: 11,
@@ -516,7 +604,7 @@ export const DUMMY_CRASH_COURSES_1112: Record<string, CrashCourse1112Info> = {
   },
 };
 
-export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
+export const CRASH_1112_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics", "crash-11-pcm", "crash-11-pcb", "crash-12-pcm", "crash-12-pcb"] as const;
 export type Crash1112Sku = (typeof CRASH_1112_SKUS)[number];
 
 export function isCrash1112Sku(sku: string | null | undefined): sku is Crash1112Sku {
@@ -531,7 +619,13 @@ export function getCrash1112Info(sku: string | null | undefined): CrashCourse111
 // Which 11-12/crash skus have the real /ai-tutor/* experience built (vs. the
 // generic crash-course-hub placeholder the other skus still use). Update this
 // alongside chapter-home's per-sku chapter data whenever a new course is added.
-export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history"] as const;
+export const AI_TUTOR_SKUS = ["ncert-10-maths", "ncert-10-science", "ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics"] as const;
+
+// The four real Social Science books, grouped as one "Class X Social" entry
+// point on Discover (see marketplace-v1.tsx) even though each is its own
+// separate underlying course/sku — a student picks the specific subject
+// after tapping through, not before.
+export const SOCIAL_SCIENCE_SKUS = ["ncert-10-history", "ncert-10-geography", "ncert-10-political-science", "ncert-10-economics"] as const;
 export function isAiTutorSku(sku: string | null | undefined): boolean {
   return !!sku && (AI_TUTOR_SKUS as readonly string[]).includes(sku);
 }

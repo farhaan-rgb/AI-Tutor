@@ -2020,8 +2020,12 @@ const BANNER_COURSES = [
     image: "/ncert-10-science-listing.jpg",
   },
   {
-    sku: "ncert-10-history",
-    title: "X History NCERT",
+    // Not a real sku — same grouping as Discover's "Class X Social" card
+    // (marketplace-v1.tsx). Tapping any banner slot already navigates to
+    // Discover itself, not directly into a course, so this needs no special
+    // click handling — Discover's own card does the subject-picker routing.
+    sku: "social",
+    title: "X Social NCERT",
     subtitle: "A dedicated teacher for every concept and problem in your textbook",
     image: "/ncert-10-history-listing.jpg",
   },

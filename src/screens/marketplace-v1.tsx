@@ -54,6 +54,7 @@ import { MorphableCard } from "./marketplace-card-morph";
 import { GameArt } from "./game-art";
 import { useGamesPass } from "../shared/games-pass-state";
 import { WishlistCard, WishlistSheet } from "./wishlist-sheet";
+import { SOCIAL_SCIENCE_SKUS } from "../shared/classroom-catalog";
 
 // ─── Local helpers / data ────────────────────────────────────────────────────
 
@@ -1216,11 +1217,16 @@ export function Component() {
         imageAlt: "Teacher presenting the Class 10 NCERT Science textbook",
       },
       {
-        sku: "ncert-10-history",
-        // Same accent again — third subject, same product family.
+        // Not a real sku itself — "Class X Social" groups the four real
+        // Social Science books (History, Geography, Political Science,
+        // Economics) behind one Discover card, since Social Science isn't
+        // one course the way Maths/Science are. Tapping through always
+        // opens the subject picker (ai-tutor-social-subjects.tsx), which
+        // then routes into whichever real course/sku the student picks.
+        sku: "social",
         accent: "#597ef7",
-        title: "X History NCERT",
-        subtitle: "History · Full NCERT Syllabus",
+        title: "X Social NCERT",
+        subtitle: "History, Geography & more · Full NCERT Syllabus",
         image: "/ncert-10-history-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Social Science textbook",
       },
@@ -1239,11 +1245,19 @@ export function Component() {
               one tap away, so repeating it here was pure redundancy. */}
           <div className="grid grid-cols-2" style={{ gap: 12 }}>
             {demoCourses.map((course) => {
-              const isEnrolledInDemoCourse = localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
+              // "Class X Social" isn't a real sku — "enrolled" means enrolled
+              // in any one of the four real Social Science courses behind
+              // it. Either way, tapping it always opens the subject picker
+              // (there's more than one subject to choose between, so unlike
+              // Maths/Science there's no single "continue" destination).
+              const isSocial = course.sku === "social";
+              const isEnrolledInDemoCourse = isSocial
+                ? SOCIAL_SCIENCE_SKUS.some((sku) => localStorage.getItem(`cc_enrolled_${sku}`) === "1")
+                : localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
               return (
                 <button
                   key={course.sku}
-                  onClick={() => navigate(isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
+                  onClick={() => navigate(isSocial ? "/ai-tutor/social-subjects?demo=ai-tutor" : isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
                   className="flex flex-col text-left min-w-0"
                   style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
                 >
@@ -1259,7 +1273,7 @@ export function Component() {
                         className="flex items-center justify-center"
                         style={{ width: "100%", height: 110, background: `linear-gradient(135deg, color-mix(in srgb, ${course.accent} 22%, #0a0612) 0%, color-mix(in srgb, ${course.accent} 45%, #0a0612) 100%)` }}
                       >
-                        {course.sku === "ncert-10-history" ? (
+                        {isSocial ? (
                           <Landmark style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
                         ) : (
                           <Microscope style={{ width: 30, height: 30, color: "rgba(255,255,255,0.85)" }} />
