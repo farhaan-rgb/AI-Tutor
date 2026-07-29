@@ -38,3 +38,5 @@ coverage/
 
 # macOS file-op artifacts
 .!*
+.vercel
+.env*

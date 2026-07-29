@@ -1201,7 +1201,12 @@ export function Component() {
         // CBSE convention — "Class X") instead of "Class 10" — shorter, and
         // matches how these boards actually label the grade themselves.
         title: "X Maths NCERT",
-        subtitle: "Mathematics · Full NCERT Syllabus",
+        // Subtitle is a value-prop hook, not a syllabus descriptor — "Full
+        // NCERT Syllabus" (the old copy) is what every course claims, so it
+        // gives a scrolling student no actual reason to tap this one over
+        // any other. Outcome-framed instead: names the moment the product
+        // solves (stuck on a problem, no one around to ask), not a feature.
+        subtitle: "Solved step by step — ask anytime",
         image: "/ncert-10-maths-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Maths textbook",
       },
@@ -1212,7 +1217,7 @@ export function Component() {
         // read as two different products rather than one course catalog.
         accent: "#597ef7",
         title: "X Science NCERT",
-        subtitle: "Science · Full NCERT Syllabus",
+        subtitle: "Explained step by step — ask anytime",
         image: "/ncert-10-science-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Science textbook",
       },
@@ -1220,14 +1225,14 @@ export function Component() {
         sku: "ncert-10-english",
         accent: "#597ef7",
         title: "X English NCERT",
-        subtitle: "First Flight + Footprints without Feet",
+        subtitle: "Every question in both books, answered",
         imageAlt: "Open book — Class 10 NCERT English textbooks",
       },
       {
         sku: "ncert-10-hindi",
         accent: "#597ef7",
         title: "X Hindi NCERT",
-        subtitle: "क्षितिज + कृतिका",
+        subtitle: "Every question in both books, answered",
         imageAlt: "Open book — Class 10 NCERT Hindi textbooks",
       },
       {
@@ -1240,7 +1245,7 @@ export function Component() {
         sku: "social",
         accent: "#597ef7",
         title: "X Social NCERT",
-        subtitle: "History, Geography & more · Full NCERT Syllabus",
+        subtitle: "Every chapter — even the ones tuition skips",
         image: "/ncert-10-history-listing.jpg",
         imageAlt: "Teacher presenting the Class 10 NCERT Social Science textbook",
       },
@@ -1278,6 +1283,24 @@ export function Component() {
                   style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
                 >
                   <div style={{ position: "relative" }}>
+                    {/* Distinguishes these cards from an ordinary course listing at a
+                        glance, before the subtitle hook even gets read — same job as
+                        a "bestseller"/"new" ribbon on a marketplace listing. Warm gold
+                        rather than the course's own blue accent so it doesn't blend
+                        into the ENROLLED badge's color language. */}
+                    <div
+                      className="flex items-center"
+                      style={{
+                        position: "absolute", top: 6, left: 6, zIndex: 1, gap: 3,
+                        paddingLeft: 5, paddingRight: 6, height: 18, borderRadius: 4,
+                        backgroundColor: "rgba(250,173,20,0.9)",
+                        backdropFilter: "blur(8px)",
+                        WebkitBackdropFilter: "blur(8px)",
+                      }}
+                    >
+                      <Sparkles style={{ width: 9, height: 9, color: "#1f0e02" }} />
+                      <span style={{ fontSize: 9, fontWeight: 800, color: "#1f0e02", letterSpacing: 0.3 }}>AI TUTOR</span>
+                    </div>
                     {course.image ? (
                       <img
                         src={course.image}
@@ -1321,7 +1344,20 @@ export function Component() {
                     <span className="truncate" style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", display: "block", marginBottom: 2 }}>
                       {course.title}
                     </span>
-                    <span className="truncate" style={{ fontSize: "var(--text-2xs)", color: "var(--muted-foreground)", display: "block", marginBottom: 10 }}>{course.subtitle}</span>
+                    {/* 2-line clamp, not single-line truncate — the subtitle is now
+                        an outcome-framed hook (e.g. "Stuck on a problem? Solved,
+                        step by step — anytime"), not a short syllabus descriptor.
+                        Single-line truncation was cutting these off right after
+                        the hook and before the actual payoff — the exact part
+                        doing the persuading. */}
+                    <span
+                      style={{
+                        fontSize: "var(--text-2xs)", color: "var(--muted-foreground)", marginBottom: 10,
+                        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", lineHeight: 1.35,
+                      }}
+                    >
+                      {course.subtitle}
+                    </span>
                     <div className="flex items-center justify-center gap-1.5" style={{ height: 34, borderRadius: "var(--radius-button)", background: course.accent, color: "var(--white)" }}>
                       <Sparkles style={{ width: 13, height: 13 }} />
                       <span style={{ fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue" : "View"}</span>

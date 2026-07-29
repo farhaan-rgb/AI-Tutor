@@ -58,7 +58,20 @@ export default function DevicePreviewToolbar({
   const [device, setDevice] = useState<"mobile" | "web">("mobile");
   const [orientation, setOrientation] = useState<"portrait" | "landscape">("portrait");
   const [showOrientation, setShowOrientation] = useState(false);
-  const [currentPath, setCurrentPath] = useState(() => localStorage.getItem(PREVIEW_PATH_KEY) || "/");
+  // Real bug, real fix: this used to ignore whatever URL the top-level page
+  // was actually loaded with, always falling back to localStorage (or "/")
+  // instead — so sharing a deep link to a specific screen (e.g. a
+  // curriculum-preview URL for a colleague) silently landed wherever this
+  // particular browser's toolbar state happened to be, not the URL that was
+  // shared. A real, non-"/" URL now wins outright; "/" itself (the bare
+  // domain, with no specific screen requested) still falls back to
+  // localStorage/PAGES[0] for in-session continuity via the toolbar's own
+  // page-selector dropdown.
+  const [currentPath, setCurrentPath] = useState(() => {
+    const requested = window.location.pathname + window.location.search;
+    if (requested && requested !== "/") return requested;
+    return localStorage.getItem(PREVIEW_PATH_KEY) || PAGES[0].path;
+  });
   const [showPages, setShowPages] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);

@@ -7,13 +7,28 @@
  * attempted yet, so showing fabricated percentages here would misrepresent state.
  */
 import { useNavigate, useSearchParams } from "react-router";
-import { ArrowLeft, Lock, Sparkles, ChevronRight, Info } from "lucide-react";
+import { ArrowLeft, Lock, Sparkles, ChevronRight, Info, Clock, ListChecks } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
 
 const DEFAULT_SKU = "ncert-10-maths";
 const CRASH_PRICE = 999;
 const CRASH_ORIGINAL_PRICE = 1999;
+
+// The student is already curious enough to have tapped through from
+// Discover/the home banner — this is the highest-intent moment before
+// Enroll Now, so unlike the one-line card hooks (marketplace-v1.tsx,
+// classes-v1.tsx), it's safe to spell out the real value props explicitly
+// as short outcome statements rather than a single teaser line. Icon +
+// text pairs are used here so it also holds up as three quick visual scans
+// on the mobile screen, not just a paragraph. Kept to 3 — every value prop
+// from the same underlying pitch (real problem-solving, real availability,
+// real complete coverage), not a longer feature list.
+const VALUE_PROPS = [
+  { icon: Sparkles, text: "Solves every problem step by step — and tells you exactly what to fix if you get stuck" },
+  { icon: Clock, text: "Available anytime — no waiting for tuition hours to ask a question" },
+  { icon: ListChecks, text: "Every real question from the book, so nothing in it can surprise you on exam day" },
+];
 
 export function Component() {
   const navigate = useNavigate();
@@ -56,6 +71,20 @@ export function Component() {
           <span style={{ ...typo.metaStyle, color: "var(--foreground)" }}>
             Chapter 1 is free to explore in full. Enroll to unlock Chapters 2–{chapters.length}.
           </span>
+        </div>
+
+        <div className="flex flex-col" style={{ gap: 10, marginBottom: 18 }}>
+          {VALUE_PROPS.map(({ icon: Icon, text }) => (
+            <div key={text} className="flex items-start" style={{ gap: 10 }}>
+              <div
+                className="flex items-center justify-center shrink-0"
+                style={{ width: 26, height: 26, borderRadius: 8, marginTop: 1, background: "color-mix(in srgb, var(--primary) 14%, var(--card))", border: "1px solid color-mix(in srgb, var(--primary) 25%, transparent)" }}
+              >
+                <Icon style={{ width: 13, height: 13, color: "var(--primary)" }} />
+              </div>
+              <span style={{ ...typo.cardBodyStyle, fontSize: "var(--text-sm)", color: "var(--foreground)", lineHeight: 1.4 }}>{text}</span>
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-col" style={{ gap: 8 }}>

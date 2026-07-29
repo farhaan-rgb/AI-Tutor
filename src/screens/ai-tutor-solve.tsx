@@ -3579,9 +3579,11 @@ function StepCircle({ state, index }: { state: StepState; index: number }) {
 // is correct: at that point you've committed to the upload path.
 type Mode = "select" | "explain" | "pending" | "correct" | "incorrect";
 
-// Local ai-tutor-server (see /server) — grades an uploaded answer photo with
-// a real vision model instead of the old presenter-picks-the-result demo.
-const API_BASE = "http://localhost:8787";
+// ai-tutor-server (see /server) — grades an uploaded answer photo with a
+// real vision model instead of the old presenter-picks-the-result demo.
+// VITE_API_BASE_URL points at the deployed server in production; falls
+// back to localhost for local dev, where no env var is set.
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8787";
 
 // What the grading model is told counts as "correct" — the real final
 // answer(s), not the whole derivation, so the model judges the student's

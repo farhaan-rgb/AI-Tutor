@@ -55,13 +55,16 @@ export const router = createBrowserRouter([
     path: "/",
     Component: RootLayout,
     children: [
-      /* Redirect to Classes V1 by default */
+      /* Redirect to the AI Tutor demo's Classes V1 view by default — same
+         destination as the DevicePreviewToolbar's "Reset demo" button, so
+         opening the deployed link lands on the scoped demo, not the full
+         app's real Classes screen (every legacy class/course visible). */
       {
         index: true,
         Component: () => {
           const navigate = useNavigate();
           useEffect(() => {
-            navigate('/classes-v1', { replace: true });
+            navigate('/classes-v1?demo=ai-tutor', { replace: true });
           }, [navigate]);
           return null;
         }

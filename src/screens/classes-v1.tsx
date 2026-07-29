@@ -2010,13 +2010,16 @@ const BANNER_COURSES = [
     // "X" (roman numeral 10 — real NCERT/CBSE "Class X" convention) instead
     // of "Class 10" — shorter, matches how the boards label the grade.
     title: "X Maths NCERT",
-    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    // Leads with "anytime" — the single strongest value prop (available
+    // beyond tuition hours) — rather than burying it after "dedicated
+    // teacher," which reads as a feature description, not a reason to tap.
+    subtitle: "Ask anytime — for any concept, any problem in your book",
     image: "/ncert-10-maths-listing.jpg",
   },
   {
     sku: "ncert-10-science",
     title: "X Science NCERT",
-    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    subtitle: "Ask anytime — for any concept, any problem in your book",
     image: "/ncert-10-science-listing.jpg",
   },
   {
@@ -2026,19 +2029,19 @@ const BANNER_COURSES = [
     // click handling — Discover's own card does the subject-picker routing.
     sku: "social",
     title: "X Social NCERT",
-    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    subtitle: "Ask anytime — for any concept, any problem in your book",
     image: "/ncert-10-history-listing.jpg",
   },
   {
     sku: "ncert-10-english",
     title: "X English NCERT",
-    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    subtitle: "Ask anytime — for any concept, any problem in your book",
     image: undefined as string | undefined,
   },
   {
     sku: "ncert-10-hindi",
     title: "X Hindi NCERT",
-    subtitle: "A dedicated teacher for every concept and problem in your textbook",
+    subtitle: "Ask anytime — for any concept, any problem in your book",
     image: undefined as string | undefined,
   },
 ] as const;
