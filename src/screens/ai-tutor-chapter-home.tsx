@@ -21,6 +21,7 @@ import { StatusBar, AnimatedProgress, typo } from "../shared/premium-ui";
 import { FloatingAITutor } from "../shared/floating-ai-tutor";
 import { BottomSheet } from "../shared/bottom-sheet";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
+import { PRACTICE_SETS } from "./ai-tutor-solve";
 
 // Chapter list is resolved per-sku at render time (see chapterTitlesFor /
 // sectionsForChapter below) — this file now serves more than one course.
@@ -861,6 +862,38 @@ function isTopicComplete(t: Topic) {
   return explainDone; // concept (default) — Explain-only
 }
 
+// Real chapter-level totals for the "Concepts explained X/Y" / "Problems
+// solved X/Y" stats shown above Chapter 1. These used to be hardcoded
+// literals ("0 / 6", "0 / 14", percent={0}) — real numbers, but specific to
+// Maths Chapter 1 and frozen at zero forever, both wrong the moment a
+// student actually explained/practiced something, and wrong for every
+// other subject's Chapter 1 (History, English, etc. don't have 6 concepts
+// or 14 problems) since this same block renders for any sku. Computed here
+// instead, using the same showExplain/showPractice rules TopicRow already
+// uses, and the same ai_tutor_demo_* localStorage flags isTopicComplete
+// already reads — so this reflects the exact same "done" state already
+// visible in the topic list below it, not a second, disconnected number.
+function chapterProgressStats(c: ChapterData) {
+  let conceptsTotal = 0, conceptsDone = 0, problemsTotal = 0, problemsDone = 0;
+  for (const section of c.sections) {
+    for (const t of section.topics) {
+      const key = t.explainQuery ?? t.id;
+      const showExplain = !!t.explainQuery && t.kind !== "example";
+      const showPractice = !t.explainQuery || t.kind === "example" || t.kind === "both";
+      if (showExplain) {
+        conceptsTotal += 1;
+        if (localStorage.getItem(`ai_tutor_demo_explain_${key}`) === "1") conceptsDone += 1;
+      }
+      if (showPractice) {
+        const count = PRACTICE_SETS[key]?.length ?? 0;
+        problemsTotal += count;
+        if (localStorage.getItem(`ai_tutor_demo_practice_${key}`) === "1") problemsDone += count;
+      }
+    }
+  }
+  return { conceptsTotal, conceptsDone, problemsTotal, problemsDone };
+}
+
 export function Component() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -955,20 +988,25 @@ export function Component() {
                   <Sparkles style={{ width: 15, height: 15, color: "var(--primary)", flexShrink: 0 }} />
                   <span style={{ ...typo.metaStyle, color: "var(--foreground)" }}>Free preview — explore all of Chapter 1, no enrollment needed.</span>
                 </div>
-              ) : (
-                <div style={{ marginBottom: 20 }}>
-                  <div className="flex items-baseline justify-between" style={{ marginBottom: 6 }}>
-                    <span style={typo.metaStyle}>Concepts explained</span>
-                    <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>0 / 6</span>
+              ) : (() => {
+                const { conceptsTotal, conceptsDone, problemsTotal, problemsDone } = chapterProgressStats(c);
+                const conceptsPct = conceptsTotal > 0 ? Math.round((conceptsDone / conceptsTotal) * 100) : 0;
+                const problemsPct = problemsTotal > 0 ? Math.round((problemsDone / problemsTotal) * 100) : 0;
+                return (
+                  <div style={{ marginBottom: 20 }}>
+                    <div className="flex items-baseline justify-between" style={{ marginBottom: 6 }}>
+                      <span style={typo.metaStyle}>Concepts explained</span>
+                      <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>{conceptsDone} / {conceptsTotal}</span>
+                    </div>
+                    <AnimatedProgress percent={conceptsPct} color="var(--primary)" />
+                    <div className="flex items-baseline justify-between" style={{ margin: "10px 0 6px" }}>
+                      <span style={typo.metaStyle}>Problems solved</span>
+                      <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>{problemsDone} / {problemsTotal}</span>
+                    </div>
+                    <AnimatedProgress percent={problemsPct} color="var(--success)" />
                   </div>
-                  <AnimatedProgress percent={0} color="var(--primary)" />
-                  <div className="flex items-baseline justify-between" style={{ margin: "10px 0 6px" }}>
-                    <span style={typo.metaStyle}>Problems solved</span>
-                    <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>0 / 14</span>
-                  </div>
-                  <AnimatedProgress percent={0} color="var(--success)" />
-                </div>
-              )
+                );
+              })()
             )}
 
             {(() => {

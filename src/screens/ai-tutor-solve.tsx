@@ -3517,7 +3517,10 @@ const HINDI_SURDAS_RACHNA_ABHIVYAKTI_PROBLEMS: PracticeProblem[] = [
   },
 ];
 
-const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
+// Exported so ai-tutor-chapter-home.tsx can compute real "Problems solved"
+// totals per chapter (real per-topic problem counts) instead of a hardcoded
+// number — see that file's chapterProgressStats().
+export const PRACTICE_SETS: Record<string, PracticeProblem[]> = {
   "unique-factorisation": UNIQUE_FACTORISATION_PROBLEMS,
   "hcf-lcm-two": HCF_LCM_TWO_PROBLEMS,
   "hcf-lcm-three": HCF_LCM_THREE_PROBLEMS,
