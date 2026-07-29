@@ -346,7 +346,10 @@ app.post("/api/ai-tutor", async (req, res) => {
       "isn't listed. Prefer the single most central chapter for a wide exam scope and list the rest in " +
       "otherChapters — but leave otherChapters EMPTY for a single, focused request naming just one real " +
       "topic/chapter; only populate it when the request genuinely spans multiple chapters (e.g. 'everything " +
-      "up to polynomials'). Fill urgentTip only when the request signals real time pressure. Write plain English " +
+      "up to polynomials'). Fill urgentTip only when the request signals real time pressure. When type is " +
+      "'navigate', reasoning must ALWAYS be a real, non-empty sentence — even for an obvious one-word match " +
+      "like 'Federalism', still say a sentence like 'Federalism is covered in this real chapter' — never " +
+      "leave it blank just because the match feels self-evident. Write plain English " +
       "for a student who may not be fluent in it — literal phrasing, not idiom. " +
       responseShape +
       `\n\nCurrent chapter: ${chapterContext.title}\nReal content in this chapter:\n${chapterContext.summary}` +
@@ -359,7 +362,10 @@ app.post("/api/ai-tutor", async (req, res) => {
       "chapter that isn't listed. If the request spans multiple chapters (a wide exam scope), return the " +
       "single most central/foundational one as the primary target and list the rest by title in " +
       "otherChapters. If you genuinely cannot match anything real in the catalog, set found to false and " +
-      "explain what's missing in reasoning — never guess. If the request signals time pressure (an exam " +
+      "explain what's missing in reasoning — never guess. reasoning must ALWAYS be a real, non-empty " +
+      "sentence when found is true — even for an obvious one-word match like 'Federalism', still say a " +
+      "sentence like 'Federalism is covered in this real chapter' — never leave it blank just because the " +
+      "match feels self-evident. If the request signals time pressure (an exam " +
       "soon, 'tomorrow', 'test', 'quiz'), fill urgentTip with one short, encouraging sentence on what to " +
       "prioritize first once they arrive (practicing real exercises over re-reading concepts) — otherwise " +
       "leave it null. " +
@@ -406,15 +412,21 @@ app.post("/api/ai-tutor", async (req, res) => {
       });
     }
 
+    const chapterTitle = subject.chapters[chapterIndex];
     res.json({
       type: "navigate",
       found: true,
       sku: parsed.sku,
       chapterIndex,
-      chapterTitle: subject.chapters[chapterIndex],
+      chapterTitle,
       subjectTitle: subject.subject,
       otherChapters: Array.isArray(parsed.otherChapters) ? parsed.otherChapters.filter((c) => typeof c === "string") : [],
-      reasoning: typeof parsed.reasoning === "string" ? parsed.reasoning : "",
+      // Defensive fallback, not just a prompt instruction — the model has
+      // returned an empty string here for an obvious one-word match (real
+      // bug, real screenshot: a "Go to Federalism" button with nothing
+      // above it), so this can never reach the client blank regardless of
+      // how well the prompt is followed.
+      reasoning: typeof parsed.reasoning === "string" && parsed.reasoning.trim() ? parsed.reasoning : `${chapterTitle} is the real chapter that matches what you asked.`,
       urgentTip: typeof parsed.urgentTip === "string" ? parsed.urgentTip : null,
     });
   } catch (err) {
