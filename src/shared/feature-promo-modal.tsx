@@ -1,135 +1,172 @@
 /**
- * AI Tutor promo popup — shown once on the home screen to pull attention
- * toward the guided "try it" journey rather than just the Discover listing.
- * Outcome-framed copy (rule: name what the product solves, not a feature
- * list) mirroring the same value props used on the Discover cards and
- * curriculum-preview screen, kept to the single strongest 3, not all 10
- * discussed earlier — a promo popup gets a few seconds of attention, not a
- * full pitch.
+ * AI Tutor home teaser — a passive, 3-slide visual carousel shown once on
+ * the home screen, purely to give a taste of what the course is before
+ * asking for a click. Deliberately NOT interactive (no step-by-step
+ * problem, no real practice attempt) — that's a different, separate
+ * "handholding journey" concept, not this. Skip is always available; the
+ * only real action is the final CTA into the course.
  *
- * Shown once per browser (localStorage flag), not on every visit — a promo
- * that reappears every time you open the app reads as nagging, not
- * inviting. "Reset demo" clears the flag so the pitch can be re-shown.
+ * Three slides, matching exactly what should be communicated here:
+ *  1. The real textbook curriculum is replicated chapter-by-chapter — a
+ *     student sees the same structure they already know, not something
+ *     unfamiliar.
+ *  2. Every topic has a tutor-led video, plus the ability to ask anything.
+ *  3. Every real problem in the book is available — solve it yourself and
+ *     get feedback, or ask the AI tutor to solve it for you.
+ *
+ * Shown once per browser (localStorage flag) — "Reset demo" clears it so
+ * the pitch can be re-shown.
  */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { Sparkles, Clock, ListChecks, X } from "lucide-react";
+import { BookOpen, Video, ListChecks, ArrowRight } from "lucide-react";
 
 export const PROMO_DISMISSED_KEY = "ai_tutor_promo_dismissed";
+const SKU = "ncert-10-maths";
 
-const VALUE_PROPS = [
-  { icon: Clock, text: "Ask anytime — no waiting for tuition hours" },
-  { icon: Sparkles, text: "Every problem solved step by step" },
-  { icon: ListChecks, text: "Every real question in the book, so nothing surprises you" },
+const SLIDES = [
+  {
+    icon: BookOpen,
+    accent: "#597ef7",
+    gradient: "linear-gradient(160deg, #0a1128 0%, #142657 100%)",
+    headline: "Your exact textbook, chapter by chapter",
+    caption: "Every chapter, every section — arranged exactly like your real NCERT textbook, so nothing here feels unfamiliar.",
+  },
+  {
+    icon: Video,
+    accent: "#9254de",
+    gradient: "linear-gradient(160deg, #170a28 0%, #2d1457 100%)",
+    headline: "A real tutor for every topic",
+    caption: "Watch a tutor explain each concept on video — and ask anything, anytime you're stuck.",
+  },
+  {
+    icon: ListChecks,
+    accent: "#13c2c2",
+    gradient: "linear-gradient(160deg, #04211f 0%, #08403d 100%)",
+    headline: "Every problem in the book — your way",
+    caption: "Solve it yourself and get real feedback, or ask your AI tutor to solve it for you, step by step.",
+  },
 ];
 
 export function FeaturePromoModal() {
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem(PROMO_DISMISSED_KEY) === "1") return;
-    // A short delay so this doesn't slam into view the instant the screen
-    // paints — long enough to register as "the app noticed I'm here," not
-    // long enough to miss it entirely on a quick visit.
-    const t = setTimeout(() => setVisible(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
+  const [visible, setVisible] = useState(() => localStorage.getItem(PROMO_DISMISSED_KEY) !== "1");
+  const [slide, setSlide] = useState(0);
 
   function dismiss() {
     localStorage.setItem(PROMO_DISMISSED_KEY, "1");
     setVisible(false);
   }
 
-  function tryIt() {
+  function goToCourse() {
     localStorage.setItem(PROMO_DISMISSED_KEY, "1");
     setVisible(false);
-    navigate("/ai-tutor/try-it");
+    navigate(`/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${SKU}`);
   }
+
+  if (!visible) return null;
+
+  const isLast = slide === SLIDES.length - 1;
+  const current = SLIDES[slide];
+  const Icon = current.icon;
 
   return (
     <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={dismiss}
-          className="fixed inset-0 flex items-center justify-center"
-          style={{ background: "rgba(0,0,0,0.6)", zIndex: 200, padding: 20 }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              width: "100%", maxWidth: 340, borderRadius: 20,
-              background: "var(--card)", border: "1px solid var(--border)",
-              boxShadow: "var(--elevation-xl)", overflow: "hidden",
-            }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 flex flex-col"
+        style={{ zIndex: 200, background: current.gradient, transition: "background 0.4s ease" }}
+      >
+        {/* Skip — always available, every slide */}
+        <div className="flex justify-end shrink-0" style={{ padding: "18px 20px 0" }}>
+          <button
+            onClick={dismiss}
+            style={{ background: "rgba(255,255,255,0.1)", border: "none", borderRadius: 20, padding: "7px 16px", cursor: "pointer" }}
           >
-            <div
-              className="flex items-center justify-center"
-              style={{ height: 120, background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-700) 100%)", position: "relative" }}
+            <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-semibold)", color: "rgba(255,255,255,0.85)" }}>Skip</span>
+          </button>
+        </div>
+
+        {/* Slide content */}
+        <div className="flex-1 flex flex-col items-center justify-center" style={{ padding: "0 32px" }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide}
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col items-center"
+              style={{ maxWidth: 320 }}
             >
-              <button
-                onClick={dismiss}
-                className="flex items-center justify-center"
-                style={{ position: "absolute", top: 10, right: 10, width: 28, height: 28, borderRadius: "50%", background: "rgba(0,0,0,0.2)", border: "none", cursor: "pointer" }}
-                aria-label="Dismiss"
-              >
-                <X style={{ width: 15, height: 15, color: "var(--white)" }} />
-              </button>
               <motion.div
-                animate={{ scale: [1, 1.08, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
+                animate={{ scale: [1, 1.06, 1] }}
+                transition={{ duration: 2.4, repeat: Infinity }}
                 className="flex items-center justify-center"
-                style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(255,255,255,0.18)" }}
+                style={{
+                  width: 116, height: 116, borderRadius: "50%", marginBottom: 28,
+                  background: `radial-gradient(circle, color-mix(in srgb, ${current.accent} 30%, transparent) 0%, transparent 70%)`,
+                }}
               >
-                <Sparkles style={{ width: 28, height: 28, color: "var(--white)" }} />
+                <div
+                  className="flex items-center justify-center"
+                  style={{ width: 84, height: 84, borderRadius: "50%", background: `color-mix(in srgb, ${current.accent} 22%, black)`, border: `1.5px solid color-mix(in srgb, ${current.accent} 50%, transparent)` }}
+                >
+                  <Icon style={{ width: 38, height: 38, color: current.accent, strokeWidth: 1.75 }} />
+                </div>
               </motion.div>
-            </div>
 
-            <div style={{ padding: "20px 22px 22px" }}>
-              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-lg)", fontWeight: "var(--font-weight-bold)", color: "var(--foreground)", margin: "0 0 6px", lineHeight: 1.3 }}>
-                Never stuck on a problem again
+              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xl)", fontWeight: "var(--font-weight-bold)", color: "var(--white)", textAlign: "center", margin: "0 0 12px", lineHeight: 1.3 }}>
+                {current.headline}
               </p>
-              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", color: "var(--muted-foreground)", margin: "0 0 16px", lineHeight: 1.4 }}>
-                Meet your AI Tutor — a real teacher for every concept and problem in your NCERT textbook.
+              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", color: "rgba(255,255,255,0.7)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
+                {current.caption}
               </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-              <div className="flex flex-col" style={{ gap: 10, marginBottom: 20 }}>
-                {VALUE_PROPS.map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center" style={{ gap: 10 }}>
-                    <div className="flex items-center justify-center shrink-0" style={{ width: 26, height: 26, borderRadius: 8, background: "color-mix(in srgb, var(--primary) 14%, var(--card))", border: "1px solid color-mix(in srgb, var(--primary) 25%, transparent)" }}>
-                      <Icon style={{ width: 13, height: 13, color: "var(--primary)" }} />
-                    </div>
-                    <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xs)", color: "var(--foreground)", lineHeight: 1.3 }}>{text}</span>
-                  </div>
-                ))}
-              </div>
+        {/* Dots + Next/CTA */}
+        <div className="flex flex-col items-center shrink-0" style={{ padding: "0 24px calc(28px + env(safe-area-inset-bottom))", gap: 20 }}>
+          <div className="flex items-center" style={{ gap: 7 }}>
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlide(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                style={{
+                  width: i === slide ? 20 : 7, height: 7, borderRadius: 4, border: "none", cursor: "pointer",
+                  background: i === slide ? current.accent : "rgba(255,255,255,0.25)",
+                  transition: "all 0.25s ease",
+                }}
+              />
+            ))}
+          </div>
 
-              <button
-                onClick={tryIt}
-                className="flex items-center justify-center"
-                style={{ width: "100%", height: 46, borderRadius: 12, background: "var(--primary)", border: "none", cursor: "pointer" }}
-              >
-                <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>Try it now — takes 2 minutes</span>
-              </button>
-              <button
-                onClick={dismiss}
-                className="flex items-center justify-center"
-                style={{ width: "100%", height: 32, marginTop: 6, background: "transparent", border: "none", cursor: "pointer" }}
-              >
-                <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xs)", color: "var(--muted-foreground)" }}>Maybe later</span>
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
+          {isLast ? (
+            <button
+              onClick={goToCourse}
+              className="flex items-center justify-center gap-2"
+              style={{ width: "100%", height: 50, borderRadius: 14, background: current.accent, border: "none", cursor: "pointer" }}
+            >
+              <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>Explore the course</span>
+              <ArrowRight style={{ width: 16, height: 16, color: "var(--white)" }} />
+            </button>
+          ) : (
+            <button
+              onClick={() => setSlide((s) => s + 1)}
+              className="flex items-center justify-center gap-2"
+              style={{ width: "100%", height: 50, borderRadius: 14, background: "rgba(255,255,255,0.12)", border: `1.5px solid ${current.accent}`, cursor: "pointer" }}
+            >
+              <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-semibold)", color: "var(--white)" }}>Next</span>
+              <ArrowRight style={{ width: 16, height: 16, color: "var(--white)" }} />
+            </button>
+          )}
+        </div>
+      </motion.div>
     </AnimatePresence>
   );
 }
