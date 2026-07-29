@@ -37,6 +37,7 @@ import { Component as AiTutorSolveScreen } from "../screens/ai-tutor-solve";
 import { Component as AiTutorGuidedLessonScreen } from "../screens/ai-tutor-guided-lesson";
 import { Component as AiTutorCurriculumPreviewScreen } from "../screens/ai-tutor-curriculum-preview";
 import { Component as AiTutorSocialSubjectsScreen } from "../screens/ai-tutor-social-subjects";
+import { Component as AiTutorTryItScreen } from "../screens/ai-tutor-try-it";
 
 /* Marketplace */
 import { Component as MarketplaceV1Screen } from "../screens/marketplace-v1";
@@ -103,6 +104,7 @@ export const router = createBrowserRouter([
       { path: "ai-tutor/guided-lesson", Component: AiTutorGuidedLessonScreen },
       { path: "ai-tutor/curriculum-preview", Component: AiTutorCurriculumPreviewScreen },
       { path: "ai-tutor/social-subjects", Component: AiTutorSocialSubjectsScreen },
+      { path: "ai-tutor/try-it", Component: AiTutorTryItScreen },
 
       /* Marketplace Detail Pages (no bottom nav) */
       { path: "marketplace/orders", Component: MarketplaceOrdersScreen },

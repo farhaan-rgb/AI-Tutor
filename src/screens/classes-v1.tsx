@@ -26,6 +26,7 @@ import { useVocabFastPurchases } from "../shared/feedback-storage";
 // v1 additions — Games rail in Classes (A/B variant: all 9 games shown FREE here)
 import { DUMMY_GAMES, type Game } from "./marketplace-v1";
 import { useGamesPass } from "../shared/games-pass-state";
+import { FeaturePromoModal } from "../shared/feature-promo-modal";
 
 // Daily Drill streak — mirrors CURRENT_STREAK in game-daily-sprint.tsx.
 // TODO: lift to shared module when persistence lands.
@@ -2641,6 +2642,10 @@ export function Component() {
         )}
       </div>
 
+      {/* Promo pop-up pulling attention toward the guided "try it" journey
+          — only in the AI Tutor demo experience, not the legacy real
+          Classes screen this same component also renders. */}
+      {isAiTutorDemo && <FeaturePromoModal />}
     </div>
   );
 }

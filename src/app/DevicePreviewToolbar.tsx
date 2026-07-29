@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { PROMO_DISMISSED_KEY } from "../shared/feature-promo-modal";
 
 const PREVIEW_PATH_KEY = "devicePreviewToolbar.currentPath";
 
@@ -271,6 +272,7 @@ export default function DevicePreviewToolbar({
             Object.keys(localStorage)
               .filter((k) => k.startsWith("ai_tutor_demo_"))
               .forEach((k) => localStorage.removeItem(k));
+            localStorage.removeItem(PROMO_DISMISSED_KEY);
             navigateTo(PAGES[0].path);
           }}
           title="Clear AI-tutor demo enrollment and reload the starred entry"
