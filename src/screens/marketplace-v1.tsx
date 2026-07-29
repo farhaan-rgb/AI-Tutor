@@ -1309,7 +1309,14 @@ export function Component() {
                         : isSocial
                         ? "/ai-tutor/social-subjects?demo=ai-tutor"
                         : isEnrolledInDemoCourse
-                        ? "/classes-v1?demo=ai-tutor"
+                        // Already enrolled — tapping the listing again should
+                        // continue straight into the course (same real
+                        // destination as the Classrooms card on classes-v1),
+                        // not bounce back out to the classes tab. That
+                        // detour was also the one thing making the guided
+                        // tour's entry point unreachable from here, since
+                        // the tour only lives on Chapter Home.
+                        ? `/ai-tutor/chapter-home?sku=${course.sku}`
                         : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`
                     )
                   }
