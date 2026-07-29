@@ -16,10 +16,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, Check, Play, AlertCircle, ChevronDown, Sparkles, BookOpen, Lock } from "lucide-react";
+import { ArrowLeft, Check, Play, AlertCircle, ChevronDown, Sparkles, BookOpen, Lock, Compass } from "lucide-react";
 import { StatusBar, AnimatedProgress, typo } from "../shared/premium-ui";
 import { FloatingAITutor } from "../shared/floating-ai-tutor";
 import { BottomSheet } from "../shared/bottom-sheet";
+import { TourCard } from "../shared/tour-card";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
 import { PRACTICE_SETS } from "./ai-tutor-solve";
 
@@ -921,15 +922,62 @@ export function Component() {
   const allChapters = allChaptersFor(skuParam);
   const initialChapter = Math.min(Math.max(parseInt(params.get("chapter") ?? "0", 10), 0), allChapters.length - 1);
 
+  // Guided handhold tour — manually triggered only (the "Take the tour"
+  // button below), never auto-fired on enrollment. State travels as URL
+  // query params so it survives the real navigations to Explain/Solve and
+  // back, same convention as sku/chapter/preview above.
+  const tourActive = params.get("tour") === "1";
+  const tourStep = parseInt(params.get("step") ?? "0", 10);
+
   const [currentChapter, setCurrentChapter] = useState(initialChapter);
   const [showJumpSheet, setShowJumpSheet] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const jumpSheetOpenedDuringTourRef = useRef(false);
+
+  function goToTourStep(step: number) {
+    const next = new URLSearchParams(params);
+    next.set("tour", "1");
+    next.set("step", String(step));
+    navigate(`?${next.toString()}`, { replace: true });
+  }
+  function endTour() {
+    const next = new URLSearchParams(params);
+    next.delete("tour");
+    next.delete("step");
+    navigate(`?${next.toString()}`, { replace: true });
+  }
+  function startTour() {
+    chapterRefs.current[0]?.scrollIntoView({ block: "start" });
+    goToTourStep(1);
+  }
+
+  // Step 2 ("jump between chapters") is real-action-gated — it advances the
+  // moment the student actually opens and then closes/uses the real Jump
+  // sheet, not on a "Next" tap.
+  useEffect(() => {
+    if (!tourActive || tourStep !== 2) return;
+    if (showJumpSheet) {
+      jumpSheetOpenedDuringTourRef.current = true;
+    } else if (jumpSheetOpenedDuringTourRef.current) {
+      jumpSheetOpenedDuringTourRef.current = false;
+      goToTourStep(3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showJumpSheet, tourActive, tourStep]);
 
   // Jump to the requested chapter on first mount — no animation, this is the
-  // initial landing position, not a user-triggered navigation.
+  // initial landing position, not a user-triggered navigation. Tour step 5
+  // ("Chapter 3 onward is locked") always arrives via a fresh navigation from
+  // Solve, so it's folded into this same mount-time scroll rather than a
+  // second effect — two separate scrollIntoView calls on the same mount
+  // raced, and the plain instant one always won, undoing the tour's smooth
+  // scroll before it ever got there. Chapter 2 (Polynomials) has its own
+  // real, unlocked content in this build — same as Chapter 1 — so the real
+  // locked boundary the tour should point at is Chapter 3, not Chapter 2.
   useEffect(() => {
-    chapterRefs.current[initialChapter]?.scrollIntoView({ block: "start" });
+    const target = tourActive && tourStep === 5 ? 2 : initialChapter;
+    chapterRefs.current[target]?.scrollIntoView({ block: "start" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -983,6 +1031,72 @@ export function Component() {
         </button>
       </div>
       <div style={{ height: 1, background: "var(--border)" }} />
+
+      {/* Grounded in "Unique prime factorisation" (Ch.1 Maths) specifically —
+          the one topic with a real narrated video + hand-raise + a matching
+          practice set — so the entry point only shows on that course. */}
+      {!tourActive && !isPreview && skuParam === DEFAULT_SKU && (
+        <button
+          onClick={startTour}
+          className="flex items-center justify-center gap-2 shrink-0"
+          style={{
+            margin: "12px 20px 0", padding: "9px 14px", borderRadius: 10, cursor: "pointer",
+            background: "color-mix(in srgb, var(--primary) 8%, var(--card))",
+            border: "1.5px dashed color-mix(in srgb, var(--primary) 40%, transparent)",
+          }}
+        >
+          <Compass style={{ width: 15, height: 15, color: "var(--primary)" }} />
+          <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--primary)" }}>Take the guided tour</span>
+        </button>
+      )}
+
+      {tourActive && tourStep === 1 && (
+        <div style={{ paddingTop: 12 }}>
+          <TourCard
+            step={1}
+            title="This is your full syllabus"
+            body="Scroll through Chapter 1 below to see every real NCERT topic, arranged in the exact order the textbook covers it."
+            ctaLabel="Next"
+            onCta={() => goToTourStep(2)}
+            onExit={endTour}
+          />
+        </div>
+      )}
+      {tourActive && tourStep === 2 && (
+        <div style={{ paddingTop: 12 }}>
+          <TourCard
+            step={2}
+            title="Jump between chapters anytime"
+            body="Tap the book icon up top-right — that opens the full chapter list so you can jump straight to any chapter."
+            waiting
+            onExit={endTour}
+          />
+        </div>
+      )}
+      {tourActive && tourStep === 3 && (
+        <div style={{ paddingTop: 12 }}>
+          <TourCard
+            step={3}
+            title="Watch a real tutor explain a topic"
+            body={`Let's open "${CH1_SECTIONS[0].topics[0].title}" and watch your tutor walk through it — then you can ask a doubt right there.`}
+            ctaLabel="Watch the video →"
+            onCta={() => navigate(`/ai-tutor/explain?topic=unique-factorisation&tour=1&step=3`)}
+            onExit={endTour}
+          />
+        </div>
+      )}
+      {tourActive && tourStep === 5 && (
+        <div style={{ paddingTop: 12 }}>
+          <TourCard
+            step={5}
+            title="Chapter 3 onward is locked"
+            body="This is exactly what a student sees before unlocking more of the course — chapters past Polynomials stay locked until they purchase."
+            ctaLabel="Unlock the full course"
+            onCta={() => navigate(`/crash-course-detail?sku=${skuParam}&demo=ai-tutor`)}
+            onExit={endTour}
+          />
+        </div>
+      )}
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto" style={{ padding: "16px 20px 24px" }}>
         {allChapters.map((c, ci) => (

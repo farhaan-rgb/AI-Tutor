@@ -28,11 +28,12 @@
  * where a topic has them, or real Exercise 1.1/1.2 questions for the two
  * standalone exercise topics — never invented numbers under a real name.
  */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, Mic, Square, Type, PenLine } from "lucide-react";
 import { motion } from "motion/react";
 import { StatusBar, typo } from "../shared/premium-ui";
+import { TourCard } from "../shared/tour-card";
 import { BottomSheet } from "../shared/bottom-sheet";
 import { Skeleton } from "../app/components/ui/skeleton";
 
@@ -4988,13 +4989,59 @@ const TOPIC_TITLES: Record<string, string> = {
   "hindi-surdas-rachna-abhivyakti": "रचना और अभिव्यक्ति",
 };
 
+// Guided handhold tour, step 4 — a self-contained overlay rather than an
+// edit threaded through RichPractice's own internals (that component already
+// has many independent mode branches — select/derivation/visual/analytical —
+// each with its own return; touching every one of them for one coachmark is
+// exactly the kind of change that's easy to half-do). Instead this mounts
+// alongside RichPractice and watches the SAME real completion flag Chapter
+// Home already reads (`ai_tutor_demo_practice_${topicKey}`), polling rather
+// than reaching into RichPractice's state, so it stays fully decoupled.
+function SolveTourOverlay({ topicKey }: { topicKey: string }) {
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const tourActive = params.get("tour") === "1" && params.get("step") === "4";
+  const [done, setDone] = useState(() => localStorage.getItem(`ai_tutor_demo_practice_${topicKey}`) === "1");
+
+  useEffect(() => {
+    if (!tourActive || done) return;
+    const id = setInterval(() => {
+      if (localStorage.getItem(`ai_tutor_demo_practice_${topicKey}`) === "1") setDone(true);
+    }, 600);
+    return () => clearInterval(id);
+  }, [tourActive, done, topicKey]);
+
+  if (!tourActive) return null;
+
+  return (
+    <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(16px + env(safe-area-inset-bottom))", zIndex: 150 }}>
+      <TourCard
+        step={4}
+        title={done ? "Problem solved — nicely done" : "Try solving this yourself"}
+        body={done
+          ? "That's a real, complete worked solution — exactly the kind of feedback a student gets credit for."
+          : "Work through the steps below, one at a time. Once the problem is fully solved, we'll show you what's next."}
+        ctaLabel={done ? "Continue →" : undefined}
+        onCta={done ? () => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths&tour=1&step=5") : undefined}
+        waiting={!done}
+        onExit={() => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths")}
+      />
+    </div>
+  );
+}
+
 export function Component() {
   const [params] = useSearchParams();
   const topicKey = params.get("topic") ?? "hcf-lcm-three";
   const problems = PRACTICE_SETS[topicKey];
 
   if (problems) {
-    return <RichPractice topicKey={topicKey} topicTitle={TOPIC_TITLES[topicKey] ?? "Practice"} problems={problems} />;
+    return (
+      <>
+        <RichPractice topicKey={topicKey} topicTitle={TOPIC_TITLES[topicKey] ?? "Practice"} problems={problems} />
+        <SolveTourOverlay topicKey={topicKey} />
+      </>
+    );
   }
   return <LegacyPractice topicKey={topicKey} />;
 }
