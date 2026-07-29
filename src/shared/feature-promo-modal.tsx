@@ -6,6 +6,15 @@
  * "handholding journey" concept, not this. Skip is always available; the
  * only real action is the final CTA into the course.
  *
+ * Each slide's hero is a REAL image, not an abstract icon — a screenshot of
+ * the actual product (slides 2-3) or the real course photo already used on
+ * Discover (slide 1), since a genuine screenshot builds more familiarity
+ * and interest than a generic illustration ever could. Slides 2 and 3 both
+ * use the same real "Real Numbers" chapter thread (Proving √p is
+ * irrational → the 4ⁿ practice problem) as the rest of this build, so the
+ * curriculum-familiarity slide and the two feature slides all point at the
+ * same real content a student would actually land on.
+ *
  * Three slides, matching exactly what should be communicated here:
  *  1. The real textbook curriculum is replicated chapter-by-chapter — a
  *     student sees the same structure they already know, not something
@@ -30,6 +39,8 @@ const SLIDES = [
     icon: BookOpen,
     accent: "#597ef7",
     gradient: "linear-gradient(160deg, #0a1128 0%, #142657 100%)",
+    image: "/ncert-10-maths-listing.jpg",
+    imageAlt: "The real Class 10 NCERT Maths textbook",
     headline: "Your exact textbook, chapter by chapter",
     caption: "Every chapter, every section — arranged exactly like your real NCERT textbook, so nothing here feels unfamiliar.",
   },
@@ -37,13 +48,17 @@ const SLIDES = [
     icon: Video,
     accent: "#9254de",
     gradient: "linear-gradient(160deg, #170a28 0%, #2d1457 100%)",
+    image: "/promo-explain.jpg",
+    imageAlt: "Real screenshot — the AI tutor explaining 'Proving √p is irrational', with a follow-up question box",
     headline: "A real tutor for every topic",
-    caption: "Watch a tutor explain each concept on video — and ask anything, anytime you're stuck.",
+    caption: "Watch a tutor explain each concept — and ask anything, anytime you're stuck.",
   },
   {
     icon: ListChecks,
     accent: "#13c2c2",
     gradient: "linear-gradient(160deg, #04211f 0%, #08403d 100%)",
+    image: "/promo-practice.jpg",
+    imageAlt: "Real screenshot — a step-by-step practice problem being solved",
     headline: "Every problem in the book — your way",
     caption: "Solve it yourself and get real feedback, or ask your AI tutor to solve it for you, step by step.",
   },
@@ -91,7 +106,7 @@ export function FeaturePromoModal() {
         </div>
 
         {/* Slide content */}
-        <div className="flex-1 flex flex-col items-center justify-center" style={{ padding: "0 32px" }}>
+        <div className="flex-1 flex flex-col items-center justify-center" style={{ padding: "8px 32px 0" }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={slide}
@@ -100,29 +115,38 @@ export function FeaturePromoModal() {
               exit={{ opacity: 0, x: -24 }}
               transition={{ duration: 0.3 }}
               className="flex flex-col items-center"
-              style={{ maxWidth: 320 }}
+              style={{ maxWidth: 300, width: "100%" }}
             >
-              <motion.div
-                animate={{ scale: [1, 1.06, 1] }}
-                transition={{ duration: 2.4, repeat: Infinity }}
-                className="flex items-center justify-center"
+              {/* Real screenshot / real course photo — not an abstract icon.
+                  Fixed 3:4 frame with object-fit:cover so all three slides
+                  (one landscape course photo, two portrait app screenshots)
+                  read as one consistent card treatment. */}
+              <div
+                className="relative"
                 style={{
-                  width: 116, height: 116, borderRadius: "50%", marginBottom: 28,
-                  background: `radial-gradient(circle, color-mix(in srgb, ${current.accent} 30%, transparent) 0%, transparent 70%)`,
+                  width: "100%", aspectRatio: "3 / 4", borderRadius: 18, overflow: "hidden", marginBottom: 22,
+                  border: `1.5px solid color-mix(in srgb, ${current.accent} 45%, transparent)`,
+                  boxShadow: `0 12px 32px -8px color-mix(in srgb, ${current.accent} 35%, transparent)`,
                 }}
               >
+                <img src={current.image} alt={current.imageAlt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 <div
-                  className="flex items-center justify-center"
-                  style={{ width: 84, height: 84, borderRadius: "50%", background: `color-mix(in srgb, ${current.accent} 22%, black)`, border: `1.5px solid color-mix(in srgb, ${current.accent} 50%, transparent)` }}
+                  className="flex items-center justify-center absolute"
+                  style={{
+                    bottom: 10, right: 10, width: 38, height: 38, borderRadius: "50%",
+                    background: `color-mix(in srgb, ${current.accent} 30%, black)`,
+                    border: `1.5px solid color-mix(in srgb, ${current.accent} 60%, transparent)`,
+                    backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
+                  }}
                 >
-                  <Icon style={{ width: 38, height: 38, color: current.accent, strokeWidth: 1.75 }} />
+                  <Icon style={{ width: 18, height: 18, color: current.accent, strokeWidth: 2 }} />
                 </div>
-              </motion.div>
+              </div>
 
-              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xl)", fontWeight: "var(--font-weight-bold)", color: "var(--white)", textAlign: "center", margin: "0 0 12px", lineHeight: 1.3 }}>
+              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-lg)", fontWeight: "var(--font-weight-bold)", color: "var(--white)", textAlign: "center", margin: "0 0 10px", lineHeight: 1.3 }}>
                 {current.headline}
               </p>
-              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-sm)", color: "rgba(255,255,255,0.7)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
+              <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-xs)", color: "rgba(255,255,255,0.7)", textAlign: "center", margin: 0, lineHeight: 1.5 }}>
                 {current.caption}
               </p>
             </motion.div>
@@ -130,7 +154,7 @@ export function FeaturePromoModal() {
         </div>
 
         {/* Dots + Next/CTA */}
-        <div className="flex flex-col items-center shrink-0" style={{ padding: "0 24px calc(28px + env(safe-area-inset-bottom))", gap: 20 }}>
+        <div className="flex flex-col items-center shrink-0" style={{ padding: "16px 24px calc(28px + env(safe-area-inset-bottom))", gap: 18 }}>
           <div className="flex items-center" style={{ gap: 7 }}>
             {SLIDES.map((_, i) => (
               <button
