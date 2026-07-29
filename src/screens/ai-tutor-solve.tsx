@@ -33,7 +33,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Camera, Check, X, Sparkles, Upload, AlertTriangle, ChevronLeft, ChevronRight, ChevronDown, Mic, Square, Type, PenLine } from "lucide-react";
 import { motion } from "motion/react";
 import { StatusBar, typo } from "../shared/premium-ui";
-import { TourCard } from "../shared/tour-card";
+import { TourCard, TourPointer, TourHighlightRing } from "../shared/tour-card";
 import { BottomSheet } from "../shared/bottom-sheet";
 import { Skeleton } from "../app/components/ui/skeleton";
 
@@ -3695,6 +3695,11 @@ function ProblemIndex({ problems, problemIdx, isProblemDone, onSelect }: {
 
 function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; topicTitle: string; problems: PracticeProblem[] }) {
   const navigate = useNavigate();
+  // Guided tour, step 4 — points at the real "Ask AI tutor to solve it"
+  // button on the initial "select" screen (the only screen this tour ever
+  // reaches, since it navigates straight to a fresh, not-yet-started problem).
+  const [tourParams] = useSearchParams();
+  const tourActive = tourParams.get("tour") === "1" && tourParams.get("step") === "4";
   const [problemIdx, setProblemIdx] = useState(0);
   const [mode, setMode] = useState<Mode>("select");
   const [uploadOpen, setUploadOpen] = useState(false);
@@ -4552,19 +4557,27 @@ function RichPractice({ topicKey, topicTitle, problems }: { topicKey: string; to
               your mind back to "just ask the AI" never requires leaving the
               screen. Only submitting actually commits you past this point. */}
           <div className="flex flex-col" style={{ gap: 10 }}>
-            <button
-              onClick={startExplain}
-              className="flex items-center gap-3"
-              style={{ padding: "14px 16px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
-            >
-              <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--warning-950)" }}>
-                <Sparkles style={{ width: 18, height: 18, color: "var(--warning)" }} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Ask AI tutor to solve it</p>
-                <p style={typo.metaStyle}>Step-by-step, at your pace</p>
-              </div>
-            </button>
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={startExplain}
+                className="flex items-center gap-3"
+                style={{ width: "100%", padding: "14px 16px", borderRadius: 12, border: tourActive ? "1.5px solid var(--primary)" : "1px solid var(--border)", background: "var(--card)", cursor: "pointer", textAlign: "left" }}
+              >
+                <div className="flex items-center justify-center shrink-0" style={{ width: 40, height: 40, borderRadius: 12, background: "var(--warning-950)" }}>
+                  <Sparkles style={{ width: 18, height: 18, color: "var(--warning)" }} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p style={{ ...typo.cardTitleStyle, fontSize: "var(--text-sm)" }}>Ask AI tutor to solve it</p>
+                  <p style={typo.metaStyle}>Step-by-step, at your pace</p>
+                </div>
+              </button>
+              {tourActive && (
+                <>
+                  <TourHighlightRing radius={12} />
+                  <TourPointer step={4} text="Tap here — your tutor walks you through this problem one step at a time." align="center" onExit={() => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths")} />
+                </>
+              )}
+            </div>
 
             <button
               onClick={() => setUploadOpen(!uploadOpen)}
@@ -5011,19 +5024,19 @@ function SolveTourOverlay({ topicKey }: { topicKey: string }) {
     return () => clearInterval(id);
   }, [tourActive, done, topicKey]);
 
-  if (!tourActive) return null;
+  // Only surfaces once the problem is genuinely solved — the "not done yet"
+  // case is already covered by the inline pointer on the real "Ask AI tutor
+  // to solve it" button (see RichPractice), so this doesn't duplicate it.
+  if (!tourActive || !done) return null;
 
   return (
     <div style={{ position: "fixed", left: 0, right: 0, bottom: "calc(16px + env(safe-area-inset-bottom))", zIndex: 150 }}>
       <TourCard
         step={4}
-        title={done ? "Problem solved — nicely done" : "Try solving this yourself"}
-        body={done
-          ? "That's a real, complete worked solution — exactly the kind of feedback a student gets credit for."
-          : "Work through the steps below, one at a time. Once the problem is fully solved, we'll show you what's next."}
-        ctaLabel={done ? "Continue →" : undefined}
-        onCta={done ? () => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths&tour=1&step=5") : undefined}
-        waiting={!done}
+        title="Problem solved — nicely done"
+        body="That's a real, complete worked solution — exactly the kind of feedback a student gets credit for."
+        ctaLabel="Continue →"
+        onCta={() => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths&tour=1&step=5")}
         onExit={() => navigate("/ai-tutor/chapter-home?sku=ncert-10-maths")}
       />
     </div>

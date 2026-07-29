@@ -20,7 +20,7 @@ import { ArrowLeft, Check, Play, AlertCircle, ChevronDown, Sparkles, BookOpen, L
 import { StatusBar, AnimatedProgress, typo } from "../shared/premium-ui";
 import { FloatingAITutor } from "../shared/floating-ai-tutor";
 import { BottomSheet } from "../shared/bottom-sheet";
-import { TourCard } from "../shared/tour-card";
+import { TourCard, TourPointer, TourHighlightRing } from "../shared/tour-card";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
 import { PRACTICE_SETS } from "./ai-tutor-solve";
 
@@ -668,7 +668,7 @@ function SectionDivider({ label }: { label: string }) {
   );
 }
 
-function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice, onLockedTap }: {
+function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice, onLockedTap, tourTarget, tourStep, onExitTour }: {
   topic: Topic;
   isLast: boolean;
   nextStatus?: TopicStatus;
@@ -676,10 +676,16 @@ function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice,
   onExplain: (t: Topic) => void;
   onPractice: (t: Topic) => void;
   onLockedTap: () => void;
+  // Guided tour, step 3 — true only for the one real topic ("Unique prime
+  // factorisation") that has a real narrated video + hand-raise built, so
+  // the tour points at its actual Explain icon instead of a proxy button.
+  tourTarget?: boolean;
+  tourStep?: number;
+  onExitTour?: () => void;
 }) {
   // Every row starts collapsed EXCEPT the recommended next action, which opens
   // pre-expanded so its Explain/Practice buttons are visible without an extra tap.
-  const [open, setOpen] = useState(topic.highlighted ?? false);
+  const [open, setOpen] = useState(Boolean(topic.highlighted) || Boolean(tourTarget));
   const [openDoubt, setOpenDoubt] = useState(false);
   const expanded = topic.status === "open-doubt" ? openDoubt : open;
   const setExpanded = topic.status === "open-doubt" ? setOpenDoubt : setOpen;
@@ -753,6 +759,7 @@ function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice,
                 const explainGlows = topic.highlighted && showExplain;
                 const practiceGlows = topic.highlighted && showPractice && !showExplain;
                 return (
+                <>
                 <div className="flex gap-3" style={{ padding: "8px 4px 4px 42px" }}>
                   {showExplain && (
                     <button onClick={() => onExplain(topic)} className="flex flex-col items-center" style={{ gap: 6, width: 62, background: "none", border: "none", cursor: "pointer" }}>
@@ -765,6 +772,7 @@ function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice,
                             style={{ inset: -5, borderRadius: 21, border: "2px solid var(--warning)", boxShadow: "0 0 10px color-mix(in srgb, var(--warning) 40%, transparent)" }}
                           />
                         )}
+                        {tourTarget && tourStep === 3 && !explainGlows && <TourHighlightRing radius={21} />}
                         <div style={{ position: "relative", ...actionIconStyle("var(--warning)", "var(--warning-950)") }}>
                           <Play style={{ width: 18, height: 18 }} fill="var(--warning)" color="var(--warning)" />
                         </div>
@@ -791,6 +799,24 @@ function TopicRow({ topic, isLast, nextStatus, isPreview, onExplain, onPractice,
                     </button>
                   )}
                 </div>
+                {/* An absolutely-positioned pointer bubble here gets clipped —
+                    this row's parent AnimatePresence wrapper (below) has
+                    `overflow: hidden` sized to its own settled "auto" height
+                    for the expand/collapse animation, so anything extending
+                    past that gets cut off. An in-flow card (same component
+                    used elsewhere) avoids the clip entirely since it just
+                    makes the wrapper naturally taller. */}
+                {tourTarget && tourStep === 3 && (
+                  <div style={{ marginTop: 4 }}>
+                    <TourCard
+                      step={3}
+                      title="Tap Explain above"
+                      body={`Watch a real tutor explain "${topic.title}" — then ask a doubt right there.`}
+                      onExit={onExitTour ?? (() => {})}
+                    />
+                  </div>
+                )}
+                </>
                 );
               })()}
             </motion.div>
@@ -1022,13 +1048,21 @@ export function Component() {
           <p style={{ ...typo.pageTitleStyle }} className="truncate">{currentChapterData.title}</p>
           <p style={typo.metaStyle}>{chapterTopicCount(currentChapterData)} topics</p>
         </div>
-        <button
-          onClick={() => setShowJumpSheet(true)}
-          className="flex items-center justify-center shrink-0"
-          style={{ width: 36, height: 36, borderRadius: "var(--radius-button)", background: "var(--card)", border: "1px solid var(--border)" }}
-        >
-          <BookOpen style={{ width: 17, height: 17, color: "var(--foreground)" }} />
-        </button>
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={() => setShowJumpSheet(true)}
+            className="flex items-center justify-center shrink-0"
+            style={{ width: 36, height: 36, borderRadius: "var(--radius-button)", background: "var(--card)", border: "1px solid var(--border)" }}
+          >
+            <BookOpen style={{ width: 17, height: 17, color: "var(--foreground)" }} />
+          </button>
+          {tourActive && tourStep === 2 && (
+            <>
+              <TourHighlightRing radius={10} />
+              <TourPointer step={2} text="Tap this — it opens the full chapter list so you can jump straight to any chapter." align="end" onExit={endTour} />
+            </>
+          )}
+        </div>
       </div>
       <div style={{ height: 1, background: "var(--border)" }} />
 
@@ -1050,41 +1084,6 @@ export function Component() {
         </button>
       )}
 
-      {tourActive && tourStep === 1 && (
-        <div style={{ paddingTop: 12 }}>
-          <TourCard
-            step={1}
-            title="This is your full syllabus"
-            body="Scroll through Chapter 1 below to see every real NCERT topic, arranged in the exact order the textbook covers it."
-            ctaLabel="Next"
-            onCta={() => goToTourStep(2)}
-            onExit={endTour}
-          />
-        </div>
-      )}
-      {tourActive && tourStep === 2 && (
-        <div style={{ paddingTop: 12 }}>
-          <TourCard
-            step={2}
-            title="Jump between chapters anytime"
-            body="Tap the book icon up top-right — that opens the full chapter list so you can jump straight to any chapter."
-            waiting
-            onExit={endTour}
-          />
-        </div>
-      )}
-      {tourActive && tourStep === 3 && (
-        <div style={{ paddingTop: 12 }}>
-          <TourCard
-            step={3}
-            title="Watch a real tutor explain a topic"
-            body={`Let's open "${CH1_SECTIONS[0].topics[0].title}" and watch your tutor walk through it — then you can ask a doubt right there.`}
-            ctaLabel="Watch the video →"
-            onCta={() => navigate(`/ai-tutor/explain?topic=unique-factorisation&tour=1&step=3`)}
-            onExit={endTour}
-          />
-        </div>
-      )}
       {tourActive && tourStep === 5 && (
         <div style={{ paddingTop: 12 }}>
           <TourCard
@@ -1125,7 +1124,7 @@ export function Component() {
                 const conceptsPct = conceptsTotal > 0 ? Math.round((conceptsDone / conceptsTotal) * 100) : 0;
                 const problemsPct = problemsTotal > 0 ? Math.round((problemsDone / problemsTotal) * 100) : 0;
                 return (
-                  <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 20, position: "relative" }}>
                     <div className="flex items-baseline justify-between" style={{ marginBottom: 6 }}>
                       <span style={typo.metaStyle}>Concepts explained</span>
                       <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>{conceptsDone} / {conceptsTotal}</span>
@@ -1136,6 +1135,19 @@ export function Component() {
                       <span style={{ ...typo.metaStyle, fontWeight: "var(--font-weight-semibold)", color: "var(--foreground)" }}>{problemsDone} / {problemsTotal}</span>
                     </div>
                     <AnimatedProgress percent={problemsPct} color="var(--success)" />
+                    {tourActive && tourStep === 1 && ci === 0 && (
+                      <TourHighlightRing radius={10} />
+                    )}
+                    {tourActive && tourStep === 1 && ci === 0 && (
+                      <TourPointer
+                        step={1}
+                        text="This is your real syllabus — every chapter and topic tracked here, in the exact order your textbook covers it."
+                        align="start"
+                        ctaLabel="Next"
+                        onCta={() => goToTourStep(2)}
+                        onExit={endTour}
+                      />
+                    )}
                   </div>
                 );
               })()
@@ -1171,9 +1183,15 @@ export function Component() {
                     isLast={i === effectiveTopics.length - 1}
                     nextStatus={effectiveTopics[i + 1]?.status}
                     isPreview={isPreview}
-                    onExplain={(t) => navigate(`/ai-tutor/explain?topic=${t.explainQuery ?? t.id}`)}
+                    onExplain={(t) => {
+                      const tourSuffix = tourActive && tourStep === 3 && t.explainQuery === "unique-factorisation" ? "&tour=1&step=3" : "";
+                      navigate(`/ai-tutor/explain?topic=${t.explainQuery ?? t.id}${tourSuffix}`);
+                    }}
                     onPractice={(t) => navigate(`/ai-tutor/solve?topic=${t.explainQuery ?? t.id}`)}
                     onLockedTap={() => navigate(`/crash-course-enrolled?sku=${skuParam}`)}
+                    tourTarget={tourActive && tourStep === 3 && ci === 0 && topic.explainQuery === "unique-factorisation"}
+                    tourStep={tourStep}
+                    onExitTour={endTour}
                   />
                 ))}
               </div>
