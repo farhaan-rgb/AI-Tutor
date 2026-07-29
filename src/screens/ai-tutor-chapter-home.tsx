@@ -894,6 +894,24 @@ function chapterProgressStats(c: ChapterData) {
   return { conceptsTotal, conceptsDone, problemsTotal, problemsDone };
 }
 
+// Real grounding text for FloatingAITutor's /api/ask-tutor call — the
+// chapter's own real section labels + topic titles, so the tutor answers
+// against actual content rather than just a bare chapter-title string.
+function buildChapterContextSummary(c: ChapterData): string {
+  return c.sections
+    .map((s) => `${s.label}: ${s.topics.map((t) => t.title).join(", ")}`)
+    .join("\n");
+}
+
+// Real topic titles from the current chapter, phrased as starter questions
+// — replaces the old hardcoded "Explain F = ma" chip set that showed
+// regardless of subject. Locked (not-yet-built) topics are excluded since
+// there's nothing real yet to ask about them.
+function buildChapterSuggestions(c: ChapterData): string[] {
+  const topics = c.sections.flatMap((s) => s.topics).filter((t) => t.status !== "locked");
+  return topics.slice(0, 4).map((t) => (t.explainQuery ? `Explain ${t.title}` : `Help with ${t.title}`));
+}
+
 export function Component() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -1076,7 +1094,13 @@ export function Component() {
         </div>
       </BottomSheet>
 
-      <FloatingAITutor topicContext={`${currentChapterData.title} — Class 10 Mathematics`} />
+      <FloatingAITutor
+        // Real subject name, not a hardcoded "Class 10 Mathematics" that
+        // used to show even on History/Hindi/English chapters.
+        topicContext={`${currentChapterData.title} — Class 10 ${getCrash1112Info(skuParam)?.subjects[0]?.title ?? "this subject"}`}
+        contextSummary={buildChapterContextSummary(currentChapterData)}
+        suggestions={buildChapterSuggestions(currentChapterData)}
+      />
     </div>
   );
 }

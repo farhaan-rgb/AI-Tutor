@@ -10,6 +10,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Lock, Sparkles, ChevronRight, Info, Clock, ListChecks } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
+import { AiTutorAccessAssistant } from "../shared/ai-tutor-access-assistant";
 
 const DEFAULT_SKU = "ncert-10-maths";
 const CRASH_PRICE = 999;
@@ -164,6 +165,13 @@ export function Component() {
           <span style={{ fontSize: "var(--text-sm)", fontWeight: "var(--font-weight-bold)", color: "var(--white)" }}>Enroll Now</span>
         </button>
       </div>
+
+      {/* A student browsing this subject's chapter list might actually need
+          a different chapter (or a different subject entirely) — same
+          global "find a chapter" assistant as AppLayout, not a scoped-down
+          variant, since jumping across subjects from here is still useful,
+          not confusing. */}
+      <AiTutorAccessAssistant />
     </div>
   );
 }
