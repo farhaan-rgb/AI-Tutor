@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { BottomNav } from "./bottom-nav";
 import { SidebarNav } from "./sidebar-nav";
+import { AiTutorAccessAssistant } from "../shared/ai-tutor-access-assistant";
 
 export function AppLayout() {
   return (
@@ -28,6 +29,13 @@ export function AppLayout() {
           <BottomNav />
         </div>
       </div>
+
+      {/* Mounted here (not per-screen) so "find my chapter" is reachable
+          from anywhere in the main app — Classes, Practice, Marketplace,
+          Profile — matching the "access anytime" value prop rather than
+          only being available once a student has already drilled into a
+          specific subject's chapter-home. */}
+      <AiTutorAccessAssistant />
     </div>
   );
 }
