@@ -1236,6 +1236,23 @@ export function Component() {
         imageAlt: "Open book — Class 10 NCERT Hindi textbooks",
       },
       {
+        // Not a real sku — same underlying course/content as "ncert-10-maths"
+        // above (real sku passed through in the onClick below), just a
+        // second Discover entry point that skips curriculum-preview's
+        // free-Chapter-1-only gate entirely and drops straight into
+        // chapter-home with every built topic explorable, no enroll banner.
+        // For demoing/reviewing the full course structure without the
+        // paywall getting in the way — Chapters 3–14 still show their real
+        // "not yet built" placeholder rows (that's a content-completeness
+        // state, not a paywall, so there's nothing to unlock there).
+        sku: "ncert-10-maths-unlocked",
+        accent: "#597ef7",
+        title: "X Maths NCERT — All Unlocked",
+        subtitle: "Every built chapter and topic, open — no enrollment, no paywall",
+        image: "/ncert-10-maths-listing.jpg",
+        imageAlt: "Teacher presenting the Class 10 NCERT Maths textbook",
+      },
+      {
         // Not a real sku itself — "Class X Social" groups the four real
         // Social Science books (History, Geography, Political Science,
         // Economics) behind one Discover card, since Social Science isn't
@@ -1272,13 +1289,30 @@ export function Component() {
               const isSocial = course.sku === "social";
               const isEnglish = course.sku === "ncert-10-english";
               const isHindi = course.sku === "ncert-10-hindi";
-              const isEnrolledInDemoCourse = isSocial
+              // Always-unlocked entry point — deliberately never reads/writes
+              // cc_enrolled_ncert-10-maths, so it can't affect (or be
+              // affected by) the real "X Maths NCERT" card's own enrolled
+              // state just above it.
+              const isMathsUnlocked = course.sku === "ncert-10-maths-unlocked";
+              const isEnrolledInDemoCourse = isMathsUnlocked
+                ? false
+                : isSocial
                 ? SOCIAL_SCIENCE_SKUS.some((sku) => localStorage.getItem(`cc_enrolled_${sku}`) === "1")
                 : localStorage.getItem(`cc_enrolled_${course.sku}`) === "1";
               return (
                 <button
                   key={course.sku}
-                  onClick={() => navigate(isSocial ? "/ai-tutor/social-subjects?demo=ai-tutor" : isEnrolledInDemoCourse ? "/classes-v1?demo=ai-tutor" : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`)}
+                  onClick={() =>
+                    navigate(
+                      isMathsUnlocked
+                        ? "/ai-tutor/chapter-home?sku=ncert-10-maths"
+                        : isSocial
+                        ? "/ai-tutor/social-subjects?demo=ai-tutor"
+                        : isEnrolledInDemoCourse
+                        ? "/classes-v1?demo=ai-tutor"
+                        : `/ai-tutor/curriculum-preview?demo=ai-tutor&sku=${course.sku}`
+                    )
+                  }
                   className="flex flex-col text-left min-w-0"
                   style={{ borderRadius: "var(--radius-card)", overflow: "hidden", border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer" }}
                 >
@@ -1299,7 +1333,7 @@ export function Component() {
                       }}
                     >
                       <Sparkles style={{ width: 9, height: 9, color: "#1f0e02" }} />
-                      <span style={{ fontSize: 9, fontWeight: 800, color: "#1f0e02", letterSpacing: 0.3 }}>AI TUTOR</span>
+                      <span style={{ fontSize: 9, fontWeight: 800, color: "#1f0e02", letterSpacing: 0.3 }}>{isMathsUnlocked ? "ALL UNLOCKED" : "AI TUTOR"}</span>
                     </div>
                     {course.image ? (
                       <img
@@ -1360,7 +1394,7 @@ export function Component() {
                     </span>
                     <div className="flex items-center justify-center gap-1.5" style={{ height: 34, borderRadius: "var(--radius-button)", background: course.accent, color: "var(--white)" }}>
                       <Sparkles style={{ width: 13, height: 13 }} />
-                      <span style={{ fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-semibold)" }}>{isEnrolledInDemoCourse ? "Continue" : "View"}</span>
+                      <span style={{ fontSize: "var(--text-xs)", fontWeight: "var(--font-weight-semibold)" }}>{isMathsUnlocked ? "Explore" : isEnrolledInDemoCourse ? "Continue" : "View"}</span>
                     </div>
                   </div>
                 </button>
