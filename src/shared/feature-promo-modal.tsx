@@ -6,14 +6,23 @@
  * "handholding journey" concept, not this. Skip is always available; the
  * only real action is the final CTA into the course.
  *
- * Each slide's hero is a REAL image, not an abstract icon — a screenshot of
- * the actual product (slides 2-3) or the real course photo already used on
- * Discover (slide 1), since a genuine screenshot builds more familiarity
- * and interest than a generic illustration ever could. Slides 2 and 3 both
- * use the same real "Real Numbers" chapter thread (Proving √p is
+ * Each slide's hero is a REAL image, not an abstract icon — screenshots of
+ * the actual product (slides 2-3), since a genuine screenshot builds more
+ * familiarity and interest than a generic illustration ever could. Slides 2
+ * and 3 both use the same real "Real Numbers" chapter thread (Proving √p is
  * irrational → the 4ⁿ practice problem) as the rest of this build, so the
- * curriculum-familiarity slide and the two feature slides all point at the
- * same real content a student would actually land on.
+ * two feature slides point at the same real content a student would
+ * actually land on.
+ *
+ * Slide 1 is a real side-by-side comparison, not a single photo: the left
+ * image is a composite of real, verified crops from the actual NCERT
+ * jemh101.pdf (the chapter-1 title box + the real "1.1 Introduction" /
+ * "1.2 The Fundamental Theorem of Arithmetic" / "1.3 Revisiting Irrational
+ * Numbers" section headings, each cropped from its own real page — see
+ * scratchpad build notes), and the right image is a real screenshot of the
+ * app's own chapter-home view for the exact same chapter, showing the same
+ * "1.2"/"1.3" section labels. The point is proving the 1:1 structural match
+ * directly, not just asserting it in copy.
  *
  * Three slides, matching exactly what should be communicated here:
  *  1. The real textbook curriculum is replicated chapter-by-chapter — a
@@ -39,8 +48,11 @@ const SLIDES = [
     icon: BookOpen,
     accent: "#597ef7",
     gradient: "linear-gradient(160deg, #0a1128 0%, #142657 100%)",
-    image: "/ncert-10-maths-listing.jpg",
-    imageAlt: "The real Class 10 NCERT Maths textbook",
+    // Comparison pair instead of a single image — see file header.
+    images: [
+      { src: "/promo-textbook-skeleton.jpg", alt: "Real crops from the actual NCERT textbook (jemh101.pdf) — Chapter 1 title and its real 1.1/1.2/1.3 section headings", label: "The real textbook", bg: "#ffffff" },
+      { src: "/promo-app-chapter.jpg", alt: "Real screenshot — the app's chapter view for the same chapter, same section labels", label: "In the app", bg: "#0a0a0a" },
+    ],
     headline: "Your exact textbook, chapter by chapter",
     caption: "Every chapter, every section — arranged exactly like your real NCERT textbook, so nothing here feels unfamiliar.",
   },
@@ -117,31 +129,62 @@ export function FeaturePromoModal() {
               className="flex flex-col items-center"
               style={{ maxWidth: 300, width: "100%" }}
             >
-              {/* Real screenshot / real course photo — not an abstract icon.
-                  Fixed 3:4 frame with object-fit:cover so all three slides
-                  (one landscape course photo, two portrait app screenshots)
-                  read as one consistent card treatment. */}
-              <div
-                className="relative"
-                style={{
-                  width: "100%", aspectRatio: "3 / 4", borderRadius: 18, overflow: "hidden", marginBottom: 22,
-                  border: `1.5px solid color-mix(in srgb, ${current.accent} 45%, transparent)`,
-                  boxShadow: `0 12px 32px -8px color-mix(in srgb, ${current.accent} 35%, transparent)`,
-                }}
-              >
-                <img src={current.image} alt={current.imageAlt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              {current.images ? (
+                // Side-by-side real comparison (slide 1 only) — two frames,
+                // each labelled, so the 1:1 structural match is shown, not
+                // just claimed in copy.
+                <div className="flex items-start" style={{ width: "100%", gap: 10, marginBottom: 16 }}>
+                  {current.images.map((img) => (
+                    <div key={img.src} className="flex flex-col items-center" style={{ flex: 1, minWidth: 0 }}>
+                      <div
+                        className="relative flex items-start justify-center"
+                        style={{
+                          width: "100%", aspectRatio: "3 / 4", borderRadius: 14, overflow: "hidden",
+                          background: img.bg,
+                          border: `1.5px solid color-mix(in srgb, ${current.accent} 45%, transparent)`,
+                          boxShadow: `0 10px 24px -8px color-mix(in srgb, ${current.accent} 35%, transparent)`,
+                        }}
+                      >
+                        {/* object-fit: contain, not cover — this is a real
+                            side-by-side proof (rule 0c-style discipline: no
+                            content may be silently cropped out of a "look,
+                            it's the same real structure" comparison). The
+                            textbook composite is landscape and the app
+                            screenshot is portrait, so contain (not cover)
+                            is the only way both stay fully legible inside
+                            the same 3:4 frame. */}
+                        <img src={img.src} alt={img.alt} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
+                      </div>
+                      <span style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-2xs)", fontWeight: "var(--font-weight-semibold)", color: "rgba(255,255,255,0.65)", marginTop: 8 }}>{img.label}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Real screenshot / real course photo — not an abstract icon.
+                // Fixed 3:4 frame with object-fit:cover so both single-image
+                // slides read as one consistent card treatment.
                 <div
-                  className="flex items-center justify-center absolute"
+                  className="relative"
                   style={{
-                    bottom: 10, right: 10, width: 38, height: 38, borderRadius: "50%",
-                    background: `color-mix(in srgb, ${current.accent} 30%, black)`,
-                    border: `1.5px solid color-mix(in srgb, ${current.accent} 60%, transparent)`,
-                    backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
+                    width: "100%", aspectRatio: "3 / 4", borderRadius: 18, overflow: "hidden", marginBottom: 22,
+                    border: `1.5px solid color-mix(in srgb, ${current.accent} 45%, transparent)`,
+                    boxShadow: `0 12px 32px -8px color-mix(in srgb, ${current.accent} 35%, transparent)`,
                   }}
                 >
-                  <Icon style={{ width: 18, height: 18, color: current.accent, strokeWidth: 2 }} />
+                  <img src={current.image} alt={current.imageAlt} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  <div
+                    className="flex items-center justify-center absolute"
+                    style={{
+                      bottom: 10, right: 10, width: 38, height: 38, borderRadius: "50%",
+                      background: `color-mix(in srgb, ${current.accent} 30%, black)`,
+                      border: `1.5px solid color-mix(in srgb, ${current.accent} 60%, transparent)`,
+                      backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
+                    }}
+                  >
+                    <Icon style={{ width: 18, height: 18, color: current.accent, strokeWidth: 2 }} />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <p style={{ fontFamily: "var(--font-family-inter)", fontSize: "var(--text-lg)", fontWeight: "var(--font-weight-bold)", color: "var(--white)", textAlign: "center", margin: "0 0 10px", lineHeight: 1.3 }}>
                 {current.headline}
