@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import { BottomNav } from "./bottom-nav";
 import { SidebarNav } from "./sidebar-nav";
-import { AiTutorAccessAssistant } from "../shared/ai-tutor-access-assistant";
+import { FloatingAITutor } from "../shared/floating-ai-tutor";
 
 export function AppLayout() {
   return (
@@ -30,12 +30,12 @@ export function AppLayout() {
         </div>
       </div>
 
-      {/* Mounted here (not per-screen) so "find my chapter" is reachable
-          from anywhere in the main app — Classes, Practice, Marketplace,
-          Profile — matching the "access anytime" value prop rather than
-          only being available once a student has already drilled into a
-          specific subject's chapter-home. */}
-      <AiTutorAccessAssistant />
+      {/* Mounted here (not per-screen) so the AI tutor — doubts and
+          "find my chapter" both — is reachable from anywhere in the main
+          app: Classes, Practice, Marketplace, Profile. No chapterContext
+          here, so every message is navigation-only (see
+          floating-ai-tutor.tsx) — there's no specific chapter open yet. */}
+      <FloatingAITutor />
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft, Lock, Sparkles, ChevronRight, Info, Clock, ListChecks } from "lucide-react";
 import { StatusBar, typo } from "../shared/premium-ui";
 import { DUMMY_CRASH_COURSES_1112, getCrash1112Info } from "../shared/classroom-catalog";
-import { AiTutorAccessAssistant } from "../shared/ai-tutor-access-assistant";
+import { FloatingAITutor } from "../shared/floating-ai-tutor";
 
 const DEFAULT_SKU = "ncert-10-maths";
 const CRASH_PRICE = 999;
@@ -168,10 +168,10 @@ export function Component() {
 
       {/* A student browsing this subject's chapter list might actually need
           a different chapter (or a different subject entirely) — same
-          global "find a chapter" assistant as AppLayout, not a scoped-down
-          variant, since jumping across subjects from here is still useful,
-          not confusing. */}
-      <AiTutorAccessAssistant />
+          unified assistant as AppLayout (no chapterContext, so navigation-
+          only here), not a scoped-down variant, since jumping across
+          subjects from here is still useful, not confusing. */}
+      <FloatingAITutor />
     </div>
   );
 }

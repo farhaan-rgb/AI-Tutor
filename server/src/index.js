@@ -301,53 +301,91 @@ function catalogPromptBlock() {
 
 const VALID_SKUS = new Set(ACCESS_CATALOG.map((s) => s.sku));
 
-// Helps a student locate the real chapter/subject they need from a free-text
-// description — "I have a test on coordinate geometry tomorrow," a concept
-// name, an exam scope ("everything up to polynomials"), or a Social Science
-// topic without knowing which of the four books it's in. Real navigation
-// target only (a real sku + real chapterIndex from ACCESS_CATALOG, validated
-// server-side before returning) — never an invented chapter.
-app.post("/api/find-content", async (req, res) => {
-  const { query } = req.body ?? {};
-  if (!query || typeof query !== "string") {
-    return res.status(400).json({ error: "query is required" });
+// Unified assistant — one endpoint doing both jobs a student needs from
+// "the AI tutor," instead of two separate assistants with two separate
+// buttons (the earlier /api/find-content + client-side FloatingAITutor
+// split, since merged into one component — see floating-ai-tutor.tsx).
+// `chapterContext` is present only when called from inside a specific
+// chapter (real title + real section/topic summary from that screen); when
+// present, the model decides per-message whether the student wants an
+// ANSWER (a doubt about the current chapter) or to NAVIGATE elsewhere (a
+// different real chapter/subject, an exam scope, explicit "find/go to").
+// When absent (called from outside any specific chapter — Discover, Classes,
+// curriculum-preview), every message is navigation-only, same as the
+// original /api/find-content behavior — there's no "current chapter" to
+// answer questions about. Never invents a chapter: any navigation target is
+// re-validated against ACCESS_CATALOG server-side before being returned.
+app.post("/api/ai-tutor", async (req, res) => {
+  const { question, history, chapterContext } = req.body ?? {};
+  if (!question || typeof question !== "string") {
+    return res.status(400).json({ error: "question is required" });
   }
+
+  const historyMessages = Array.isArray(history)
+    ? history
+        .filter((turn) => turn && typeof turn.text === "string")
+        .map((turn) => ({ role: turn.role === "tutor" ? "assistant" : "user", content: turn.text }))
+    : [];
+
+  const responseShape =
+    'Respond with strict JSON only, in this exact shape: {"type": "answer" | "navigate", "answer": string | null, ' +
+    '"found": boolean | null, "sku": string | null, "chapterIndex": number | null, "chapterTitle": string | null, ' +
+    '"subjectTitle": string | null, "otherChapters": string[], "reasoning": string | null, "urgentTip": string | null}. ' +
+    'Use "answer" (leave nav fields null/[]) when type is "answer"; use the nav fields (leave answer null) when type is "navigate".';
+
+  const systemPrompt = chapterContext?.title && chapterContext?.summary
+    ? "You are a Class 10 CBSE/NCERT AI tutor, open inside a specific chapter. You do two things, and must " +
+      "decide which this message needs: (1) ANSWER — a real doubt about the chapter the student is currently " +
+      "viewing, or a closely related general question; ground your answer in the real chapter content given " +
+      "below, using the same real numbers/examples wherever relevant, never contradicting it; (2) NAVIGATE — " +
+      "when the student names a chapter/topic/exam-scope that ISN'T part of the current chapter, or explicitly " +
+      "asks to find/go to/access something else; match against the real catalog below and set found to true " +
+      "with sku, chapterIndex, chapterTitle and subjectTitle ALL filled in from the real catalog entry you " +
+      "matched — never leave those null just because reasoning already names the chapter in prose; only set " +
+      "found to false when nothing in the catalog genuinely matches. Never invent a subject or chapter that " +
+      "isn't listed. Prefer the single most central chapter for a wide exam scope and list the rest in " +
+      "otherChapters — but leave otherChapters EMPTY for a single, focused request naming just one real " +
+      "topic/chapter; only populate it when the request genuinely spans multiple chapters (e.g. 'everything " +
+      "up to polynomials'). Fill urgentTip only when the request signals real time pressure. Write plain English " +
+      "for a student who may not be fluent in it — literal phrasing, not idiom. " +
+      responseShape +
+      `\n\nCurrent chapter: ${chapterContext.title}\nReal content in this chapter:\n${chapterContext.summary}` +
+      `\n\nReal catalog for navigation:\n${catalogPromptBlock()}`
+    : "You help a Class 10 CBSE/NCERT student find the right chapter in their study app, from a free-text " +
+      "description — this may be a chapter/topic name, a concept ('coordinate geometry'), an exam scope " +
+      "('everything up to polynomials'), or something urgent ('test tomorrow on X'). Always respond with " +
+      'type "navigate" — there is no specific chapter open right now to answer a content doubt about. Match ' +
+      "against the REAL catalog below — pick the single best sku + chapter index. Never invent a subject or " +
+      "chapter that isn't listed. If the request spans multiple chapters (a wide exam scope), return the " +
+      "single most central/foundational one as the primary target and list the rest by title in " +
+      "otherChapters. If you genuinely cannot match anything real in the catalog, set found to false and " +
+      "explain what's missing in reasoning — never guess. If the request signals time pressure (an exam " +
+      "soon, 'tomorrow', 'test', 'quiz'), fill urgentTip with one short, encouraging sentence on what to " +
+      "prioritize first once they arrive (practicing real exercises over re-reading concepts) — otherwise " +
+      "leave it null. " +
+      responseShape +
+      `\n\nReal catalog:\n${catalogPromptBlock()}`;
 
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       response_format: { type: "json_object" },
       messages: [
-        {
-          role: "system",
-          content:
-            "You help a Class 10 CBSE/NCERT student find the right chapter in their study app, from a " +
-            "free-text description — this may be a chapter/topic name, a concept ('coordinate geometry'), " +
-            "an exam scope ('everything up to polynomials'), or something urgent ('test tomorrow on X'). " +
-            "Match against the REAL catalog below — pick the single best sku + chapter index. Never invent " +
-            "a subject or chapter that isn't listed. If the request spans multiple chapters (a wide exam " +
-            "scope), return the single most central/foundational one as the primary target and list the " +
-            "rest by title in otherChapters. If you genuinely cannot match anything real in the catalog, " +
-            "set found to false and explain what's missing in reasoning — never guess. If the request " +
-            "signals time pressure (an exam soon, 'tomorrow', 'test', 'quiz'), fill urgentTip with one " +
-            "short, encouraging sentence on what to prioritize first once they arrive (practicing real " +
-            "exercises over re-reading concepts, for a student short on time) — otherwise leave it null. " +
-            'Respond with strict JSON only, in this exact shape: {"found": boolean, "sku": string|null, ' +
-            '"chapterIndex": number|null, "chapterTitle": string|null, "subjectTitle": string|null, ' +
-            '"otherChapters": string[], "reasoning": string, "urgentTip": string|null}. reasoning is 1-2 ' +
-            "short sentences written directly to the student, plain language, explaining why this chapter " +
-            "matches what they described.\n\n" +
-            `Real catalog:\n${catalogPromptBlock()}`,
-        },
-        { role: "user", content: query },
+        { role: "system", content: systemPrompt },
+        ...historyMessages,
+        { role: "user", content: question },
       ],
     });
 
     const raw = completion.choices[0]?.message?.content ?? "{}";
     const parsed = JSON.parse(raw);
 
-    // Never trust the model's navigation target blindly — re-validate
-    // against the real catalog before letting it drive a deep link.
+    if (parsed.type === "answer") {
+      return res.json({ type: "answer", answer: typeof parsed.answer === "string" ? parsed.answer : "" });
+    }
+
+    // Navigation target — never trust it blindly, re-validate against the
+    // real catalog before letting it drive a deep link.
     const subject = ACCESS_CATALOG.find((s) => s.sku === parsed.sku);
     const chapterIndex = Number.isInteger(parsed.chapterIndex) ? parsed.chapterIndex : -1;
     const valid =
@@ -359,6 +397,7 @@ app.post("/api/find-content", async (req, res) => {
 
     if (!valid) {
       return res.json({
+        type: "navigate",
         found: false,
         reasoning:
           typeof parsed.reasoning === "string" && parsed.reasoning
@@ -368,6 +407,7 @@ app.post("/api/find-content", async (req, res) => {
     }
 
     res.json({
+      type: "navigate",
       found: true,
       sku: parsed.sku,
       chapterIndex,
@@ -378,8 +418,8 @@ app.post("/api/find-content", async (req, res) => {
       urgentTip: typeof parsed.urgentTip === "string" ? parsed.urgentTip : null,
     });
   } catch (err) {
-    console.error("find-content failed:", err);
-    res.status(502).json({ error: "Couldn't search right now — please try again." });
+    console.error("ai-tutor failed:", err);
+    res.status(502).json({ error: "Couldn't reach the tutor — please try again." });
   }
 });
 

@@ -1095,11 +1095,13 @@ export function Component() {
       </BottomSheet>
 
       <FloatingAITutor
-        // Real subject name, not a hardcoded "Class 10 Mathematics" that
-        // used to show even on History/Hindi/English chapters.
-        topicContext={`${currentChapterData.title} — Class 10 ${getCrash1112Info(skuParam)?.subjects[0]?.title ?? "this subject"}`}
-        contextSummary={buildChapterContextSummary(currentChapterData)}
-        suggestions={buildChapterSuggestions(currentChapterData)}
+        chapterContext={{
+          // Real subject name, not a hardcoded "Class 10 Mathematics" that
+          // used to show even on History/Hindi/English chapters.
+          title: `${currentChapterData.title} — Class 10 ${getCrash1112Info(skuParam)?.subjects[0]?.title ?? "this subject"}`,
+          summary: buildChapterContextSummary(currentChapterData),
+          suggestions: buildChapterSuggestions(currentChapterData),
+        }}
       />
     </div>
   );
