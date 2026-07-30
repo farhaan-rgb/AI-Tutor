@@ -1068,8 +1068,12 @@ export function Component() {
 
       {/* Grounded in "Unique prime factorisation" (Ch.1 Maths) specifically —
           the one topic with a real narrated video + hand-raise + a matching
-          practice set — so the entry point only shows on that course. */}
-      {!tourActive && !isPreview && skuParam === DEFAULT_SKU && (
+          practice set — so the entry point only shows on that course.
+          Available in BOTH the enrolled view and the free-preview (locked,
+          pre-enrollment) view — Chapter 1's real video/practice content is
+          reachable either way, and step 5's "unlock the rest" moment is if
+          anything more relevant for a student who hasn't purchased yet. */}
+      {!tourActive && skuParam === DEFAULT_SKU && (
         <button
           onClick={startTour}
           className="flex items-center justify-center gap-2 shrink-0"
@@ -1114,10 +1118,23 @@ export function Component() {
               isPreview ? (
                 <div
                   className="flex items-center gap-2"
-                  style={{ padding: "10px 14px", borderRadius: 10, background: "var(--card)", border: "1px solid color-mix(in srgb, var(--primary) 30%, transparent)", marginBottom: 20 }}
+                  style={{ padding: "10px 14px", borderRadius: 10, background: "var(--card)", border: "1px solid color-mix(in srgb, var(--primary) 30%, transparent)", marginBottom: 20, position: "relative" }}
                 >
                   <Sparkles style={{ width: 15, height: 15, color: "var(--primary)", flexShrink: 0 }} />
                   <span style={{ ...typo.metaStyle, color: "var(--foreground)" }}>Free preview — explore all of Chapter 1, no enrollment needed.</span>
+                  {tourActive && tourStep === 1 && (
+                    <>
+                      <TourHighlightRing radius={10} />
+                      <TourPointer
+                        step={1}
+                        text="This is your real syllabus — every chapter and topic tracked here, in the exact order your textbook covers it."
+                        align="start"
+                        ctaLabel="Next"
+                        onCta={() => goToTourStep(2)}
+                        onExit={endTour}
+                      />
+                    </>
+                  )}
                 </div>
               ) : (() => {
                 const { conceptsTotal, conceptsDone, problemsTotal, problemsDone } = chapterProgressStats(c);
